@@ -19,5 +19,18 @@
         {{ form_row(registrationForm.agreeTerms) }}
 
         <button type="submit" class="btn">Register</button>
+        
+        <fieldset class="sweet-pot">
+            {{ form_label(registrationForm.phone)}}
+            {{ form_errors(registrationForm.phone)}}
+            {{ form_widget(registrationForm.phone)}}
+        </fielset>
+        <fieldset class="sweet-pot">
+            {{ form_label(registrationForm.faxNumber)}}
+            {{ form_errors(registrationForm.faxNumber)}}
+            {{ form_widget(registrationForm.faxNumber)}}
+        </fielset>
+        
+
     {{ form_end(registrationForm) }}
 {% endblock %}
