@@ -3,11 +3,12 @@
 namespace App\EventSubscriber;
 
 use Psr\Log\LoggerInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class HoneyPotSubscriber implements EventSubscriberInterface
 {
@@ -38,9 +39,8 @@ class HoneyPotSubscriber implements EventSubscriberInterface
         if(!$request){
             return;
         }
-        // dd($event);
-
-        // $data = $event->getData();
+       
+        
         $form = $event->getForm();
 
         $phone = $form->has('phone') ? trim((string)$form->get('phone')->getData()) : null;
@@ -49,8 +49,8 @@ class HoneyPotSubscriber implements EventSubscriberInterface
 
         if(!empty($phone) || !empty($faxNumber))
         {
-            $this->logger->info("Potentielle tentative de robot spammer ayant l'adresse IP suivante : '{$request->getClientIp()}' a eu lieu. Le champ phone contenait '{$phone}' et le champ faxNumber contenait '{$faxNumber}'");   
-            throw new HttpException(403, "Go away dirty bot !");
+            $this->logger->info("Potentielle tentative de robot spammer ayant l'adresse IP suivante : '{$request->getClientIp()}' a eu lieu. Le champ phone contenait '{$phone}' et le champ faxNumber contenait '{$faxNumber}'. Le lien est : '{$request->getURI()}'");   
+            throw new AccessDeniedException("Accès refusé");
         }
         
     }
