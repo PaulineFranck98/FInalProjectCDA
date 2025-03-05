@@ -8,29 +8,31 @@
     {% endfor %}
 
     <h1>Register</h1>
+    <div class="flex flex-col items-center">
 
-    {{ form_errors(registrationForm) }}
+        {{ form_errors(registrationForm) }}
 
-    {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.plainPassword, {
-            label: 'Password'
-        }) }}
-        {{ form_row(registrationForm.agreeTerms) }}
+        {{ form_start(registrationForm) }}
+            {{ form_row(registrationForm.email) }}
+            {{ form_row(registrationForm.plainPassword, {
+                label: 'Password'
+            }) }}
+            {{ form_row(registrationForm.agreeTerms) }}
 
-        <button type="submit" class="btn">Register</button>
-        
-        <fieldset class="sweet-pot">
-            {{ form_label(registrationForm.phone)}}
-            {{ form_errors(registrationForm.phone)}}
-            {{ form_widget(registrationForm.phone)}}
-        </fielset>
-        <fieldset class="sweet-pot">
-            {{ form_label(registrationForm.faxNumber)}}
-            {{ form_errors(registrationForm.faxNumber)}}
-            {{ form_widget(registrationForm.faxNumber)}}
-        </fielset>
-        
+            <button type="submit" class="btn">Register</button>
+            
+            <fieldset class="sweet-pot">
+                {{ form_label(registrationForm.phone)}}
+                {{ form_errors(registrationForm.phone)}}
+                {{ form_widget(registrationForm.phone)}}
+            </fielset>
+            <fieldset class="sweet-pot">
+                {{ form_label(registrationForm.faxNumber)}}
+                {{ form_errors(registrationForm.faxNumber)}}
+                {{ form_widget(registrationForm.faxNumber)}}
+            </fielset>
+            
 
-    {{ form_end(registrationForm) }}
+        {{ form_end(registrationForm) }}
+    </div>    
 {% endblock %}

@@ -1,3 +1,9 @@
+@import "tailwindcss";
+
+
+body {
+    background-color: lightgray;
+}
 
 fieldset.sweet-pot{
     opacity: 0;

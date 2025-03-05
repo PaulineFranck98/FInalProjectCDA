@@ -13,10 +13,10 @@ when@dev:
                 channels:
                     - app
             security: 
-                level: debug
+                level: warning
                 type: rotating_file
                 max_files: 10
-                path: "%kernel.logs_dir%/security/security.%kernel.environment%.log"
+                path: "%kernel.logs_dir%/security/security/.%kernel.environment%.log"
                 channels:
                     - security
             main:
