@@ -11,16 +11,16 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class HoneyPotType extends AbstractType
 {
-    private LoggerInterface $logger;
+    private LoggerInterface $honeyPotLogger;
 
     private RequestStack $requestStack;
 
     public function __construct(
-        LoggerInterface $logger,
+        LoggerInterface $honeyPotLogger,
         RequestStack $requestStack
     )
     {
-        $this->logger = $logger;
+        $this->honeyPotLogger = $honeyPotLogger;
         $this->requestStack = $requestStack;
     }
 
@@ -33,7 +33,7 @@ class HoneyPotType extends AbstractType
     {
         $builder->add(self::DELICIOUS_HONEY_FOR_BOT, TextType::class, $this->setHoneyPotFieldConfiguration())
                 ->add(self::FABULOUS_HONEY_FOR_BOT, TextType::class, $this->setHoneyPotFieldConfiguration())
-                ->addEventSubscriber(new HoneyPotSubscriber($this->logger, $this->requestStack));
+                ->addEventSubscriber(new HoneyPotSubscriber($this->honeyPotLogger, $this->requestStack));
     }
 
     protected function setHoneyPotFieldConfiguration(): array
