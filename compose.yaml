@@ -29,23 +29,21 @@ services:
       mailpit:
         condition: service_started
     volumes:
-      - .:/var/www/html
-      - /var/www/html/vendor
-      - /var/www/html/var
+      - .:/app
+      - ./Caddyfile:/etc/frankenphp/Caddyfile
     ports:
-      - "8000:8000"
+      - "8080:80"
     environment:
       APP_ENV: dev
       DATABASE_URL: "mysql://${MYSQL_USER:-app}:${MYSQL_PASSWORD:-!ChangeMe!}@database:3306/${MYSQL_DATABASE:-finalprojectcda}?serverVersion=8.0"
       MAILER_DSN: smtp://mailpit:1025
-    command: php -S 0.0.0.0:8000 -t public
  
 
   mailpit:
     image: axllent/mailpit
     ports:
-      - "8025:8025" # interface web
-      - "1025:1025" # serveur SMTP
+      - "8025:8025"
+      - "1025:1025"
 
 volumes:
 ###> doctrine/doctrine-bundle ###

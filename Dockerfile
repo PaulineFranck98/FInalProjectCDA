@@ -1,20 +1,18 @@
-FROM php:8.2.6-fpm
-
-# Installation des dépendances système et extensions PHP
-RUN apt-get update && apt-get install -y \
-    git unzip zip curl libicu-dev libonig-dev libxml2-dev libzip-dev libpq-dev libjpeg-dev libpng-dev libwebp-dev libfreetype6-dev \
-    && docker-php-ext-install intl pdo pdo_mysql pdo_pgsql opcache zip \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
-
-# Installation de Composer
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+FROM dunglas/frankenphp
 
 # Répertoire de travail
-WORKDIR /var/www/html
+WORKDIR /app
 
 # Copie du projet
-COPY . .
+COPY . /app
+
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+RUN docker-php-ext-install pdo_mysql
+
+# Installation des dépendances PHP
+RUN composer install --optimize-autoloader
 
 # Permissions
-RUN chown -R www-data:www-data /var/www/html
+RUN chown -R www-data:www-data /app
 USER www-data
