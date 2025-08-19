@@ -2,19 +2,41 @@
 <html>
     <head>
         <meta charset="UTF-8">
-
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+        />
         <title>{% block title %}Welcome!{% endblock %}</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
         {% block stylesheets %}
             {{ encore_entry_link_tags('app') }}
         {% endblock %}
 
         {% block javascripts %}
+            <script src="https://kit.fontawesome.com/d004286c36.js" crossorigin="anonymous"></script>
             {{ encore_entry_script_tags('app') }}
         {% endblock %}
     </head>
-    <body>
-        {% block body %}{% endblock %}
+    <body class="w-full h-screen">
+        <header>
+        {% if app.user %}
+            <nav>
+                <ul class='flex justify-around font-medium border-b border-b-gray-300 py-2 text-violet-700 bg-gray-100'>
+                    <li><a href="">Accueil</a></li>
+                    <li><a href="{{ path('locations_list') }}">Lieux</a></li>
+                    {# <li><a href="{{ path('itineraries_list') }}">Itinéraires</a></li> #}
+                    {# <li><a href="{{ path('location_form') }}">Nouveau lieu</a></li> #}
+                    {# <li><a href="{{ path('itinerary_form') }}">Nouvel itinéraire</a></li> #}
+                </ul>
+            </nav>
+        {% endif %}
+        </header>
+        
+            {% block body %}{% endblock %}  
+
+         {% if app.user %}   
+        <footer class=" border-t border-t-gray-300 py-2 text-violet-700 bg-gray-100 h-[100px] fixed bottom-0 w-full text-sm">
+        </footer>
+        {% endif %}
     </body>
 </html>

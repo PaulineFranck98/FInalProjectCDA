@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+{% block title %}Location Detail{% endblock %}
+
+{% block body %}
+<div>
+    <h1 class="text-2xl font-bold text-left mb-5">{{ location.locationName }}</h1>
+        <p>{{ location.type.typeName }}</p>
+        <p class="text-center">{{ location.address }}</p>
+        <p class="text-center">{{ location.description}}</p>
+</div>
+
+{% endblock %}

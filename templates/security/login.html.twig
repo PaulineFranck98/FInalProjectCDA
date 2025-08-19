@@ -3,18 +3,13 @@
 {% block title %}Connexion{% endblock %}
 
 {% block body %}
-    <div class="bg-[url('/public/img/bcg-vignes.webp')] bg-cover bg-center w-screen h-screen flex flex-col justify-center items-center ">
+    <div class="w-screen h-screen flex flex-col justify-center items-center ">
         <div class="bg-white/70 px-5 pt-3 pb-4 rounded-lg w-xs md:w-md">
             <form method="post">
                 {% if error %}
                     <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
                 {% endif %}
 
-                {# {% if app.user %}
-                    <div class="mb-3">
-                        You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Déconnexion</a>
-                    </div>
-                {% endif %} #}
             
                 <h1 class="text-xl md:text-2xl font-semibold text-center mb-3">Vous revoilà !</h1>
                 <div class="flex flex-col mb-4">

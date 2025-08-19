@@ -48,7 +48,7 @@ class SecurityController extends AbstractController
 
         return $clientRegistry
             ->getClient($service)
-            ->redirect(self::SCOPES[$service]);
+            ->redirect(self::SCOPES[$service], []);
     }
 
     #[Route('/connect/check/{service}', name:'connect_check_google', methods: ['GET', 'POST'])]
