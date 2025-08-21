@@ -39,4 +39,24 @@ class ApiHttpClient extends AbstractController
         $response = $this->client->request('GET', $this->baseUrl.'/itinerary/'.$id);
         return $response->toArray();
     }
+
+    public function searchLocations(array $filters = []): array
+    {
+        $url = $this->baseUrl . '/location/public';
+
+        if (!empty($filters)) {
+            $url .= '?' . http_build_query($filters);
+        }
+
+        $response = $this->client->request('GET', $url);
+        return $response->toArray();
+    }
+
+    public function getFilterData(string $endpoint): array
+    {
+        $response = $this->client->request('GET', $this->baseUrl . '/' . $endpoint);
+        return $response->toArray();
+    }
+
+
 }

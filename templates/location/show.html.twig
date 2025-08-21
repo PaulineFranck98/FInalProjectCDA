@@ -6,146 +6,169 @@
 
 {% block body %}
     <div>
-        {# {% for image in location.images %}
-            <figure>
-                <img src="{{ image.imageName }}" alt="{{ location.locationName }}" width="150">
-            </figure>
-        {% endfor %} #}
         {% if location.images|length > 0 %}
-        {# TODO : changer par un carousel #}
-            <figure class="h-64 w-full">
-                <img src="{{ location.images[0].imageName }}" alt="{{ location.locationName}}" loading="lazy" class=" w-full h-full object-cover">
+            <figure class="h-64 w-full block lg:hidden">
+                <img src="{{ location.images[0].imageName }}" alt="{{ location.locationName}}" loading="lazy" class="w-full h-full object-cover">
             </figure>
         {% endif %}
 
-        <div class="my-5 mx-6">
-            <div class="flex justify-between">
-                <h1 class="text-2xl text-left mb-1 font-semibold">{{ location.locationName }}</h1>
-                {# TODO : changer avec la note récupérée #}
-                <div class="flex gap-2 text-gray-800 font-light"  >
-                    <p>4,1</p>
-                    <div class="text-[0.75rem] ">{{ 4|stars|raw}}</div>
-                    <p>(102)</p>
-
-                </div>
-            </div>
-
-            <p class="text-gray-500">{{ location.type.typeName }}</p>
-            <div class="flex justify-between w-full mt-4">
-                <p class="font-semibold  text-[1.1rem]">Vous l'avez déjà visité?</p>
-                <label for="visited-switch" class="inline-flex items-center  cursor-pointer">
-                    <input id="visited-switch" type="checkbox" value="" class="sr-only peer" checked aria-checked="true" aria-label="Lieu déjà visité">
-                    <div class="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700  peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-violet-800 dark:peer-checked:bg-violet-800"></div>
-                </label>
-            </div>
-            <div class="my-8 w-full flex justify-center">
-                <p class="bg-violet-800 px-12 py-3 rounded-3xl text-white font-medium text-center w-fit" >
-                    <a href="#">Ajouter à mon itinéraire</a>
-                </p>  
-            </div>
-        </div>
+        <div class="my-5 mx-6 lg:mx-16">
+            <div class="flex flex-col lg:flex-row gap-16 lg:mt-10">
  
-        <ul class="flex justify-between mb-6 font-medium text-[1.1rem] py-3 sticky top-0 z-30 px-5 bg-white shadow-bottom">
-            <li><a href="#description" id="nav-description" aria-label="Aller à la description"  class="underline-bar">Description </a></li>
-            <li><a href="#contact"  id="nav-contact" aria-label="Aller au contact" class="underline-bar" >Contact</a></li>
-            <li><a href="#infos"  id="nav-infos" aria-label="Aller aux infos" class="underline-bar">Infos</a></li>
-            <li><a href="#reviews" id="nav-reviews" aria-label="Aller aux avis" class="underline-bar">Avis</a></li>
-        </ul>
+                <div class="lg:w-1/2">          
 
-        <div class="my-5 mx-6">
-            <p id="description" class="text-justify ">{{ location.description}}</p>
-
-            {# ----------------- CONTACT ----------------- #}
-            <section id="contact" class="mt-7">
-                <div class="flex gap-2 items-center mb-5">
-                    <i class="fa-solid fa-address-card" style="color: #5d0ec0;"></i>
-                    <p class="text-[1.1rem] font-semibold ">Contact</p>
-                </div>
-
-                <div class="flex gap-5">
-                    <div class="flex gap-2 items-center bg-violet-100 py-3 px-5 rounded-3xl">
-                        <i class="fa-solid fa-phone" style="color: #5d0ec0;"></i>
-                        <p class="text-violet-800 font-medium">{{ location.phoneNumber }}</p>
+                    <div class="flex flex-col lg:flex-row gap-10">
+                   
+                        <div class="flex-1">
+                            <div class="flex items-center lg:justify-start lg:gap-4">
+                                <h1 class="text-2xl text-left mb-1 font-semibold ">{{ location.locationName }}</h1>
+                                <div class="flex gap-2 text-gray-800 font-light">
+                                    <p>4,1</p>
+                                    <div class="text-[0.75rem]">{{ 4|stars|raw }}</div>
+                                    <p>(102)</p>
+                                </div>
+                            </div>
+                            <p class="text-gray-500 mt-2">{{ location.type.typeName }}</p>
+                        </div>
+                    
+                        <div class="flex-1 flex flex-col">
+                            <div class="flex justify-between items-center mt-2 lg:mt-0">
+                                <p class="font-semibold text-[1.1rem]">Vous l'avez déjà visité?</p>
+                                <label for="visited-switch" class="inline-flex items-center cursor-pointer">
+                                    <input id="visited-switch" type="checkbox" value="" class="sr-only peer" checked aria-checked="true" aria-label="Lieu déjà visité">
+                                    <div class="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-violet-800 dark:peer-checked:bg-violet-800"></div>
+                                </label>
+                            </div>
+                            <div class="my-8 w-full flex justify-center lg:mt-6 lg:mb-8">
+                                <p class="bg-violet-800 px-12 py-3 lg:py-2 rounded-3xl text-white font-medium text-center w-fit lg:w-full lg:rounded-2xl">
+                                    <a href="#">Ajouter à mon itinéraire</a>
+                                </p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="flex gap-2 items-center bg-violet-100 py-3 px-5 rounded-3xl">
-                        <i class="fa-solid fa-globe" style="color: #5d0ec0;"></i>
-                        <a href="{{ location.website }}" target="_blank" class="text-violet-800 font-medium">Site web</a>
+    
+        
+                    <ul class="flex justify-between mb-6 font-medium text-[1.1rem] py-3 sticky top-0 z-30 px-5 bg-white shadow-bottom lg:hidden">
+                        <li><a href="#description" id="nav-description" aria-label="Aller à la description"  class="underline-bar">Description </a></li>
+                        <li><a href="#contact"  id="nav-contact" aria-label="Aller au contact" class="underline-bar" >Contact</a></li>
+                        <li><a href="#infos"  id="nav-infos" aria-label="Aller aux infos" class="underline-bar">Infos</a></li>
+                        <li><a href="#reviews" id="nav-reviews" aria-label="Aller aux avis" class="underline-bar">Avis</a></li>
+                    </ul>
+
+
+                    <p id="description" class="text-justify ">{{ location.description}}</p>
+                <div class="mt-7 lg:grid lg:grid-cols-2 lg:gap-8 flex flex-col gap-8">
+                    <div class="flex flex-col gap-8">
+
+                        {# ----------------- CONTACT ----------------- #}
+                        <section id="contact" class="mt-7">
+                            <div class="flex gap-2 items-center mb-5">
+                                <i class="fa-solid fa-address-card" style="color: #5d0ec0;"></i>
+                                <p class="text-[1.1rem] font-semibold ">Contact</p>
+                            </div>
+                            <div class="flex gap-5">
+                                <div class="flex gap-2 items-center bg-violet-100 py-3 px-5 rounded-3xl">
+                                    <i class="fa-solid fa-phone" style="color: #5d0ec0;"></i>
+                                    <p class="text-violet-800 font-medium">{{ location.phoneNumber }}</p>
+                                </div>
+                                {% if location.website %}
+                                    <div class="flex gap-2 items-center bg-violet-100 py-3 px-5 rounded-3xl">
+                                        <i class="fa-solid fa-globe" style="color: #5d0ec0;"></i>
+                                        <a href="{{ location.website }}" target="_blank" class="text-violet-800 font-medium">Site web</a>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </section>
+
+                        {# ----------------- HORAIRES ----------------- #}
+                        <section id="infos" class="mt-7">
+                            <div class="flex gap-2 items-center mb-5">
+                                <i class="fa-regular fa-clock" style="color: #5d0ec0;"></i>
+                                <p class="text-[1.1rem] font-semibold text-black ">Horaires</p>
+                            </div>
+                            {# TODO : changer horaires #}
+                            <p class="text-black font-normal">Variables selon la saison, à consulter sur le site internet.</p>
+                        </section>
+                    </div>
+                    <div class="flex flex-col gap-8">
+
+                        {# ----------------- ADRESSE ----------------- #}
+                        <section class="mt-7">
+                            <div class="flex gap-2 items-center mb-5">
+                                <i class="fa-solid fa-location-dot" style="color: #5d0ec0;"></i>
+                                <p class="text-[1.1rem] font-semibold text-black ">Adresse</p>
+                            </div>
+                            <p class="text-black font-normal">{{ location.address}}, {{ location.zipcode }} {{ location.city }}</p>
+                        </section>
+
+                        {# ----------------- PRIX ----------------- #}
+                        <section class="mt-7">
+                            <div class="flex gap-2 items-center mb-5">
+                                <i class="fa-solid fa-coins" style="color: #5d0ec0;"></i>
+                                <p class="text-[1.1rem] font-semibold text-black ">Prix</p>
+                            </div>
+                            {# TODO : récupérer les prix et les associer à une gamme de prix #}
+                            <p class="text-black font-normal">Le propriétaire a indiqué une fourchette de prix allant de 150€ à 300€.</p>
+                        </section>
                     </div>
                 </div>
-            </section>
+                </div>    
+       
+                <div class="lg:w-1/2">
 
-            {# ----------------- ADRESSE ----------------- #}
-            <section  class="mt-7">
-                <div class="flex gap-2 items-center mb-5">
-                    <i class="fa-solid fa-location-dot" style="color: #5d0ec0;"></i>
-                    <p class="text-[1.1rem] font-semibold text-black ">Adresse</p>
+                    {# ----------------- IMAGES ----------------- #}
+                    <section class="mt-7 lg:mt-0">
+                        <div class="flex gap-2 items-center mb-5">
+                            <i class="fa-regular fa-images" style="color: #5d0ec0;"></i>
+                            <p class="text-[1.1rem] font-semibold text-black ">Photos</p>
+                        </div>
+                        {# TODO : changer par un carousel  #}
+                        <div>
+                            {% if location.images|length > 0 %}
+                                <figure class="rounded-xl h-60" >
+                                    <img class="rounded-xl w-full h-full object-cover" src="{{ location.images[0].imageName }}" alt="{{ location.locationName}}" loading="lazy">
+                                </figure>
+                            {% endif %}
+                        </div>
+                    </section>
+
+                    {# ----------------- AVIS ----------------- #}
+                    <section id="reviews" class="mt-7">
+                        {#  TODO : faire carousel d'avis #}
+                        <div class="lg:flex lg:justify-between lg:mb-3">
+                            <div class="flex gap-2 items-center mb-5">
+                                <i class="fa-regular fa-star" style="color: #5d0ec0;"></i>
+                                <p class="text-[1.1rem] font-semibold text-black ">Avis</p>
+                            </div>
+                            <div class="hidden lg:block">
+                                <p class=" bg-violet-800 px-12 py-2 rounded-2xl text-white font-medium text-center w-fit" >
+                                    <a href="#">Laisser un avis</a>
+                                </p>
+                            </div>  
+
+                        </div>
+                        {# TODO : récupérer les avis associés à l'ID du lieu  #}
+                        <div class="max-h-32 line-clamp-4 border border-violet-200 rounded-xl py-3 px-4">
+                            <div class="flex justify-between mb-1">
+                                <div class=" text-violet-800 text-[0.75rem] ">{{ 4|stars|raw}}</div>
+                                {# TODO : récupérer vrai nom + vraie date #}
+                                <p class="text-[0.75rem] text-gray-500">Camille - 25 octobre 2025</p>
+                            </div>
+
+                            <p class=" text-[0.9rem]">J’ai adoré mon séjour. Cet hôtel est vraiment superbe, le petit déjeuner est très bon ! Vous pouvez y aller sans hésiter ! Les chambres sont très propres et belles</p>
+                        </div>
+
+                        <div class="my-8 w-full flex justify-center lg:hidden">
+                            <p class="bg-violet-800 px-12 py-3 rounded-3xl text-white font-medium text-center w-fit" >
+                                <a href="#">Laisser un avis</a>
+                            </p>  
+                        </div>
+                    </section>
+
                 </div>
-                <p class="text-black font-normal">{{ location.address}}, {{ location.zipcode }} {{ location.city }}</p>
-            </section>
-
-            {# ----------------- HORAIRES ----------------- #}
-            <section  id="infos" class="mt-7">
-                <div class="flex gap-2 items-center mb-5">
-                    <i class="fa-regular fa-clock" style="color: #5d0ec0;"></i>
-                    <p class="text-[1.1rem] font-semibold text-black ">Horaires</p>
-                </div>
-                {# TODO : changer horaires #}
-                <p class="text-black font-normal">Variables selon la saison, à consulter sur le site internet.</p>
-            </section>
-
-            {# ----------------- PRIX ----------------- #}
-            <section class="mt-7">
-                <div class="flex gap-2 items-center mb-5">
-                    <i class="fa-solid fa-coins" style="color: #5d0ec0;"></i>
-                    <p class="text-[1.1rem] font-semibold text-black ">Prix</p>
-                </div>
-                {# TODO : récupérer les prix et les associer à une gamme de prix #}
-                <p class="text-black font-normal">Le propriétaire a indiqué une fourchette de prix allant de 150€ à 300€.</p>
-            </section>
-
-
-            {# ----------------- IMAGES ----------------- #}
-            <section class="mt-7">
-                <div class="flex gap-2 items-center mb-5">
-                    <i class="fa-regular fa-images" style="color: #5d0ec0;"></i>
-                    <p class="text-[1.1rem] font-semibold text-black ">Photos</p>
-                </div>
-                {# TODO : changer par un carousel  #}
-                <div>
-                    {% if location.images|length > 0 %}
-                        <figure class="rounded-xl h-60" >
-                            <img class="rounded-xl w-full h-full object-cover" src="{{ location.images[0].imageName }}" alt="{{ location.locationName}}" loading="lazy">
-                        </figure>
-                    {% endif %}
-                </div>
-            </section>
-
-
-            {# ----------------- AVIS ----------------- #}
-            <section id="reviews" class="mt-7">
-                {#  TODO : faire carousel d'avis #}
-                <div class="flex gap-2 items-center mb-5">
-                    <i class="fa-regular fa-star" style="color: #5d0ec0;"></i>
-                    <p class="text-[1.1rem] font-semibold text-black ">Avis</p>
-                </div>
-                {# TODO : récupérer les avis associés à l'ID du lieu  #}
-                <div class="h-32 line-clamp-4 border border-violet-200 rounded-xl py-3 px-4">
-                    <div class="flex justify-between mb-1">
-                        <div class=" text-violet-800 text-[0.75rem] ">{{ 4|stars|raw}}</div>
-                        {# TODO : récupérer vrai nom + vraie date #}
-                        <p class="text-[0.75rem] text-gray-500">Camille - 25 octobre 2025</p>
-                    </div>
-
-                    <p class=" text-[0.9rem]">J’ai adoré mon séjour. Cet hôtel est vraiment superbe, le petit déjeuner est très bon ! Vous pouvez y aller sans hésiter ! Les chambres sont très propres et belles</p>
-                </div>
-
-                <div class="my-8 w-full flex justify-center">
-                    <p class="bg-violet-800 px-12 py-3 rounded-3xl text-white font-medium text-center w-fit" >
-                        <a href="#">Laisser un avis</a>
-                    </p>  
-                </div>
-            </section>
+            </div>
         </div>
+    
         {# ----------------- A PROXIMITE ----------------- #}
         <section class="mt-7 h-72  bg-[#393939] p-5">           
             <h2 class="text-white font-semibold text-xl">À proximité</h2>                 
