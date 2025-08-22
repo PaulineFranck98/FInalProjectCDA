@@ -1,8 +1,13 @@
 @import "tailwindcss";
 
+:root {
+    --color-violet-primary: #5d0ec0;
+    --color-violet-secondary: #EDE9FE;
+}
+
 
 html {
-    scroll-behavior: smooth;
+    @apply scroll-smooth;
 }
 
 body {
@@ -10,13 +15,20 @@ body {
 }
 
 fieldset.sweet-pot{
-    opacity: 0;
-    position: absolute;
-    top:0;
-    left:0;
-    height:0;
-    width:0;
-    z-index: -1;
+    @apply opacity-0 absolute top-0 left-0 h-0 w-0 -z-10;
+}
+
+img {
+    @apply w-full h-full object-cover;
+}
+
+
+.btn-violet {
+    @apply hover:bg-violet-600 transition-all ease-in-out duration-300 cursor-pointer;
+}
+
+.btn-violet-light {
+    @apply hover:bg-violet-50 transition-all ease-in-out duration-300 cursor-pointer;
 }
 
 /* ===================================================== */
@@ -28,8 +40,9 @@ fieldset.sweet-pot{
 }
 
 .active-underline {
-    position: relative;
+    @apply relative
 }
+
 .active-underline::after {
     content: '';
     position: absolute;
@@ -42,14 +55,15 @@ fieldset.sweet-pot{
     transform: scaleX(1);
     transition: transform 0.3s cubic-bezier(.4,0,.2,1);
 }
-.active-underline:not(.active-underline)::after {
-    transform: scaleX(0);
-}
 
+.active-underline:not(.active-underline)::after {
+    @apply scale-x-0;
+}
 
 .underline-bar {
-    position: relative;
+    @apply relative;
 }
+
 .underline-bar::after {
     content: '';
     position: absolute;
@@ -60,15 +74,65 @@ fieldset.sweet-pot{
     background: #5d0ec0;
     border-radius: 2px;
     transform: scaleX(0);
-    transform-origin: left;
+    transform-origin: left; 
     transition: transform 0.3s cubic-bezier(.4,0,.2,1);
 }
+
 .active-underline::after {
     transform: scaleX(1);
     transform-origin: left;
 }
 
-/* ================ FIN NAVBAR DETAIL LIEU ================ */
+/* ===================================================== */
 
-/* ======================================================== */
+/* =======================  SWIPER ===================== */
+
+.wrapper-container-place{
+    @apply w-full h-[400px] select-none;
+}
+
+.swiper-slide{
+    @apply text-center text-[18px] flex justify-center items-center pb-4;
+}
+
+.swiper{
+    @apply w-full ml-auto mr-auto;
+}
+
+.mySwiper{
+   @apply h-1/4 py-2;
+}
+
+.mySwiper2{
+    @apply h-[71%] w-full;
+}
+
+
+.mySwiper .swiper-slide {
+   @apply w-1/4 h-full opacity-40;
+}
+
+
+.mySwiper .swiper-slide-thumb-active {
+    @apply opacity-100;
+}
+
+.mySwiper .swiper-wrapper .swiper-slide,
+.mySwiper .swiper-wrapper .swiper-slide figure {
+    @apply h-[100px] flex items-center justify-center overflow-hidden;
+}
+
+ .swiper-slide img {
+    @apply rounded-[5px];
+}
+
+
+/* ===================================================== */
+
+/* =======================  MAP ======================== */
+
+
+#map {
+    @apply h-52 md:h-52 lg:h-36;
+}
 

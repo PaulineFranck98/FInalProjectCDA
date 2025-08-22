@@ -57,6 +57,4 @@ class ApiHttpClient extends AbstractController
         $response = $this->client->request('GET', $this->baseUrl . '/' . $endpoint);
         return $response->toArray();
     }
-
-
 }
