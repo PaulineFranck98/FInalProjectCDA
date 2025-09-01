@@ -28,7 +28,13 @@
                                     <p>(102)</p>
                                 </div>
                             </div>
-                            <p class="text-gray-500 mt-2">{{ location.type.typeName }}</p>
+                            <p class="text-gray-500 mt-2">
+                                {% if location.type %}
+                                    {{ location.type.typeName }}
+                                {% else %}
+                                    <span class="text-gray-400">Type inconnu</span>
+                                {% endif %}
+                            </p>
                             {# discount #}
                             {% if location.discounts|length > 0 %}
                                 {% for discount in location.discounts %}
@@ -120,7 +126,13 @@
                                     <p class="text-[1.1rem] font-semibold text-black ">Prix</p>
                                 </div>
                                 {# TODO : récupérer les prix et les associer à une gamme de prix #}
-                                <p class="text-black font-normal">Le propriétaire a indiqué une fourchette de prix allant de 150€ à 300€.</p>
+                               <p class="text-black font-normal">
+                                    {% if location.price %}
+                                        {{ location.price.priceRange }}
+                                    {% else %}
+                                        <span class="text-gray-400">Prix inconnu</span>
+                                    {% endif %}
+                                </p>
                             </section>
                         </div>
                     </div>
@@ -236,7 +248,7 @@
         });
 
 
-        document.addEventListener('DOMContentLoaded', function(){
+        document.addEventListener('turbo:load', function(){
             const swiper = new Swiper(".mySwiper", {
                 loop: true,
                 spaceBetween: 10,

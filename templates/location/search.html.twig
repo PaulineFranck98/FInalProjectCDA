@@ -72,11 +72,12 @@
     </div>
    
     <div class="lg:w-1/2 mt-8 lg:mt-0">
-        <div id="map" class="w-full h-96 bg-gray-200 rounded-xl flex items-center justify-center">
+        <div id="search-map" class="w-full h-96 bg-gray-200 rounded-xl" data-locations='{{ locations|json_encode }}'>
             <span class="text-gray-500">Carte</span>
         </div>
     </div>
 </div>
+<script src='https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.js'></script>
 <script>
     document.getElementById('show-more-filters').addEventListener('click', function() {
         const moreFilters = document.getElementById('more-filters');
@@ -86,6 +87,44 @@
         } else {
             moreFilters.classList.remove('flex', 'flex-col', 'gap-4', 'mt-4');
         }
+    });
+
+    document.addEventListener('turbo:load', function() {
+        const mapDiv = document.getElementById('search-map');
+        console.log('Map init', mapDiv, mapDiv.dataset.locations);
+        const locations = JSON.parse(mapDiv.dataset.locations);
+
+     
+        let center = [7.75, 48.58]; // Strasbourg
+        if (locations.length > 0) {
+            center = [locations[0].longitude, locations[0].latitude];
+        }
+
+        const map = new maplibregl.Map({
+            container: 'search-map',
+            style: "https://api.jawg.io/styles/jawg-lagoon.json?access-token=5Hj1eNrhxICEmCUA3n50cFITkKNPsXWcZFw3JKMebObcRBGRIBQnT1RQlRQ4RRoG",
+            zoom: 12,
+            center: center
+        });
+        maplibregl.setRTLTextPlugin(
+            'https://unpkg.com/@mapbox/mapbox-gl-rtl-text@0.3.0/dist/mapbox-gl-rtl-text.js'
+        );
+
+        // Ajouter un marqueur pour chaque lieu
+        locations.forEach(location => {
+            if (location.latitude && location.longitude) {
+                const element = document.createElement('div');
+                element.style.backgroundImage = 'url("/img/regular-pin-small.png")';
+                element.style.width = "45px";
+                element.style.height = "45px";
+                element.style.backgroundSize = "100%";
+
+                new maplibregl.Marker({element: element})
+                    .setLngLat([location.longitude, location.latitude])
+                    .setPopup(new maplibregl.Popup().setText(location.locationName))
+                    .addTo(map);
+            }
+        });
     });
 </script>
 {% endblock %}
