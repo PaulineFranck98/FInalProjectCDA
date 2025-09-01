@@ -71,9 +71,7 @@
                         <li><a href="#infos"  id="nav-infos" aria-label="Aller aux infos" class="underline-bar">Infos</a></li>
                         <li><a href="#reviews" id="nav-reviews" aria-label="Aller aux avis" class="underline-bar">Avis</a></li>
                     </ul>
-
-
-                    
+                 
                     <p id="description" class="text-justify lg:text-[0.9rem] ">{{ location.description}}</p>
                     <div class="mt-7 lg:mt-3 lg:grid lg:grid-cols-2 flex flex-col gap-8">
                         <div class="flex flex-col gap-8 lg:gap-6">
@@ -157,29 +155,47 @@
                             <i class="fa-regular fa-images text-violet-700"></i>
                             <p class="text-[1.1rem] font-semibold text-black ">Photos</p>
                         </div>
-                            <div class="wrapper-container-place">
-                                <div style="--swiper-navigation-color: #fff; --swiper-pagination-color: #fff" class="swiper mySwiper2">
-                                    <div class="swiper-wrapper">
-                                        {% for image in location.images %}
-                                            <figure class="swiper-slide">
-                                                <img src="{{ image.imageName }}" alt="{{ location.locationName}}" >
-                                            </figure>
-                                        {% endfor %}
-                                    </div>
-                                    <div class="swiper-button-next"></div>
-                                    <div class="swiper-button-prev"></div>
+                        <div class="wrapper-container-place">
+                            <div style="--swiper-navigation-color: #fff; --swiper-pagination-color: #fff" class="swiper mySwiper2">
+                                <div class="swiper-wrapper">
+                                    {% for image in location.images %}
+                                        <figure class="swiper-slide">
+                                            <img 
+                                                src="{{ image.imageName|replace({'/upload/':'/upload/w_800/'}) }}" 
+                                                alt="{{ location.locationName}}" 
+                                                class="swiper-image"
+                                                data-full="{{ image.imageName|replace({'/upload/':'/upload/w_1200/'}) }}"
+                                            >
+                                        </figure>
+                                    {% endfor %}
                                 </div>
-                                <div thumbsSlider="" class="swiper mySwiper">
-                                    <div class="swiper-wrapper">
-                                        {% for image in location.images %}
-                                    
-                                            <figure class="swiper-slide h">
-                                                <img src="{{ image.imageName }}" alt="{{ location.locationName}}" >
-                                            </figure>
-                                        {% endfor %}
-                                    </div>
+                                <div class="swiper-button-next"></div>
+                                <div class="swiper-button-prev"></div>
+                            </div>
+                            <div thumbsSlider="" class="swiper mySwiper">
+                                <div class="swiper-wrapper">
+                                    {% for image in location.images %}
+                                
+                                        <figure class="swiper-slide h">
+                                            <img 
+                                                src="{{ image.imageName|replace({'/upload/':'/upload/w_400/'}) }}" 
+                                                alt="{{ location.locationName}}"
+                                                data-full="{{ image.imageName|replace({'/upload/':'/upload/w_1200/'}) }}" 
+                                            >
+                                        </figure>
+                                    {% endfor %}
                                 </div>
                             </div>
+                        </div>
+                            
+                            {# MODAL  #}
+                   
+                        <div id="image-modal" class="hidden fixed inset-0 w-screen h-screen bg-black/80 z-[9999] justify-center items-center">
+                            <div class="relative flex justify-center items-center">
+                                <button id="close-modal" class="absolute top-[-15px] md:top-[-50px] right-[-15px] md:right-[-40px] bg-white border-0 rounded-full w-10 h-10 text-2xl cursor-pointer flex items-center justify-center shadow-lg z-10">&times;</button>
+                                <img id="modal-img" src="" alt="Image grand format" class="max-w-[90vw] max-h-[80vh] rounded-[12px] shadow-[0_0_20px_#222] h-fit">
+                            </div>
+                        </div>
                     </section>
 
                     {# ----------------- AVIS ----------------- #}
@@ -231,6 +247,7 @@
     {# <script src="{{ asset('js/map.js') }}"></script> #}
     <script>
         document.addEventListener('scroll', () => {
+            // SCROLL SECTION MOBILE
             const sections = ['description', 'contact', 'infos', 'reviews'];
             let active = sections[0];
 
@@ -249,6 +266,8 @@
 
 
         document.addEventListener('turbo:load', function(){
+
+            // SWIPER 
             const swiper = new Swiper(".mySwiper", {
                 loop: true,
                 spaceBetween: 10,
@@ -269,7 +288,8 @@
                     swiper: swiper,
                 },
             });
-
+            
+            // MAP 
             const mapDiv = document.getElementById('map');
             const lat = parseFloat(mapDiv.dataset.lat);
             const long = parseFloat(mapDiv.dataset.long);
@@ -291,7 +311,30 @@
             element.style.backgroundSize = "100%";
 
             new maplibregl.Marker({element: element}).setLngLat([long, lat]).addTo(map);
+
+            // MODAL
+            const modal = document.getElementById("image-modal");
+            const modalImg = document.getElementById("modal-img");
+            const closeBtn = document.getElementById("close-modal");
+
+            document.querySelectorAll('.swiper-image').forEach(img => {
+                img.addEventListener('click', function() {
+                    modalImg.src = img.dataset.full;
+                    modal.style.display = 'flex';
+                });
+            });
+            closeBtn.addEventListener('click', function() {
+                modal.style.display = 'none';
+                modalImg.src = '';
+            });
+            modal.addEventListener('click', function(e) {
+                if(e.target === modal) {
+                    modal.style.display = 'none';
+                    modalImg.src = '';
+                }
+            });
         });
+     
     </script>
 
 {% endblock %}

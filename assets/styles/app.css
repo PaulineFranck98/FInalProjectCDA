@@ -19,7 +19,7 @@ fieldset.sweet-pot{
 }
 
 img {
-    @apply w-full h-full object-cover;
+    @apply w-full object-cover;
 }
 
 
@@ -123,8 +123,9 @@ img {
 }
 
  .swiper-slide img {
-    @apply rounded-[5px];
+    @apply rounded-[5px] cursor-pointer h-full;
 }
+
 
 
 /* ===================================================== */
