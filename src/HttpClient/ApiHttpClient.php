@@ -5,7 +5,7 @@ namespace App\HttpClient;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-class ApiHttpClient extends AbstractController
+class ApiHttpClient
 {
     private $client;
     private $baseUrl;

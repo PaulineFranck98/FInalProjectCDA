@@ -11,6 +11,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Messenger\Transport\Serialization\Serializer;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use App\Service\LocationSearchServiceInterface;
 
 class LocationController extends AbstractController
 {
@@ -25,10 +26,10 @@ class LocationController extends AbstractController
 
 
     #[Route('/location', name: 'location_search')]
-    public function search(Request $request, ApiHttpClient $apiHttpClient): Response
+    public function search(Request $request, LocationSearchServiceInterface $locationSearchService, ApiHttpClient $apiHttpClient): Response
     {
         $filters = $request->query->all(); 
-        $locations = $apiHttpClient->searchLocations($filters);
+        $locations = $locationSearchService->search($filters);
 
         $prices = $apiHttpClient->getFilterData('price');
         $types = $apiHttpClient->getFilterData('type');
