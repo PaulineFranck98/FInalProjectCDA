@@ -32,9 +32,12 @@ function initMap() {
     );
    
     
-
     locations.forEach(location => {
-        if (location.latitude && location.longitude) {
+        const hasGeo = location.geo && Array.isArray(location.geo.coordinates);
+
+        if (hasGeo) {
+            const [lon, lat] = location.geo.coordinates;
+
             const element = document.createElement('div');
             element.style.backgroundImage = 'url("/img/regular-pin-small.png")';
             element.style.width = "45px";
@@ -42,7 +45,7 @@ function initMap() {
             element.style.backgroundSize = "100%";
 
             new maplibregl.Marker({element: element})
-                .setLngLat([location.longitude, location.latitude])
+                .setLngLat([lon, lat])
                 .setPopup(new maplibregl.Popup().setText(location.locationName))
                 .addTo(map);
         }

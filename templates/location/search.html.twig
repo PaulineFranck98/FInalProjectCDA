@@ -14,7 +14,7 @@
                 <div class="flex flex-col">
                     {% for price in prices %}
                     <div class="flex gap-2 text-[0.9rem] text-gray-700">
-                        <input type="checkbox" value="{{ price.id }}" />
+                        <input type="checkbox" name="priceId" value="{{ price.id }}" />
                         <label>{{  price.priceRange }} </label>
                     </div>
                     {% endfor %}
@@ -24,10 +24,15 @@
                 <p>Type</p>
                 <div class="flex flex-col">
                     {% for type in types %}
-                    <div class="flex gap-2 text-[0.9rem] text-gray-700">
-                        <input type="checkbox" value="{{ type.id }}" />
+                    {# <div class="flex gap-2 text-[0.9rem] text-gray-700">
+                        <input type="checkbox" name="typeId" value="{{ type.id }}" />
                         <label>{{ type.typeName }} </label>
-                    </div>
+                    </div> #}
+                     <label class="flex gap-2 text-[0.9rem] text-gray-700">
+                        <input type="radio" name="typeId" value="{{ type.id }}"
+                            {% if filters.typeId is defined and filters.typeId == type.id %}checked{% endif %}/>
+                        {{ type.typeName }}
+                    </label>
                     {% endfor %}
                 </div>
             </div>
@@ -59,7 +64,7 @@
                 <div class="flex flex-col">
                     {% for confort in conforts %}
                     <div class="flex gap-2 text-[0.9rem] text-gray-700">
-                        <input type="checkbox" value="{{ confort.id }}" />
+                        <input type="checkbox" name="confortId" value="{{ confort.id }}" />
                         <label>{{ confort.confortLevel }} </label>
                     </div>
                     {% endfor %}
@@ -71,7 +76,7 @@
                     <div class="flex flex-col">
                         {% for duration in durations %}
                         <div class="flex gap-2 text-[0.9rem] text-gray-700">
-                            <input type="checkbox" value="{{ duration.id }}" />
+                            <input type="checkbox" name="durationId" value="{{ duration.id }}" />
                             <label>{{ duration.onSiteTime }} </label>
                         </div>
                         {% endfor %}

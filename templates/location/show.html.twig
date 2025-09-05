@@ -140,8 +140,7 @@
                         <div 
                             id="map" 
                             class="w-full  rounded-lg h-36 mt-8 inset-shadow-sm inset-shadow-gray-400"
-                            data-lat="{{ location.latitude }}"
-                            data-long="{{ location.longitude }}"
+                            data-geo='{{ location.geo ? location.geo|json_encode : "null" }}'
                         >
                         </div>
                     </section>
@@ -289,28 +288,34 @@
                 },
             });
             
-            // MAP 
+          
+            // MAP
             const mapDiv = document.getElementById('map');
-            const lat = parseFloat(mapDiv.dataset.lat);
-            const long = parseFloat(mapDiv.dataset.long);
+            const geoData = mapDiv.dataset.geo ? JSON.parse(mapDiv.dataset.geo) : null;
 
-            const map = new maplibregl.Map({
-                container: 'map',
-                style: "https://api.jawg.io/styles/jawg-lagoon.json?access-token=5Hj1eNrhxICEmCUA3n50cFITkKNPsXWcZFw3JKMebObcRBGRIBQnT1RQlRQ4RRoG",
-                zoom: 16,
-                center: [long, lat]
-            });
-            maplibregl.setRTLTextPlugin(
-                'https://unpkg.com/@mapbox/mapbox-gl-rtl-text@0.3.0/dist/mapbox-gl-rtl-text.js'
-            );
+            if (geoData) {
+                const [long, lat] = geoData.coordinates;
 
-            const element = document.createElement('div');
-            element.style.backgroundImage = 'url("/img/regular-pin-small.png")';
-            element.style.width = "45px";
-            element.style.height = "45px";
-            element.style.backgroundSize = "100%";
+                const map = new maplibregl.Map({
+                    container: 'map',
+                    style: "https://api.jawg.io/styles/jawg-lagoon.json?access-token=5Hj1eNrhxICEmCUA3n50cFITkKNPsXWcZFw3JKMebObcRBGRIBQnT1RQlRQ4RRoG",
+                    zoom: 16,
+                    center: [long, lat]
+                });
 
-            new maplibregl.Marker({element: element}).setLngLat([long, lat]).addTo(map);
+                maplibregl.setRTLTextPlugin(
+                    'https://unpkg.com/@mapbox/mapbox-gl-rtl-text@0.3.0/dist/mapbox-gl-rtl-text.js'
+                );
+
+                const element = document.createElement('div');
+                element.style.backgroundImage = 'url("/img/regular-pin-small.png")';
+                element.style.width = "45px";
+                element.style.height = "45px";
+                element.style.backgroundSize = "100%";
+
+                new maplibregl.Marker({ element: element }).setLngLat([long, lat]).addTo(map);
+            }
+
 
             // MODAL
             const modal = document.getElementById("image-modal");
