@@ -14,6 +14,8 @@ use Symfony\Component\Mime\Address;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
+use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 class RegistrationController extends AbstractController
 {
@@ -22,13 +24,45 @@ class RegistrationController extends AbstractController
     }
 
     #[Route('/register', name: 'app_register')]
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
+    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager,  SluggerInterface $slugger): Response
     {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+             // Je précise que $profilePictureFile sera une instance de UploadedFile
+             /** @var UploadedFile $profilePictureFile */
+            // Je récupère les données du champ 'profilePicture' de mon formulaire
+            $profilePictureFile = $form->get('profilePicture')->getData();
+            // Je vérifie si un fichier a bien été téléchargé
+            if($profilePictureFile){
+                // J'extrais le nom du fichier original sans l'extension, et je le stocke dans la variable 'originalFilename'
+                $originalFilename = pathinfo($profilePictureFile->getClientOriginalName(), PATHINFO_FILENAME);
+                // Je rends la chaîne de caractères sûre en enlevant les espaces et caractères spéciaux avec la fonction slug()
+                $safeFilename = $slugger->slug($originalFilename);
+                // Je génère un nom de fichier unique en ajoutant un identifiant unique
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$profilePictureFile->guessExtension();
+
+                try{
+                    // Je déplace le fichier vers le dossier où les images téléchargées sont stockées
+                    $profilePictureFile->move(
+                        // Je récupère le chemin du dossier de téléchargements
+                        $this->getParameter('uploads_directory'),
+                        // Nouveau nom sous lequel le fichier sera enregitré
+                        $newFilename
+                    );
+                // J'intercepte et gère l'exception en cas d'erreur lors du téléchargement
+                } catch(FileException $e){
+                    // J'affiche une message d'erreur et stoppe le script 
+                    dd('Impossible de déplacer l\'image téléchargée vers le dossier');
+                }
+                // J'attribue à la propriété 'profilePicture' de l'utilisateur le nouveau nom de fichier    
+                $user->setProfilePicture($newFilename);
+            }
+
+
             /** @var string $plainPassword */
             $plainPassword = $form->get('plainPassword')->getData();
 

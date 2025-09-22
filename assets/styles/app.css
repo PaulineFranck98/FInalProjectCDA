@@ -137,3 +137,9 @@ img {
     @apply h-52 md:h-52 lg:h-36;
 }
 
+/* ===================================================== */
+
+/* =======================  FORM ======================== */
+.input-base {
+    @apply  bg-gray-100 border border-gray-200 rounded-lg px-3 py-2 w-full;
+}

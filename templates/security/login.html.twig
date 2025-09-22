@@ -3,22 +3,22 @@
 {% block title %}Connexion{% endblock %}
 
 {% block body %}
-    <div class="w-screen h-screen flex flex-col justify-center items-center ">
-        <div class="bg-white/70 px-5 pt-3 pb-4 rounded-lg w-xs md:w-md">
-            <form method="post">
+    <div class="w-screen h-screen flex flex-col justify-center items-center md:justify-start  md:mt-36">
+        <div class="bg-white/70 pt-3 pb-4 rounded-lg w-full max-w-9/12 md:max-w-lg md:mx-auto">
+            <form method="post" class="w-full">
                 {% if error %}
                     <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
                 {% endif %}
 
             
-                <h1 class="text-xl md:text-2xl font-semibold text-center mb-3">Vous revoilà !</h1>
-                <div class="flex flex-col mb-4">
-                    <label class="font-semibold md:text-lg" for="username">Email</label>
-                    <input class="bg-white rounded-md p-1" type="email" value="{{ last_username }}" name="_username" id="username" class="form-control" autocomplete="email" required autofocus>
+                <h1 class="text-violet-800 text-xl md:text-2xl font-semibold text-center mb-10">Ravi de vous revoir !</h1>
+                <div class="flex flex-col mb-6">
+                    <label class=" md:text-lg mb-2 font-semibold" for="username">Email</label>
+                    <input class="input-base" type="email" value="{{ last_username }}" name="_username" id="username"  autocomplete="email" required autofocus>
                 </div>
                 <div class="flex flex-col mb-1">
-                    <label class=" font-semibold md:text-lg" for="password">Mot de passe</label>
-                    <input class="bg-white rounded-md p-1" type="password" name="_password" id="password" class="form-control" autocomplete="current-password" required>
+                    <label class=" md:text-lg mb-2 font-semibold" for="password">Mot de passe</label>
+                    <input class="input-base" type="password" name="_password" id="password"  autocomplete="current-password">
                 </div>
                 <input type="hidden" name="_csrf_token"
                     value="{{ csrf_token('authenticate') }}"
@@ -36,17 +36,17 @@
 
                 <p class="text-xs md:text-sm"><a href="{{ path('app_forgot_password_request')}}">Vous avez oublié votre mot de passe? <span class="font-semibold underline underline-offset-2">Cliquez ici</span></a></p>
                 <p class="flex justify-center" >
-                    <button  class="cursor-pointer text-bold text-white bg-gray-700 px-3 py-1 rounded-md my-4  md:text-lg" type="submit">
-                        C'est parti !
+                    <button  class=" bg-violet-800 px-12 py-2 text-white font-medium text-center w-full rounded-xl btn-violet mt-8 mb-8 md:text-lg" type="submit">
+                        C'est parti
                     </button>
                 </p>    
             </form>
-            <div class="flex items-center gap-4 mb-3">
+            <div class="flex items-center gap-4 mb-5">
                 <div class="flex-1 border-t border-gray-500"></div>
                     <span class="text-gray-700">ou</span>
                 <div class="flex-1 border-t border-gray-500"></div>
             </div>
-            <div class="flex align-center justify-center gap-3  bg-white rounded-md p-2">
+            <div class="flex align-center justify-center gap-3  bg-white px-2 py-3 border border-gray-300 rounded-xl">
                 <figure>
                     <img src="/img/logo_google.webp" alt="logo Google" />
                 </figure>
