@@ -22,11 +22,13 @@
                         <div class="lg:w-2/3">
                             <div class="flex items-center justify-between lg:justify-start lg:gap-4">
                                 <h1 class="text-2xl lg:text-3xl text-left mb-1 font-semibold ">{{ location.locationName }}</h1>
-                                <div class="flex gap-2 text-gray-800 font-light">
-                                    <p>4,1</p>
-                                    <div class="text-[0.75rem]">{{ 4|stars|raw }}</div>
-                                    <p>(102)</p>
-                                </div>
+                                {% if averageRating %}
+                                    <div class="flex gap-2 text-gray-800 font-light">
+                                        <p>{{ averageRating|number_format(1, ',', '') }}</p>
+                                        <div class="text-[0.75rem]">{{ averageRating|round(1, 'floor')|stars|raw }}</div>
+                                        <p>({{ ratings|length }})</p>
+                                    </div>
+                                {% endif %}
                             </div>
                             <p class="text-gray-500 mt-2">
                                 {% if location.type %}
@@ -203,31 +205,44 @@
                         <div class="lg:flex lg:justify-between lg:mb-3">
                             <div class="flex gap-2 items-center mb-5">
                                 <i class="fa-regular fa-star text-violet-700"></i>
-                                <p class="text-[1.1rem] font-semibold text-black ">Avis</p>
+                                <p class="text-[1.1rem] font-semibold text-black ">Avis <span class="text-sm font-light text-gray-700">({{ ratings|length }})</span></p>
                             </div>
                             <div class="hidden lg:block">
                                 <p class=" bg-violet-800 px-12 py-2 rounded-2xl text-white font-medium text-center w-fit btn-violet" >
-                                    <a href="#">Laisser un avis</a>
+                                    <a href="{{ path('new_rating', {'locationId': location.id})}}">Laisser un avis</a>
                                 </p>
                             </div>  
 
                         </div>
-                        {# TODO : récupérer les avis associés à l'ID du lieu  #}
-                        <div class="h-32 max-h-32 line-clamp-4 border border-violet-200 rounded-xl py-3 px-4">
-                            <div class="flex justify-between mb-1">
-                                <div class=" text-violet-700 text-[0.75rem] ">{{ 4|stars|raw}}</div>
-                                {# TODO : récupérer vrai nom + vraie date #}
-                                <p class="text-[0.75rem] text-gray-500">Camille - 25 octobre 2025</p>
+                       
+                        <div class="swiper mySwiperReviews" style="--swiper-pagination-color: #5D0EC0">
+                            <div class="swiper-wrapper">
+                                {% for review in ratings|slice(0, 10) %}
+                                    <div class="swiper-slide">
+                                        <div class="h-32 max-h-32 line-clamp-4 border border-violet-200 rounded-xl py-3 px-4 w-full">
+                                            <div class="flex justify-between mb-1">
+                                                <div class="text-violet-700 text-[0.75rem]">
+                                                    {{ review.rating|stars|raw }}
+                                                </div>
+                                                <p class="text-[0.75rem] text-gray-500">
+                                                    {{ review.user.username ?? 'Anonyme' }} – 
+                                                    {{ review.ratingDate|date('d/m/Y') }}
+                                                </p>
+                                            </div>
+                                            <p class="text-[0.9rem]">
+                                                {{ review.comment ?? 'Pas de commentaire' }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    <div class="swiper-slide">
+                                        <p class="text-gray-500 text-center py-8">Aucun avis pour le moment.</p>
+                                    </div>
+                                {% endfor %}
                             </div>
-
-                            <p class=" text-[0.9rem]">J’ai adoré mon séjour. Cet hôtel est vraiment superbe, le petit déjeuner est très bon ! Vous pouvez y aller sans hésiter ! Les chambres sont très propres et belles</p>
+                            <div class="swiper-pagination reviews-pagination"></div>
                         </div>
 
-                        <div class="my-8 w-full flex justify-center lg:hidden">
-                            <p class="bg-violet-800 px-12 py-3 rounded-3xl text-white font-medium text-center w-fit" >
-                                <a href="#">Laisser un avis</a>
-                            </p>  
-                        </div>
                     </section>
 
                 </div>
@@ -264,17 +279,17 @@
         });
 
 
-        document.addEventListener('turbo:load', function(){
+        document.addEventListener('DOMContentLoaded', function(){
 
-            // SWIPER 
+            // SWIPER IMAGES
             const swiper = new Swiper(".mySwiper", {
                 loop: true,
                 spaceBetween: 10,
-                slidesPerView: 3,
-                
+                slidesPerView: 3,       
                 freeMode: true,
                 watchSlidesProgress: true,
             });
+
             const swiper2 = new Swiper(".mySwiper2", {
                 loop: true,
                 spaceBetween: 10,
@@ -287,6 +302,17 @@
                     swiper: swiper,
                 },
             });
+
+            // SWIPER COMMENTS
+            new Swiper(".mySwiperReviews", {
+                slidesPerView: 1,
+                spaceBetween: 20,
+                pagination: {
+                    el: ".reviews-pagination",
+                    clickable: true,
+                },
+            });
+           
             
           
             // MAP

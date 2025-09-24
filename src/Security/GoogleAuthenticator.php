@@ -26,9 +26,25 @@ class GoogleAuthenticator extends AbstractOAuthAuthenticator
             throw new AuthenticationException("email not verified");
         }
 
-        return $repository->findOneBy([
+        $user =  $repository->findOneBy([
             'google_id' => $resourceOwner->getId(),
             'email' => $resourceOwner->getEmail()
         ]);
+
+        // update si infos manquantes lors de la connexion
+        if($user) {
+            $data = $resourceOwner->toArray();
+
+            if ($user->getUsername() === null) {
+                $user->setUsername($data['name'] ?? null);
+            }
+            if ($user->getProfilePicture() === null) {
+                $user->setProfilePicture($data['picture'] ?? null);
+            }
+
+            $repository->add($user, true);
+        }
+
+        return $user;
     }
 }

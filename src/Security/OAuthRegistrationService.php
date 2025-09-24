@@ -23,7 +23,10 @@ final readonly class OAuthRegistrationService
     {
         $user = (new User())
         ->setEmail($resourceOwner->getEmail())
-        ->setGoogleId($resourceOwner->getId());
+        ->setGoogleId($resourceOwner->getId())
+        ->setUsername($data['name'] ?? null)
+        ->setProfilePicture($data['picture'] ?? null);
+
     
 
         $this->repository->add($user, true);

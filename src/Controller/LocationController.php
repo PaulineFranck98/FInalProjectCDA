@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Membre;
 use App\HttpClient\ApiHttpClient;
+use App\Repository\RatingRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -54,11 +55,21 @@ class LocationController extends AbstractController
 
     
     #[Route('/location/{id}', name: 'location_detail')]
-    public function getLocation(string $id, ApiHttpClient $apiHttpClient): Response
+    public function getLocation(string $id, ApiHttpClient $apiHttpClient, RatingRepository $ratingRepository): Response
     {   
         $location = $apiHttpClient->getLocation($id);
+
+        $averageRating = $ratingRepository->getAverageRating($id);
+
+        $ratings = $ratingRepository->findBy(
+            ['locationId' => $id],
+            ['ratingDate' => 'DESC']
+        );
+
         return $this->render('location/show.html.twig', [
-            'location' => $location
+            'location' => $location,
+            'ratings' => $ratings,
+            'averageRating' => $averageRating,
         ]);
     }
 

@@ -77,7 +77,7 @@ class RegistrationFormType extends HoneyPotType
                     'class' => 'input-base file:mr-4 file:py-2  file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100'
                 ],
                 'label_attr' => ['class' => 'mb-2 block'],
-                'row_attr' => ['class' => 'mb-12'],
+                'row_attr' => ['class' => 'mb-8'],
                 'constraints' => [
                     // J'utilise la contrainte 'File' pour spécifier les contraintes
                     new File([
@@ -97,7 +97,7 @@ class RegistrationFormType extends HoneyPotType
 
             ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,
-                'label' => 'J\'ai lu et j\'accepte les <a href="#">conditions</a>',
+                'label' => 'J\'ai lu et j\'accepte les <a href="#" class="text-violet-800 hover:underline hover:text-violet-900">conditions</a>',
                 'attr' => ['class' => 'accent-violet-700'],
                 'row_attr' => ['class' => 'flex justify-between w-full'],
                 'label_html' => true,

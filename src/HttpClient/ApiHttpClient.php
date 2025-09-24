@@ -21,6 +21,12 @@ class ApiHttpClient
         $response = $this->client->request('GET', $this->baseUrl.'/location/public');
         return $response->toArray();
     }
+    
+    public function getLocation(string $id): array
+    {
+        $response = $this->client->request('GET', $this->baseUrl.'/location/'.$id);
+        return $response->toArray();
+    }
 
     public function getItineraries(): array 
     {
@@ -28,17 +34,11 @@ class ApiHttpClient
         return $response->toArray();
     }
 
-    public function getLocation(string $id): array
-    {
-        $response = $this->client->request('GET', $this->baseUrl.'/location/'.$id);
-        return $response->toArray();
-    }
-
-    public function getItinerary(string $id): array 
-    {
-        $response = $this->client->request('GET', $this->baseUrl.'/itinerary/'.$id);
-        return $response->toArray();
-    }
+    // public function getItinerary(string $id): array 
+    // {
+    //     $response = $this->client->request('GET', $this->baseUrl.'/itinerary/'.$id);
+    //     return $response->toArray();
+    // }
 
     public function searchLocations(array $filters = []): array
     {

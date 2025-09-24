@@ -7,8 +7,8 @@
         <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
     {% endfor %}
     <section class="flex items-center justify-center h-screen w-full md:max-w-lg md:mx-auto md:items-start md:mt-36">
-        <div class="flex flex-col items-center justify-center gap-12 w-full max-w-9/12">
-            <h1 class="text-violet-800 text-xl font-bold">Créer un compte utilisateur</h1>
+        <div class="flex flex-col items-center justify-center  w-full max-w-9/12">
+            <h1 class="text-violet-800 text-xl font-bold mb-8">Créer un compte utilisateur</h1>
             {{ form_errors(registrationForm) }}
             {{ form_start(registrationForm, { attr: { class: 'w-full' } }) }}
                 {{ form_row(registrationForm.email, { row_attr: { class: 'flex flex-col w-full mb-6' }, label_attr: { class: 'mb-2' } }) }}
@@ -16,20 +16,36 @@
                 {{ form_row(registrationForm.profilePicture)}}
                 {{ form_row(registrationForm.agreeTerms) }}
 
-                <button type="submit" class="bg-violet-800 px-12 py-2 text-white font-medium text-center w-full rounded-xl btn-violet mt-8">S'inscrire</button>
+                <button type="submit" class="bg-violet-800 px-12 py-2 text-white font-medium text-center w-full rounded-xl btn-violet mt-8 mb-6">S'inscrire</button>
                 
                 <fieldset class="sweet-pot">
                     {{ form_label(registrationForm.phone)}}
                     {{ form_errors(registrationForm.phone)}}
                     {{ form_widget(registrationForm.phone)}}
-                </fielset>
+                </fieldset>
                 <fieldset class="sweet-pot">
                     {{ form_label(registrationForm.faxNumber)}}
                     {{ form_errors(registrationForm.faxNumber)}}
                     {{ form_widget(registrationForm.faxNumber)}}
-                </fielset>
+                </fieldset>
             {{ form_end(registrationForm) }}
-        </div>    
+            <div class="flex items-center gap-4 w-full">
+                <div class="flex-1 border-t border-gray-500"></div>
+                    <span class="text-gray-700">ou</span>
+                <div class="flex-1 border-t border-gray-500"></div>
+            </div>
+            <div class="flex align-center justify-center gap-3  bg-white px-2 py-3 border border-gray-300 rounded-xl w-full mt-6">
+                <figure>
+                    <img src="/img/logo_google.webp" alt="logo Google" />
+                </figure>
+                <p class=" md:text-lg">
+                    <a href="{{ path('connect_google', {service: 'google'}) }}">Continuer avec Google</a>
+                </p>
+            </div>
+            <p class="text-xs mt-3 mb-5">En continuant avec Google vous acceptez nos <a href="#" class="text-violet-800  hover:underline hover:text-violet-900">conditions d'utilisation</a></p>  
+            <p class="w-full">Déjà inscrit ?<a href="{{ path('app_login') }}" class="text-violet-800  hover:underline hover:text-violet-900"> Se connecter</a> </p>
+        </div>  
+        
     </section>
 
 {% endblock %}
