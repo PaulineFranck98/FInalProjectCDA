@@ -34,9 +34,15 @@ class ApiHttpClient
         return $response->toArray();
     }
 
-    // public function getItinerary(string $id): array 
+    // public function searchLocations(array $filters = []): array
     // {
-    //     $response = $this->client->request('GET', $this->baseUrl.'/itinerary/'.$id);
+    //     $url = $this->baseUrl . '/location/public';
+
+    //     if (!empty($filters)) {
+    //         $url .= '?' . http_build_query($filters);
+    //     }
+
+    //     $response = $this->client->request('GET', $url);
     //     return $response->toArray();
     // }
 
@@ -44,8 +50,23 @@ class ApiHttpClient
     {
         $url = $this->baseUrl . '/location/public';
 
-        if (!empty($filters)) {
-            $url .= '?' . http_build_query($filters);
+        // contiendra le sparamètres de la requête
+        $query = [];
+        foreach ($filters as $key => $value) {
+            // si le filtre contient plusieurs valeurs
+            if (is_array($value)) {
+                // transforme ['a','b'] en durationId[]=a&durationId[]=b
+                foreach ($value as $v) {
+                    // urlencode permet d'éviter les problèmes avec les caractères spéciaux
+                    $query[] = urlencode($key.'[]') . '=' . urlencode($v);
+                }
+            } else {
+                $query[] = urlencode($key) . '=' . urlencode($value);
+            }
+        }
+        // si on a au moins un filtre, on colle tout à la suite de l'url
+        if (!empty($query)) {
+            $url .= '?' . implode('&', $query);
         }
 
         $response = $this->client->request('GET', $url);

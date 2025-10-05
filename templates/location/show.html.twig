@@ -127,8 +127,8 @@
                                 </div>
                                 {# TODO : récupérer les prix et les associer à une gamme de prix #}
                                <p class="text-black font-normal">
-                                    {% if location.price %}
-                                        {{ location.price.priceRange }}
+                                    {% if location.minPrice and location.maxPrice %}
+                                        Le propriétaire a indiqué une fourchette de prix allant de {{ location.minPrice }}€ à {{ location.maxPrice }}€.
                                     {% else %}
                                         <span class="text-gray-400">Prix inconnu</span>
                                     {% endif %}

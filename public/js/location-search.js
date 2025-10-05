@@ -31,12 +31,15 @@ function initMap() {
         'https://unpkg.com/@mapbox/mapbox-gl-rtl-text@0.3.0/dist/mapbox-gl-rtl-text.js'
     );
    
+    const bounds = new maplibregl.LngLatBounds();
     
     locations.forEach(location => {
         const hasGeo = location.geo && Array.isArray(location.geo.coordinates);
 
         if (hasGeo) {
             const [lon, lat] = location.geo.coordinates;
+
+            bounds.extend([lon,lat]);
 
             const element = document.createElement('div');
             element.style.backgroundImage = 'url("/img/regular-pin-small.png")';
@@ -50,9 +53,17 @@ function initMap() {
                 .addTo(map);
         }
     });
+
+    if(!bounds.isEmpty()) {
+        map.fitBounds(bounds, {
+            padding: 50,
+            maxZoom: 14,
+            duration: 1000,
+        })
+    };
 }
 
-document.addEventListener('turbo:load', function() {
+document.addEventListener('DOMContentLoaded', function() {
     // document.getElementById('show-more-filters').addEventListener('click', toggleFilters);
     initMap();
 });

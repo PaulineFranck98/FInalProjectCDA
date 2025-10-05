@@ -28,9 +28,9 @@
         {% endblock %}
     </head>
     <body class="w-full min-h-screen flex flex-col" data-turbo="false">
-        <header>
+        <header class="fixed top-0 left-0 w-full z-50 bg-white border-b border-b-gray-200 h-[49px] flex items-center">
         {% if app.user %}
-            <nav class="hidden sm:block border-b border-b-gray-200">
+            <nav class="hidden sm:block w-full">
                 <ul class='flex justify-between font-medium  text-violet-800 my-3 mx-6 lg:mx-44'>
                     <li><a href="{{ path('app_home') }}">Accueil</a></li>
                     <li><a href="{{ path('location_search') }}">Recherche</a></li>
@@ -40,7 +40,7 @@
                 </ul>
             </nav>
             {%  else %}
-                <nav class="border-b border-b-gray-200 fixed w-full">
+                <nav class="w-full">
                     <ul class='flex justify-between font-medium  text-violet-800 my-3 mx-6 lg:mx-44'>
                         <li><a href="http://localhost:3000/sign-up" target="_blank">Espace partenaire</a></li>
                         <li><a href="{{ path('app_login') }}">Espace particulier</a></li>   
@@ -50,7 +50,7 @@
             
         {% endif %}
         </header>
-        <main class="flex-1">
+        <main class="flex-1 mt-[49px] lg:h-[calc(100vh-49px)] overflow-hidden">
             {% for label, messages in app.flashes %}
                 {% for message in messages %}
                     <div class="text-center p-4 mb-4 text-sm rounded-lg fixed left-1/2 -translate-x-1/2  z-[10000]

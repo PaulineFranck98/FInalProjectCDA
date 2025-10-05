@@ -27,29 +27,37 @@ class LocationController extends AbstractController
 
 
     #[Route('/location', name: 'location_search')]
-    public function search(Request $request, LocationSearchServiceInterface $locationSearchService, ApiHttpClient $apiHttpClient): Response
+    public function search(Request $request, LocationSearchServiceInterface $locationSearchService, ApiHttpClient $apiHttpClient, RatingRepository $ratingRepository): Response
     {
         $filters = $request->query->all(); 
         $locations = $locationSearchService->search($filters);
 
-        $prices = $apiHttpClient->getFilterData('price');
         $types = $apiHttpClient->getFilterData('type');
         $durations = $apiHttpClient->getFilterData('duration');
         $conforts = $apiHttpClient->getFilterData('confort');
         $intensities = $apiHttpClient->getFilterData('intensity');
         $themes = $apiHttpClient->getFilterData('theme');
         $companions = $apiHttpClient->getFilterData('companion');
+        $priceRange = $apiHttpClient->getFilterData('location/price-range');
+
+        // & crée une référence : pointeur direct vers l'élément du tableau
+        foreach($locations as &$location) {
+            $locationId = $location['id'] ?? null;
+            $location['averageRating'] = $ratingRepository->getAverageRating($locationId);
+        }
+        // évite de modifier le dernier élément de $locations
+        unset($location);
 
         return $this->render('location/search.html.twig', [
             'locations' => $locations,
             'filters' => $filters,
-            'prices' => $prices,
             'types' => $types,
             'durations' => $durations,
             'conforts' => $conforts,
             'intensities' => $intensities,
             'themes' => $themes,
             'companions' => $companions,
+            'priceRange' => $priceRange,
         ]);
     }
 

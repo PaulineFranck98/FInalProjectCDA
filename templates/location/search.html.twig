@@ -2,103 +2,199 @@
 {% block title %}Recherche de lieux{% endblock %}
 
 {% block body %}
-<div class="flex flex-col lg:flex-row gap-8 mt-10 m-auto lg:w-[80%]">
- 
-    <div class="lg:w-1/2 flex flex-col lg:flex-row gap-8">
-      
-        <form method="get" class="flex flex-col gap-4 bg-white rounded-xl p-4 shadow lg:w-1/2">
-            <input type="text" name="city" placeholder="Ville" class="border border-gray-400 rounded px-4 py-2 w-full" />
-            {# <button type="button" class="text-violet-800 underline mt-2" id="show-more-filters">Voir plus de filtres</button> #}
-            <div class=" flex flex-col border border-gray-400 rounded px-4 py-2">
+<div class="flex flex-col lg:flex-row lg:gap-8 m-auto lg:w-[80%] lg:h-[calc(100vh-49px)] pb-10">
+
+    <button id="openFilters"
+            class="fixed bottom-24 right-4 bg-violet-700 text-white px-4 py-2 rounded-full shadow-lg z-50 lg:hidden">
+        <i class="fa-solid fa-sliders"></i> Filtres
+    </button>
+
+    <div id="filtersPanel" class="fixed inset-0 bg-white z-50 transform translate-x-full transition-transform duration-300 lg:relative lg:translate-x-0 lg:w-1/2 flex flex-col lg:flex-row gap-8 min-h-0 pt-10">
+        <form method="get" class="flex flex-col gap-4 bg-white rounded-xl p-4 shadow lg:w-1/2  md:min-w-[320px] overflow-y-auto scrollbar-hide  ">
+            <button id="closeFilters" type="button" class="self-end text-violet-700 mb-2 lg:hidden">
+                <i class="fa-solid fa-xmark text-2xl"></i>
+            </button>
+
+            <input type="text" name="city" placeholder="Ville" class="border border-gray-300 rounded px-4 py-2 w-full" value="{{ filters.city ?? '' }}" />
+            <div class=" flex flex-col border border-gray-300 rounded px-4 py-2 ">
                 <p>Prix</p>
+                <div class="flex flex-col gap-2  ">
+                    <div class="flex items-center">
+                        <input 
+                            type="range" 
+                            id="priceMin" 
+                            name="priceMin"
+                            class="w-2/3 accent-violet-600 cursor-pointer"
+                            min="{{ priceRange.minPrice }}" 
+                            max="{{ priceRange.maxPrice }}" 
+                            value="{{ filters.priceMin ?? priceRange.minPrice }}" 
+                            step="1"
+                            oninput="
+                                const maxInput = document.getElementById('priceMax');
+                                if (parseInt(this.value) >= parseInt(maxInput.value)) this.value = maxInput.value - 1;
+                                document.getElementById('minPriceDisplay').textContent = this.value;
+                            "
+                        >
+                        <span class="text-sm ms-2">Min : <span id="minPriceDisplay">{{ filters.priceMin ?? priceRange.minPrice }}</span>€</span>
+                    </div>
+                    <div class="flex items-center">
+                        <input 
+                            type="range" 
+                            id="priceMax" 
+                            name="priceMax"
+                            class="w-2/3 accent-violet-600 cursor-pointer"
+                            min="{{ priceRange.minPrice }}" 
+                            max="{{ priceRange.maxPrice }}" 
+                            value="{{ filters.priceMax ?? priceRange.maxPrice }}" 
+                            step="1"
+                            oninput=" 
+                                const minInput = document.getElementById('priceMin');
+                                if (parseInt(this.value) <= parseInt(minInput.value)) this.value = parseInt(minInput.value) + 1;
+                                document.getElementById('maxPriceDisplay').textContent = this.value;"
+                        >
+                        <span class="text-sm ms-2">Max : <span id="maxPriceDisplay">{{ filters.priceMax ?? priceRange.maxPrice }}</span>€</span>
+                    </div>
+                </div>
+                
+            </div>
+            <div class=" flex flex-col border border-gray-300 rounded px-4 py-2">
+                <p>Type</p>
                 <div class="flex flex-col">
-                    {% for price in prices %}
+                    {% for type in types %}
                     <div class="flex gap-2 text-[0.9rem] text-gray-700">
-                        <input type="checkbox" name="priceId" value="{{ price.id }}" />
-                        <label>{{  price.priceRange }} </label>
+                        <input class="accent-violet-700 cursor-pointer" type="checkbox" name="typeId" value="{{ type.id }}"
+                            {% if filters.typeId is defined and filters.typeId == type.id %}checked{% endif %}/>
+                        <label>{{ type.typeName }}</label>
                     </div>
                     {% endfor %}
                 </div>
             </div>
-            <div class=" flex flex-col border border-gray-400 rounded px-4 py-2">
-                <p>Type</p>
-                <div class="flex flex-col">
-                    {% for type in types %}
-                    {# <div class="flex gap-2 text-[0.9rem] text-gray-700">
-                        <input type="checkbox" name="typeId" value="{{ type.id }}" />
-                        <label>{{ type.typeName }} </label>
-                    </div> #}
-                     <label class="flex gap-2 text-[0.9rem] text-gray-700">
-                        <input type="radio" name="typeId" value="{{ type.id }}"
-                            {% if filters.typeId is defined and filters.typeId == type.id %}checked{% endif %}/>
-                        {{ type.typeName }}
-                    </label>
-                    {% endfor %}
-                </div>
-            </div>
             
-            <div class=" flex flex-col border border-gray-400 rounded px-4 py-2">
+            <div class=" flex flex-col border border-gray-300 rounded px-4 py-2">
                 <p>Avec qui ?</p>
                 <div class="flex flex-col">
                     {% for companion in companions %}
                     <div class="flex gap-2 text-[0.9rem] text-gray-700">
-                        <input type="checkbox" value="{{ companion.id }}" />
+                        <input class="accent-violet-700 cursor-pointer" type="checkbox" name="companionIds[]" value="{{ companion.id }}" {% if filters.companionIds is defined and companion.id in filters.companionIds %}checked{% endif %}>
                         <label>{{ companion.companionName}} </label>
                     </div>
                     {% endfor %}
                 </div>
             </div>
-             <div class=" flex flex-col border border-gray-400 rounded px-4 py-2">
+             <div class=" flex flex-col border border-gray-300 rounded px-4 py-2">
                 <p>Thème</p>
                 <div class="flex flex-col">
                     {% for theme in themes %}
                     <div class="flex gap-2 text-[0.9rem] text-gray-700">
-                        <input type="checkbox" value="{{ theme.id }}" />
+                        <input class="accent-violet-700 cursor-pointer"  type="checkbox" name="themeIds[]" value="{{ theme.id }}" {% if filters.themeIds is defined and theme.id in filters.themeIds %}checked{% endif %}>
                         <label>{{ theme.themeName }} </label>
                     </div>
                     {% endfor %}
                 </div>
             </div>
-            <div class=" flex flex-col border border-gray-400 rounded px-4 py-2">
+            <div class=" flex flex-col border border-gray-300 rounded px-4 py-2">
                 <p>Confort</p>
                 <div class="flex flex-col">
                     {% for confort in conforts %}
                     <div class="flex gap-2 text-[0.9rem] text-gray-700">
-                        <input type="checkbox" name="confortId" value="{{ confort.id }}" />
+                        <input class="accent-violet-700 cursor-pointer"  type="checkbox" name="confortId[]" value="{{ confort.id }}" {% if filters.confortId is defined and confort.id in filters.confortId %}checked{% endif %}>
                         <label>{{ confort.confortLevel }} </label>
                     </div>
                     {% endfor %}
                 </div>
             </div>
             <div id="more-filters" class="flex flex-col gap-4">
-                <div class=" flex flex-col border border-gray-400 rounded px-4 py-2">
+                <div class=" flex flex-col border border-gray-300 rounded px-4 py-2">
                     <p>Durée</p>
                     <div class="flex flex-col">
                         {% for duration in durations %}
                         <div class="flex gap-2 text-[0.9rem] text-gray-700">
-                            <input type="checkbox" name="durationId" value="{{ duration.id }}" />
-                            <label>{{ duration.onSiteTime }} </label>
+                            <input class="accent-violet-700 cursor-pointer"  type="checkbox" name="durationId[]" value="{{ duration.id }}" {% if filters.durationId is defined and duration.id in filters.durationId %}checked{% endif %}>
+                            <label>
+                                {% if duration.onSiteTime == '1' %}
+                                    1h
+                                {% elseif duration.onSiteTime == '2' %}
+                                    2h
+                                {% elseif duration.onSiteTime == '3' %}
+                                    3h
+                                {% elseif duration.onSiteTime == '12' %}
+                                    1/2 journée
+                                {% elseif duration.onSiteTime == '24' %}
+                                    1 journée et +
+                                {% else %}
+                                    {{ duration.onSiteTime }}
+                                {% endif %}
+                            </label>
                         </div>
                         {% endfor %}
                     </div>
-                </div>
-              
-                <select name="intensity" class="border border-gray-400 rounded px-4 py-2">
+                </div>  
+                <select name="intensityId" class="border border-gray-300 rounded px-4 py-2">
                     <option value="">Intensité</option>
                     {% for intensity in intensities %}
-                        <option value="{{ intensity.id }}">{{ intensity.intensityLevel }}</option>
+                        <option value="{{ intensity.id }}"
+                            {% if filters.intensityId is defined and filters.intensityId == intensity.id %}selected{% endif %}>
+                            {{ intensity.intensityLevel }}
+                        </option>
                     {% endfor %}
                 </select>
-               
-                 
             </div>
-            <button type="submit" class="bg-violet-800 text-white px-6 py-2 rounded-xl mt-4">Rechercher</button>
+            <div class="w-full flex justify-center items-center gap-4 text-red-600 border  border-red-300 bg-red-50 rounded-md py-2">
+                <i class="fa-regular fa-trash-can"></i>
+                <a href="{{ path('location_search') }}">Réinitialiser</a>
+            </div>
+            <button type="submit" class="bg-violet-800 text-white px-6 py-2 rounded-xl mt-4 cursor-pointer">Rechercher</button>
         </form>
     
-        <div class="mt-8 flex flex-col gap-4 lg:w-1/2">
+        <div class="hidden pt-8 lg:flex flex-col gap-4 lg:w-1/2">
             {% for location in locations %}
-                <a href="{{ path('location_detail', {'id': location.id}) }}" class="block">
-                    <p class="font-medium border-violet-600 hover:bg-violet-600 hover:text-white transition-colors duration-300 ease-in-out border px-4 py-2 rounded cursor-pointer">{{ location.locationName }}</p>
+                <a href="{{ path('location_detail', {'id': location.id}) }}" class="flex items-center gap-4 border border-violet-200 hover:border-violet-600 rounded-lg  hover:bg-violet-50 transition h-[110px] p-2">
+                    {% if location.images|length > 0 %}
+                        <img 
+                            src="{{ location.images[0].imageName|replace({'/upload/':'/upload/w_300/'}) }}"
+                            alt="{{ location.locationName }}"
+                            class="object-cover rounded-md h-full w-32">
+                    {% else %}
+                        <div class="w-24 h-full bg-gray-200 rounded-md flex items-center justify-center text-gray-400 text-sm ">
+                            Aucune image
+                        </div>
+                    {% endif %}
+                    <div class="flex flex-col justify-center gap-1 ">
+                        <p class="font-semibold text-violet-800">{{ location.locationName }}</p>
+
+                        {% if location.averageRating %}
+                            <div class="flex gap-2 text-gray-800 font-light mt-1 items-center">
+                                <p>{{ location.averageRating|number_format(1, ',', '') }}</p>
+                                <div class="text-[0.75rem]">{{ location.averageRating|round(1, 'floor')|stars|raw }}</div>
+                            </div>
+                        {% else %}
+                            <p class="text-sm text-gray-400 mt-1">Pas encore noté</p>
+                        {% endif %}
+                        {% if location.duration and location.duration.onSiteTime %}
+                            <div class="flex gap-2 items-center text-gray-600">
+                                <i class="fa-regular fa-clock text-sm"></i>
+                                <p class="text-sm ">
+                                    {% if location.duration.onSiteTime == '1' %}
+                                        1h
+                                    {% elseif location.duration.onSiteTime == '2' %}
+                                        2h
+                                    {% elseif location.duration.onSiteTime == '3' %}
+                                        3h
+                                    {% elseif location.duration.onSiteTime == '12' %}
+                                        12h
+                                    {% elseif location.duration.onSiteTime == '24' %}
+                                        24h
+                                    {% else %}
+                                        {{ location.duration.onSiteTime }}
+                                    {% endif %}
+                                </p>
+                        {% endif %}
+                        {% if location.city %}
+                                <p class="text-sm "> |  {{ location.city }}</p>
+                            </div>
+                           
+                        {% endif %}
+                    </div>
                 </a>
             {% else %}
                 <p class="text-center text-gray-500">Aucun lieu trouvé.</p>
@@ -106,12 +202,23 @@
         </div>
     </div>
    
-    <div class="lg:w-1/2 mt-8 lg:mt-0">
-        <div id="search-map" class="w-full h-96 bg-gray-200 rounded-xl" data-locations='{{ locations|json_encode }}'>
+    <div class="lg:w-1/2 lg:pt-8 lg:h-full h-screen relative">
+        <div id="search-map" class="w-full  bg-gray-200 rounded-xl h-full" data-locations='{{ locations|json_encode }}'>
             <span class="text-gray-500">Carte</span>
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const filtersPanel = document.getElementById("filtersPanel");
+        const openBtn = document.getElementById("openFilters");
+        const closeBtn = document.getElementById("closeFilters");
+
+        openBtn?.addEventListener("click", () => filtersPanel.classList.remove("translate-x-full"));
+        closeBtn?.addEventListener("click", () => filtersPanel.classList.add("translate-x-full"));
+    });
+</script>
 <script src='https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.js'></script>
 <script src="{{ asset('js/location-search.js') }}"></script>
 

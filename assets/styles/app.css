@@ -18,9 +18,9 @@ fieldset.sweet-pot{
     @apply opacity-0 absolute top-0 left-0 h-0 w-0 -z-10;
 }
 
-img {
+/* img {
     @apply w-full object-cover;
-}
+} */
 
 
 .btn-violet {
@@ -123,7 +123,7 @@ img {
 }
 
  .swiper-slide img {
-    @apply rounded-[5px] cursor-pointer h-full;
+    @apply rounded-[5px] cursor-pointer h-full w-full object-cover;
 }
 
 
@@ -142,4 +142,13 @@ img {
 /* =======================  FORM ======================== */
 .input-base {
     @apply  bg-gray-100 border border-gray-200 rounded-lg px-3 py-2 w-full;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* Internet Explorer & Edge */
+  scrollbar-width: none;     /* Firefox */
 }
