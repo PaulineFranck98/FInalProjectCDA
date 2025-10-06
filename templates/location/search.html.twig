@@ -5,11 +5,11 @@
 <div class="flex flex-col lg:flex-row lg:gap-8 m-auto lg:w-[80%] lg:h-[calc(100vh-49px)] pb-10">
 
     <button id="openFilters"
-            class="fixed bottom-24 right-4 bg-violet-700 text-white px-4 py-2 rounded-full shadow-lg z-50 lg:hidden">
+            class="fixed top-2 right-4 bg-violet-700 text-white px-4 py-2 rounded-full shadow-lg z-50 lg:hidden">
         <i class="fa-solid fa-sliders"></i> Filtres
     </button>
 
-    <div id="filtersPanel" class="fixed inset-0 bg-white z-50 transform translate-x-full transition-transform duration-300 lg:relative lg:translate-x-0 lg:w-1/2 flex flex-col lg:flex-row gap-8 min-h-0 pt-10">
+    <div id="filtersPanel" class="fixed inset-0 bg-white z-50 transform translate-x-full transition-transform duration-300 lg:relative lg:translate-x-0 lg:w-1/2 flex flex-col lg:flex-row gap-8 min-h-0 md:pt-10">
         <form method="get" class="flex flex-col gap-4 bg-white rounded-xl p-4 shadow lg:w-1/2  md:min-w-[320px] overflow-y-auto scrollbar-hide  ">
             <button id="closeFilters" type="button" class="self-end text-violet-700 mb-2 lg:hidden">
                 <i class="fa-solid fa-xmark text-2xl"></i>
@@ -209,16 +209,6 @@
     </div>
 </div>
 
-<script>
-    document.addEventListener("DOMContentLoaded", () => {
-        const filtersPanel = document.getElementById("filtersPanel");
-        const openBtn = document.getElementById("openFilters");
-        const closeBtn = document.getElementById("closeFilters");
-
-        openBtn?.addEventListener("click", () => filtersPanel.classList.remove("translate-x-full"));
-        closeBtn?.addEventListener("click", () => filtersPanel.classList.add("translate-x-full"));
-    });
-</script>
 <script src='https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.js'></script>
 <script src="{{ asset('js/location-search.js') }}"></script>
 

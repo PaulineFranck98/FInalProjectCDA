@@ -1,13 +1,11 @@
+function toggleFilters()  {
 
+    const filtersPanel = document.getElementById("filtersPanel");
+    const openBtn = document.getElementById("openFilters");
+    const closeBtn = document.getElementById("closeFilters");
 
-function toggleFilters() {
-    const moreFilters = document.getElementById('more-filters');
-    moreFilters.classList.toggle('hidden');
-    if (!moreFilters.classList.contains('hidden')) {
-        moreFilters.classList.add('flex', 'flex-col', 'gap-4', 'mt-4');
-    } else {
-        moreFilters.classList.remove('flex', 'flex-col', 'gap-4', 'mt-4');
-    }
+    openBtn?.addEventListener("click", () => filtersPanel.classList.remove("translate-x-full"));
+    closeBtn?.addEventListener("click", () => filtersPanel.classList.add("translate-x-full"));
 }
 
 function initMap() {
@@ -64,6 +62,6 @@ function initMap() {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    // document.getElementById('show-more-filters').addEventListener('click', toggleFilters);
     initMap();
+    toggleFilters();
 });

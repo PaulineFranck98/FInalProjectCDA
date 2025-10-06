@@ -60,4 +60,18 @@ class SecurityController extends AbstractController
     {
         return new Response(status: 200);
     }
+
+    // profile
+
+    #[Route(path: '/account/profile', name: 'show_profile')]
+    public function showProfile(): Response
+    {
+        return $this->render('profile/profile.html.twig');
+    }
+
+    #[Route(path: '/account/ratings', name: 'show_ratings')]
+    public function showRatings(): Response
+    { 
+        return $this->render('security/ratings.html.twig');
+    }
 }
