@@ -2,14 +2,14 @@
 {% block title %}Recherche de lieux{% endblock %}
 
 {% block body %}
-<div class="flex flex-col lg:flex-row lg:gap-8 m-auto lg:w-[80%] lg:h-[calc(100vh-49px)] pb-10">
+<div class="flex flex-col lg:flex-row lg:gap-6 m-auto lg:w-[80%] lg:h-[calc(100vh-49px)] pb-10">
 
     <button id="openFilters"
             class="fixed top-2 right-4 bg-violet-700 text-white px-4 py-2 rounded-full shadow-lg z-50 lg:hidden">
         <i class="fa-solid fa-sliders"></i> Filtres
     </button>
 
-    <div id="filtersPanel" class="fixed inset-0 bg-white z-50 transform translate-x-full transition-transform duration-300 lg:relative lg:translate-x-0 lg:w-1/2 flex flex-col lg:flex-row gap-8 min-h-0 md:pt-10">
+    <div id="filtersPanel" class="fixed inset-0 bg-white z-50 transform translate-x-full transition-transform duration-300 lg:relative lg:translate-x-0 lg:w-1/2 flex flex-col lg:flex-row gap-6 min-h-0 md:pt-10">
         <form method="get" class="flex flex-col gap-4 bg-white rounded-xl p-4 shadow lg:w-1/2  md:min-w-[320px] overflow-y-auto scrollbar-hide  ">
             <button id="closeFilters" type="button" class="self-end text-violet-700 mb-2 lg:hidden">
                 <i class="fa-solid fa-xmark text-2xl"></i>
@@ -75,7 +75,7 @@
                 <div class="flex flex-col">
                     {% for companion in companions %}
                     <div class="flex gap-2 text-[0.9rem] text-gray-700">
-                        <input class="accent-violet-700 cursor-pointer" type="checkbox" name="companionIds[]" value="{{ companion.id }}" {% if filters.companionIds is defined and companion.id in filters.companionIds %}checked{% endif %}>
+                        <input class="accent-violet-700 cursor-pointer" type="checkbox" name="companionIds" value="{{ companion.id }}" {% if filters.companionIds is defined and companion.id in filters.companionIds %}checked{% endif %}>
                         <label>{{ companion.companionName}} </label>
                     </div>
                     {% endfor %}
@@ -86,7 +86,7 @@
                 <div class="flex flex-col">
                     {% for theme in themes %}
                     <div class="flex gap-2 text-[0.9rem] text-gray-700">
-                        <input class="accent-violet-700 cursor-pointer"  type="checkbox" name="themeIds[]" value="{{ theme.id }}" {% if filters.themeIds is defined and theme.id in filters.themeIds %}checked{% endif %}>
+                        <input class="accent-violet-700 cursor-pointer"  type="checkbox" name="themeIds" value="{{ theme.id }}" {% if filters.themeIds is defined and theme.id in filters.themeIds %}checked{% endif %}>
                         <label>{{ theme.themeName }} </label>
                     </div>
                     {% endfor %}
@@ -97,7 +97,7 @@
                 <div class="flex flex-col">
                     {% for confort in conforts %}
                     <div class="flex gap-2 text-[0.9rem] text-gray-700">
-                        <input class="accent-violet-700 cursor-pointer"  type="checkbox" name="confortId[]" value="{{ confort.id }}" {% if filters.confortId is defined and confort.id in filters.confortId %}checked{% endif %}>
+                        <input class="accent-violet-700 cursor-pointer"  type="checkbox" name="confortIds" value="{{ confort.id }}" {% if filters.confortId is defined and confort.id in filters.confortId %}checked{% endif %}>
                         <label>{{ confort.confortLevel }} </label>
                     </div>
                     {% endfor %}
@@ -109,22 +109,8 @@
                     <div class="flex flex-col">
                         {% for duration in durations %}
                         <div class="flex gap-2 text-[0.9rem] text-gray-700">
-                            <input class="accent-violet-700 cursor-pointer"  type="checkbox" name="durationId[]" value="{{ duration.id }}" {% if filters.durationId is defined and duration.id in filters.durationId %}checked{% endif %}>
-                            <label>
-                                {% if duration.onSiteTime == '1' %}
-                                    1h
-                                {% elseif duration.onSiteTime == '2' %}
-                                    2h
-                                {% elseif duration.onSiteTime == '3' %}
-                                    3h
-                                {% elseif duration.onSiteTime == '12' %}
-                                    1/2 journée
-                                {% elseif duration.onSiteTime == '24' %}
-                                    1 journée et +
-                                {% else %}
-                                    {{ duration.onSiteTime }}
-                                {% endif %}
-                            </label>
+                            <input class="accent-violet-700 cursor-pointer"  type="checkbox" name="durationIds" value="{{ duration.id }}" {% if filters.durationId is defined and duration.id in filters.durationId %}checked{% endif %}>
+                            <label>{{ duration.onSiteTime|duration_label('long') }}</label>
                         </div>
                         {% endfor %}
                     </div>
@@ -145,8 +131,10 @@
             </div>
             <button type="submit" class="bg-violet-800 text-white px-6 py-2 rounded-xl mt-4 cursor-pointer">Rechercher</button>
         </form>
+
+        {# partie page avec pagination #}
     
-        <div class="hidden pt-8 lg:flex flex-col gap-4 lg:w-1/2">
+        <div class="hidden lg:flex flex-col gap-4 lg:w-1/2 min-w-[375px]  overflow-y-auto scrollbar-hide lg:rounded-xl lg:p-4 lg:shadow ">
             {% for location in locations %}
                 <a href="{{ path('location_detail', {'id': location.id}) }}" class="flex items-center gap-4 border border-violet-200 hover:border-violet-600 rounded-lg  hover:bg-violet-50 transition h-[110px] p-2">
                     {% if location.images|length > 0 %}
@@ -155,54 +143,81 @@
                             alt="{{ location.locationName }}"
                             class="object-cover rounded-md h-full w-32">
                     {% else %}
-                        <div class="w-24 h-full bg-gray-200 rounded-md flex items-center justify-center text-gray-400 text-sm ">
+                        <div class="w-32 h-full bg-gray-200 rounded-md flex items-center justify-center text-gray-400 text-sm ">
                             Aucune image
                         </div>
                     {% endif %}
                     <div class="flex flex-col justify-center gap-1 ">
                         <p class="font-semibold text-violet-800">{{ location.locationName }}</p>
+                         {% if location.city %}
+                                <p class="text-xs text-gray-600 ">{{ location.city }}</p>
+                        {% endif %}
 
                         {% if location.averageRating %}
-                            <div class="flex gap-2 text-gray-800 font-light mt-1 items-center">
+                            <div class="flex gap-1 text-gray-800 font-light text-sm">
                                 <p>{{ location.averageRating|number_format(1, ',', '') }}</p>
                                 <div class="text-[0.75rem]">{{ location.averageRating|round(1, 'floor')|stars|raw }}</div>
                             </div>
                         {% else %}
-                            <p class="text-sm text-gray-400 mt-1">Pas encore noté</p>
+                            <p class="text-sm text-gray-400">Pas encore noté</p>
                         {% endif %}
+                        
                         {% if location.duration and location.duration.onSiteTime %}
                             <div class="flex gap-2 items-center text-gray-600">
                                 <i class="fa-regular fa-clock text-sm"></i>
-                                <p class="text-sm ">
-                                    {% if location.duration.onSiteTime == '1' %}
-                                        1h
-                                    {% elseif location.duration.onSiteTime == '2' %}
-                                        2h
-                                    {% elseif location.duration.onSiteTime == '3' %}
-                                        3h
-                                    {% elseif location.duration.onSiteTime == '12' %}
-                                        12h
-                                    {% elseif location.duration.onSiteTime == '24' %}
-                                        24h
-                                    {% else %}
-                                        {{ location.duration.onSiteTime }}
-                                    {% endif %}
-                                </p>
+                                <p class="text-sm "><label>{{ location.duration.onSiteTime|duration_label('short') }}</label></p>
+                            </div>    
                         {% endif %}
-                        {% if location.city %}
-                                <p class="text-sm "> |  {{ location.city }}</p>
-                            </div>
-                           
-                        {% endif %}
+                       
                     </div>
                 </a>
             {% else %}
                 <p class="text-center text-gray-500">Aucun lieu trouvé.</p>
             {% endfor %}
+            {# Pagination test #}
+            {% if pagination and pagination.totalPages > 1 %}
+                <nav class="flex justify-center mt-6" aria-label="Pagination">
+                    <ul class="inline-flex items-center -space-x-px">
+                        {#  page d'avant #}
+                        {% set prevPage = pagination.page > 1 ? pagination.page - 1 : 1 %}
+                        <li>
+                            <a href="{{ path(app.request.attributes.get('_route'), filters|merge({'page': prevPage})) }}"
+                            class="px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700"
+                            aria-label="Page précédente">
+                                &laquo;
+                            </a>
+                        </li>
+                        {# numéro page #}
+                        {% for p in 1..pagination.totalPages %}
+                            <li>
+                                <a href="{{ path(app.request.attributes.get('_route'), filters|merge({'page': p})) }}"
+                                class="px-3 py-2 leading-tight border border-gray-300
+                                {% if p == pagination.page %}
+                                    text-white bg-violet-700
+                                {% else %}
+                                    text-gray-500 bg-white hover:bg-gray-100 hover:text-gray-700
+                                {% endif %}
+                                ">
+                                    {{ p }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                        {# page suivante #}
+                        {% set nextPage = pagination.page < pagination.totalPages ? pagination.page + 1 : pagination.totalPages %}
+                        <li>
+                            <a href="{{ path(app.request.attributes.get('_route'), filters|merge({'page': nextPage})) }}"
+                            class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700"
+                            aria-label="Page suivante">
+                                &raquo;
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+{% endif %}
         </div>
     </div>
    
-    <div class="lg:w-1/2 lg:pt-8 lg:h-full h-screen relative">
+    <div class="lg:w-1/2 lg:pt-10 lg:h-full h-screen relative">
         <div id="search-map" class="w-full  bg-gray-200 rounded-xl h-full" data-locations='{{ locations|json_encode }}'>
             <span class="text-gray-500">Carte</span>
         </div>

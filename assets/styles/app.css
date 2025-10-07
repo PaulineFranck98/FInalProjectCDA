@@ -152,3 +152,19 @@ fieldset.sweet-pot{
   -ms-overflow-style: none;  /* Internet Explorer & Edge */
   scrollbar-width: none;     /* Firefox */
 }
+
+/* ===================================================== */
+
+/* =======================  PROFILE  ======================== */
+
+.shadow-custom-aside {
+  box-shadow: 3px 0px 10px 0px #0000001a;
+}
+
+.anchors-aside {
+    @apply hover:bg-violet-50 py-3 px-4 w-full block transition-all ease-in-out duration-300 hover:text-violet-700 text-gray-700 rounded-md ;
+}
+
+.active-anchor-aside {
+    @apply bg-violet-50 text-violet-700 rounded-md;
+}

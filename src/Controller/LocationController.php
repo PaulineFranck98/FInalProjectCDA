@@ -30,7 +30,11 @@ class LocationController extends AbstractController
     public function search(Request $request, LocationSearchServiceInterface $locationSearchService, ApiHttpClient $apiHttpClient, RatingRepository $ratingRepository): Response
     {
         $filters = $request->query->all(); 
-        $locations = $locationSearchService->search($filters);
+
+        $result = $locationSearchService->search($filters);
+
+        $locations = $result['locations'];
+        $pagination = $result['pagination'];
 
         $types = $apiHttpClient->getFilterData('type');
         $durations = $apiHttpClient->getFilterData('duration');
@@ -43,13 +47,16 @@ class LocationController extends AbstractController
         // & crée une référence : pointeur direct vers l'élément du tableau
         foreach($locations as &$location) {
             $locationId = $location['id'] ?? null;
-            $location['averageRating'] = $ratingRepository->getAverageRating($locationId);
+            if($locationId) {
+                $location['averageRating'] = $ratingRepository->getAverageRating($locationId);
+            }
         }
         // évite de modifier le dernier élément de $locations
         unset($location);
 
         return $this->render('location/search.html.twig', [
             'locations' => $locations,
+            'pagination' => $pagination,
             'filters' => $filters,
             'types' => $types,
             'durations' => $durations,
