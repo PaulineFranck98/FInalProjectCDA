@@ -168,3 +168,7 @@ fieldset.sweet-pot{
 .active-anchor-aside {
     @apply bg-violet-50 text-violet-700 rounded-md;
 }
+
+.shadow-search-location {
+    box-shadow: inset 0px 6px 17px #01010117;
+}

@@ -18,19 +18,19 @@ class ApiHttpClient
 
     public function getLocations(): array
     {
-        $response = $this->client->request('GET', $this->baseUrl.'/location/public');
+        $response = $this->client->request('GET', $this->baseUrl.'/public/location');
         return $response->toArray();
     }
     
     public function getLocation(string $id): array
     {
-        $response = $this->client->request('GET', $this->baseUrl.'/location/'.$id);
+        $response = $this->client->request('GET', $this->baseUrl.'/public/location/'.$id);
         return $response->toArray();
     }
 
     public function searchLocations(array $filters = []): array
     {
-        $url = $this->baseUrl . '/location/public';
+        $url = $this->baseUrl . '/public/location';
 
         foreach ($filters as $key => $value) {
             if (is_array($value)) {
@@ -48,7 +48,12 @@ class ApiHttpClient
         // check si la réponse contient bien les données attendues
         return [
             'locations' => $data['data'] ?? [],
-            'pagination' => $data['pagination'] ?? null
+            'pagination' => [
+                'page' => $data['page'] ?? 1,
+                'limit' => $data['limit'] ?? 10,
+                'total' => $data['total'] ?? 0,
+                'totalPages' => $data['totalPages'] ?? 1,
+            ]
         ];
     }
 

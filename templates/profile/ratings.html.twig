@@ -1,28 +1,30 @@
 {% extends 'base.html.twig' %}
 
+% extends 'base.html.twig' %}
+
 {% block title %}Bienvenue sur votre profil {{ app.user.username }}{% endblock %}
 
 
 {% block body %}
 
-<section id="profile-dashboard" class="flex lg:w-10/12 m-auto mt-12 min-h- ">
-    <aside class="flex flex-col w-1/4">
-        <div>
+<section id="profile-dashboard" class="flex min-h-0 lg:h-[calc(100vh-49px)]">
+    <aside class="flex flex-col w-1/6 shadow-custom-aside">
+        {# <div>
             <figure>
                 <img src="" alt="" />
             </figure>
-        </div>
-        <ul>
-            <a href=""><li class="p-6 border border-gray-200">Profil</li></a>
-            <a href=""><li class="p-6 border border-gray-200">Itinéraires</li></a>
-            <a href=""><li class="p-6 border border-gray-200">Avis</li></a>
-            <a href=""><li class="p-6 border border-gray-200">Favoris</li></a>
-            <a href=""><li class="p-6 border border-gray-200">Lorem</li></a>
+        </div> #}
+        <ul class="w-full lg:pt-8">
+            <li class="px-6 py-2"><a href="" class="anchors-aside"><i class="fa-regular fa-clone mr-5"></i>Tableau de bord</a></li>
+            <li class="px-6 py-2"><a href="{{ path('show_profile') }}" class="active-anchor-aside anchors-aside"><i class="fa-regular fa-circle-user mr-5"></i>Profil</a></li>
+            <li class="px-6 py-2"><a href="" class="anchors-aside"><i class="fa-regular fa-map mr-5"></i>Itinéraires</a></li>
+            <li class="px-6 py-2"><a href="" class="anchors-aside"><i class="fa-regular fa-star mr-5"></i></i>Avis</a></li>
+            <li class="px-6 py-2"><a href="" class="anchors-aside"><i class="fa-regular fa-heart mr-5"></i>Favoris</a></li>
+            <li class="px-6 py-2"><a href="" class="anchors-aside"><i class="fa-regular fa-pen-to-square mr-5"></i>Lorem</a></li>
         </ul>
     </aside>
     <section id="profile-container" class="border border-gray-200 w-full">
-        <h1>Notes et Avis</h1>
-        {% if app.user.ratings %}
+
     </section>
 </section>
 
