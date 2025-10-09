@@ -60,8 +60,7 @@
                 <div class="flex flex-col">
                     {% for type in types %}
                     <div class="flex gap-2 text-[0.9rem] text-gray-700">
-                        <input class="accent-violet-700 cursor-pointer" type="checkbox" name="typeId" value="{{ type.id }}"
-                            {% if filters.typeId is defined and filters.typeId == type.id %}checked{% endif %}/>
+                            <input class="accent-violet-700 cursor-pointer"  type="checkbox" name="typeIds[]" value="{{ type.id }}" {% if filters.typeIds is defined and type.id in filters.typeIds %}checked{% endif %}>
                         <label>{{ type.typeName }}</label>
                     </div>
                     {% endfor %}
@@ -73,7 +72,7 @@
                 <div class="flex flex-col">
                     {% for companion in companions %}
                     <div class="flex gap-2 text-[0.9rem] text-gray-700">
-                        <input class="accent-violet-700 cursor-pointer" type="checkbox" name="companionIds" value="{{ companion.id }}" {% if filters.companionIds is defined and companion.id in filters.companionIds %}checked{% endif %}>
+                        <input class="accent-violet-700 cursor-pointer" type="checkbox" name="companionIds[]" value="{{ companion.id }}" {% if filters.companionIds is defined and companion.id in filters.companionIds %}checked{% endif %}>
                         <label>{{ companion.companionName}} </label>
                     </div>
                     {% endfor %}
@@ -84,7 +83,7 @@
                 <div class="flex flex-col">
                     {% for theme in themes %}
                     <div class="flex gap-2 text-[0.9rem] text-gray-700">
-                        <input class="accent-violet-700 cursor-pointer"  type="checkbox" name="themeIds" value="{{ theme.id }}" {% if filters.themeIds is defined and theme.id in filters.themeIds %}checked{% endif %}>
+                        <input class="accent-violet-700 cursor-pointer"  type="checkbox" name="themeIds[]" value="{{ theme.id }}" {% if filters.themeIds is defined and theme.id in filters.themeIds %}checked{% endif %}>
                         <label>{{ theme.themeName }} </label>
                     </div>
                     {% endfor %}
@@ -95,34 +94,36 @@
                 <div class="flex flex-col">
                     {% for confort in conforts %}
                     <div class="flex gap-2 text-[0.9rem] text-gray-700">
-                        <input class="accent-violet-700 cursor-pointer"  type="checkbox" name="confortIds" value="{{ confort.id }}" {% if filters.confortId is defined and confort.id in filters.confortId %}checked{% endif %}>
+                        <input class="accent-violet-700 cursor-pointer"  type="checkbox" name="confortIds[]" value="{{ confort.id }}" {% if filters.confortIds is defined and confort.id in filters.confortIds %}checked{% endif %}>
                         <label>{{ confort.confortLevel }} </label>
                     </div>
                     {% endfor %}
                 </div>
             </div>
-            <div id="more-filters" class="flex flex-col gap-4">
+            {# <div id="more-filters" class="flex flex-col gap-4"> #}
                 <div class=" flex flex-col border border-gray-300 rounded px-4 py-2">
                     <p>Durée</p>
                     <div class="flex flex-col">
                         {% for duration in durations %}
                         <div class="flex gap-2 text-[0.9rem] text-gray-700">
-                            <input class="accent-violet-700 cursor-pointer"  type="checkbox" name="durationIds" value="{{ duration.id }}" {% if filters.durationId is defined and duration.id in filters.durationId %}checked{% endif %}>
+                            <input class="accent-violet-700 cursor-pointer"  type="checkbox" name="durationIds[]" value="{{ duration.id }}" {% if filters.durationIds is defined and duration.id in filters.durationIds %}checked{% endif %}>
                             <label>{{ duration.onSiteTime|duration_label('long') }}</label>
                         </div>
                         {% endfor %}
                     </div>
                 </div>  
-                <select name="intensityId" class="border border-gray-300 rounded px-4 py-2">
-                    <option value="">Intensité</option>
+                 <div class=" flex flex-col border border-gray-300 rounded px-4 py-2">
+                <p>Intensité</p>
+                <div class="flex flex-col">
                     {% for intensity in intensities %}
-                        <option value="{{ intensity.id }}"
-                            {% if filters.intensityId is defined and filters.intensityId == intensity.id %}selected{% endif %}>
-                            {{ intensity.intensityLevel }}
-                        </option>
+                    <div class="flex gap-2 text-[0.9rem] text-gray-700">
+                        <input class="accent-violet-700 cursor-pointer"  type="checkbox" name="intensityIds[]" value="{{ intensity.id }}" {% if filters.intensityIds is defined and intensity.id in filters.intensityIds %}checked{% endif %}>
+                        <label>{{ intensity.intensityLevel }} </label>
+                    </div>
                     {% endfor %}
-                </select>
+                </div>
             </div>
+            {# </div> #}
             <div class="w-full flex justify-center items-center gap-4 text-red-600 border  border-red-300 bg-red-50 rounded-md py-2">
                 <i class="fa-regular fa-trash-can"></i>
                 <a href="{{ path('location_search') }}">Réinitialiser</a>
