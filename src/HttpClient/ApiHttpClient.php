@@ -3,7 +3,6 @@
 namespace App\HttpClient;
 
 use Symfony\Contracts\HttpClient\HttpClientInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ApiHttpClient
 {
@@ -43,14 +42,30 @@ class ApiHttpClient
         }
 
         $response = $this->client->request('GET', $url);
-        $data = $response->toArray();
+        $status = $response->getStatusCode();
+
+        // false pour ne pas jeter d'erreur automatiquement si erreur !== 200
+        $data = $response->toArray(false);
+
+        if($status !== 200) {
+            $errorMessage = $data['error'] ?? 'Une erreur est survenue.';
+            $details =$data['details'] ?? [];
+            
+            return [
+                'error' => [
+                    'status' => $status,
+                    'message' => $errorMessage,
+                    'details' => $details,
+                ]
+            ];
+        }
 
         // check si la réponse contient bien les données attendues
         return [
             'locations' => $data['data'] ?? [],
             'pagination' => [
                 'page' => $data['page'] ?? 1,
-                'limit' => $data['limit'] ?? 10,
+                'pageSize' => $data['pageSize'] ?? 10,
                 'total' => $data['total'] ?? 0,
                 'totalPages' => $data['totalPages'] ?? 1,
             ]

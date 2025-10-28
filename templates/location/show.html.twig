@@ -60,8 +60,13 @@
                                 </label>
                             </div>
                             <div class="my-8 w-full flex justify-center lg:mt-6 lg:mb-8">
-                                <p class="bg-violet-800 px-12 py-3 lg:py-2 rounded-3xl text-white font-medium text-center w-fit lg:w-full lg:rounded-2xl btn-violet">
+                                {# <p class="bg-violet-800 px-12 py-3 lg:py-2 rounded-3xl text-white font-medium text-center w-fit lg:w-full lg:rounded-2xl btn-violet">
                                     <a href="#">Ajouter à mon itinéraire</a>
+                                </p> #}
+                                <p class="bg-violet-800 px-12 py-3 lg:py-2 rounded-3xl text-white font-medium text-center w-fit lg:w-full lg:rounded-2xl btn-violet">
+                                    <a href="#" id="add-to-itinerary" data-location-id="{{ location.id }}">
+                                        Ajouter à mon itinéraire
+                                    </a>
                                 </p>
                             </div>
                         </div>
@@ -255,6 +260,8 @@
     
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src='https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.js'></script>
+    <script src="{{ asset('js/itinerary-modal.js') }}"></script>
+
     {# <script src="{{ asset('js/map.js') }}"></script> #}
     <script>
         document.addEventListener('scroll', () => {
@@ -364,5 +371,26 @@
         });
      
     </script>
+
+    {# ---------------- MODALE ITINÉRAIRE ---------------- #}
+    <div id="itinerary-modal" class="hidden fixed inset-0 bg-black/50 flex justify-center items-center z-50">
+        <div class="relative bg-white rounded-xl p-6 w-full max-w-md">
+            <h2 class="text-xl font-semibold mb-4 text-violet-800">Choisir un itinéraire</h2>
+            <div id="itinerary-list">
+                <p class="text-gray-600">Chargement...</p>
+            </div>
+            <div class="text-center mt-6">
+                <a href="{{ path('itinerary_new') }}" id="create-itinerary-btn"
+                    class="bg-violet-800 text-white px-4 py-2 rounded-md hover:bg-violet-700">
+                    Créer un itinéraire
+                </a>
+            </div>
+            <button id="close-itinerary-modal" 
+                    class="absolute top-4 right-4 text-gray-500 text-lg hover:text-gray-800">
+                ×
+            </button>
+        </div>
+    </div>
+
 
 {% endblock %}

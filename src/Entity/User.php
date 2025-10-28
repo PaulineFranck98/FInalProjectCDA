@@ -53,9 +53,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $username = null;
 
+    /**
+     * @var Collection<int, Itinerary>
+     */
+    #[ORM\ManyToMany(targetEntity: Itinerary::class, mappedBy: 'users')]
+    private Collection $itineraries;
+
     public function __construct()
     {
         $this->ratings = new ArrayCollection();
+        $this->itineraries = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -207,6 +214,33 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setUsername(?string $username): static
     {
         $this->username = $username;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Itinerary>
+     */
+    public function getItineraries(): Collection
+    {
+        return $this->itineraries;
+    }
+
+    public function addItinerary(Itinerary $itinerary): static
+    {
+        if (!$this->itineraries->contains($itinerary)) {
+            $this->itineraries->add($itinerary);
+            $itinerary->addUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeItinerary(Itinerary $itinerary): static
+    {
+        if ($this->itineraries->removeElement($itinerary)) {
+            $itinerary->removeUser($this);
+        }
 
         return $this;
     }

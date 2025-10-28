@@ -22,18 +22,27 @@
 
         {% block javascripts %}
             <script src="https://kit.fontawesome.com/d004286c36.js" crossorigin="anonymous"></script>
-   
           
             {{ encore_entry_script_tags('app') }}
         {% endblock %}
     </head>
     <body class="w-full min-h-screen flex flex-col" data-turbo="false">
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="flash-message text-center p-4 mb-4 text-sm rounded-lg fixed left-1/2 -translate-x-1/2  z-[10000]
+                    {% if label == 'success' %}bg-green-50 text-green-600
+                    {% elseif label == 'error' %}bg-red-50 text-red-600
+                    {% else %}bg-gray-100 text-gray-800{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
         <header class="fixed top-0 left-0 w-full z-50 bg-white border-b border-b-gray-200 md:h-[49px] flex items-center">
         {% if app.user %}
             <nav class="hidden sm:block w-full">
                 <ul class='flex justify-between font-medium  text-violet-700 my-3 mx-6 lg:mx-44'>
                     <li><a href="{{ path('app_home') }}">Accueil</a></li>
-                    <li><a href="{{ path('location_search') }}">Recherche</a></li>
+                    <li><a href="{{ path('location_search') }}">Rechercher</a></li>
                     <li><a href="#">Itinéraire</a></li>
                     <li><a href="{{ path('show_dashboard') }}">Profil</a></li>
                     <li><a href="{{ path('app_logout') }}">Déconnexion</a></li>
@@ -51,16 +60,7 @@
         {% endif %}
         </header>
         <main class="flex-1 md:mt-[49px] lg:h-[calc(100vh-49px)] overflow-hidden">
-            {% for label, messages in app.flashes %}
-                {% for message in messages %}
-                    <div class="text-center p-4 mb-4 text-sm rounded-lg fixed left-1/2 -translate-x-1/2  z-[10000]
-                        {% if label == 'success' %}bg-green-50 text-green-600
-                        {% elseif label == 'error' %}bg-red-50 text-red-600
-                        {% else %}bg-gray-100 text-gray-800{% endif %}">
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            {% endfor %}
+            
 
             {% block body %}{% endblock %}  
         </main>
@@ -69,5 +69,18 @@
         <footer class=" border-t border-t-gray-300 py-2 text-violet-700 bg-gray-100 h-[100px] fixed bottom-0 w-full text-sm">
         </footer>
         {% endif %} #}
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+            const flashMessages = document.querySelectorAll(".flash-message");
+
+               flashMessages.forEach((message) => {
+                setTimeout(() => {
+                    message.style.transition = "transform 0.35s ease-in";
+                    message.style.transform = "translateY(-50px)";
+                    setTimeout(() => message.remove(), 350);
+                }, 5000); 
+            });
+        });
+        </script>
     </body>
 </html>

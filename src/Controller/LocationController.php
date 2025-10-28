@@ -33,6 +33,18 @@ class LocationController extends AbstractController
 
         $result = $locationSearchService->search($filters);
 
+        // gestion d'erreur API Next
+        if(isset($result['error'])) {
+            $error = $result['error'];
+            $message = $error['message'] ?? 'Erreur inconnue';
+            $details = $error['details'] ?? [];
+            $fullMessage = $details ? $message . ' — ' . implode('; ', $details) : $message;
+
+            $this->addFlash('error', $fullMessage);
+
+            return $this->redirectToRoute('location_search');
+        }
+
         $locations = $result['locations'];
         $pagination = $result['pagination'];
 

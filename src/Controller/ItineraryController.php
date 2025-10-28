@@ -2,66 +2,207 @@
 
 namespace App\Controller;
 
-use App\Entity\Membre;
+use App\Entity\Itinerary;
+use App\Form\ItineraryType;
+use App\Entity\ItineraryLocation;
 use App\HttpClient\ApiHttpClient;
+use App\Repository\ItineraryLocationRepository;
+use App\Repository\ItineraryRepository;
+use App\Repository\RatingRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class ItineraryController extends AbstractController
 {
-    #[Route('/itinerary', name: 'itineraries_list')]
-    public function getItineraries(ApiHttpClient $apiHttpClient): Response
+    // récupération des itinéraires pour affichage dans la modal
+    #[Route('/api/itineraries', name:'api_user_itineraries')]
+    public function userItineraries(): JsonResponse 
     {
-        $itineraries = $apiHttpClient->getItineraries();
-        return $this->render('itinerary/index.html.twig', [
-            'itineraries' => $itineraries
+         /** @var User $user */
+        $user = $this->getUser();
+
+        if(!$user) {
+            return $this->json(['error' => 'Utilisateur non connecté'], 401);
+        }
+
+        $itineraries = $user->getItineraries();
+
+        $data = array_map(function($itinerary) {
+            return [
+                'id' => $itinerary->getId(),
+                'itineraryName' => $itinerary->getItineraryName(),
+            ];
+        }, $itineraries->toArray());
+
+        return $this->json($data);
+    }
+
+
+    #[Route('/itinerary/new', name:'itinerary_new')]
+    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $itinerary = new Itinerary();
+
+        // l'utilisateur devient directement membre de l'itinéraire
+        $itinerary->addUser($this->getUser());
+
+        $form = $this->createForm(ItineraryType::class, $itinerary);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($itinerary);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Itinéraire créé avec succès');
+
+            // je vérifie s'il vient de la page d'un lieu ?
+            $locationId = $request->query->get('locaitonId');
+            if($locationId) {
+                return $this->redirectToRoute('itinerary_add_location', [
+                    'itineraryId' => $itinerary->getId(),
+                    'locationId' => $locationId
+                ]);
+            }
+
+            return $this->redirectToRoute('itinerary_detail', ['itineraryId' => $itinerary->getId()]);
+        }
+
+        return $this->render('itinerary/new.html.twig', [ 
+            'form' => $form
         ]);
     }
-    
-    // #[Route('/itinerary/new', name: 'itinerary_form')]
-    // public function createItineraryForm(ApiHttpClient $apiHttpClient): Response
-    // {
-    //     $locations = $apiHttpClient->getLocations();
-    //     return $this->render('itinerary/new.html.twig', [
-    //         'locations' => $locations
-    //     ]);
-    // }
 
-    // #[Route('/itinerary/submit', name: 'itinerary_submit', methods: ['POST'])]
-    // public function submitItinerary(Request $request, HttpClientInterface $httpClient): Response
-    // {
-    //     $title = $request->request->get('title');
-    //     $description = $request->request->get('description');
-    //     $locationsRaw = $request->request->all('locations');
+ 
+    #[Route('/itinerary/{itineraryId}', name:'itinerary_detail')]
+    public function itineraryDetail(int $itineraryId, ApiHttpClient $apiHttpClient, ItineraryRepository $itineraryRepository, ItineraryLocationRepository $itineraryLocationRepository, RatingRepository $ratingRepository) : Response 
+    {
+        $itinerary = $itineraryRepository->find($itineraryId);
 
-    //     $locations = [];
+        if(!$itinerary) {
+            throw $this->createNotFoundException('Itinéraire introuvable');
+        }
 
-    //     foreach ($locationsRaw as $entry) {
-    //         if (empty($entry['id']) == false && empty($entry['order']) == false) {
-    //             $locations[] = [
-    //                 'id' => $entry['id'],
-    //                 'order' => (int) $entry['order']
-    //             ];
-    //         }
-    //     }
+        // récupère les lieux associés à l'itinéraire
+        $itineraryLocations = $itineraryLocationRepository->findBy(
+            ['itinerary' => $itinerary], 
+            ['orderIndex' => 'ASC']
+        );
 
-    //     $response = $httpClient->request('POST', 'http://localhost:3000/api/itinerary', [
-    //         'json' => [
-    //             'title' => $title,
-    //             'description' => $description,
-    //             'locations' => $locations
-    //         ]
-    //     ]);
+        // récupère les détails de chaque lieu
+        $locations = [];
+        foreach($itineraryLocations as $itineraryLocation) {
+            $locationId = $itineraryLocation->getLocationId();
+            $locationData = $apiHttpClient->getLocation($locationId);
+            if($locationData) {
+                $locationData['averageRating'] = $ratingRepository->getAverageRating($locationId);
 
-    //     if ($response->getStatusCode() === 201) {
-    //         $this->addFlash('success', 'Itinéraire créé avec succès !');
-    //         return $this->redirectToRoute('itineraries_list');
-    //     }
+                $locations[] = [
+                    'order' => $itineraryLocation->getOrderIndex(),
+                    'data' => $locationData,
+                ];
+            }
+        }
 
-    //     return new Response('Erreur lors de la création de l\'itinéraire.', 500);
-    // }
+        return $this->render('itinerary/show.html.twig', [
+            'itinerary' => $itinerary,
+            'locations' => $locations,
+        ]);
+    }
+
+    #[Route('/itinerary/{itineraryId}/reorder', name: 'itinerary_reorder', methods:['POST'])]
+    public function reorderItineraryLocations(int $itineraryId, Request $request, ItineraryRepository $itineraryRepository, ItineraryLocationRepository $itineraryLocationRepository, EntityManagerInterface $entityManager) : JsonResponse 
+    {
+        $itinerary = $itineraryRepository->find($itineraryId); 
+
+        if(!$itinerary) {
+            return $this->json(['error' => 'Itinéraire introuvable'], 404);
+        }
+
+        $data = json_decode($request->getContent(), true);
+
+        foreach($data['order'] as $index => $locationId) {
+            $itineraryLocation = $itineraryLocationRepository->findOneBy([
+                'itinerary' => $itinerary,
+                'locationId' => $locationId
+            ]);
+
+            if($itineraryLocation) {
+                $itineraryLocation->setOrderIndex($index);
+            }
+        }
+
+        $entityManager->flush();
+
+        return $this->json(['success' => true]);
+    }
+
+    #[Route('/itinerary/{itineraryId}/add-location/{locationId}', name:'itinerary_add_location')]
+    public function addLocationToItinerary(int $itineraryId, string $locationId, EntityManagerInterface $entityManager, ItineraryRepository $itineraryRepository,ItineraryLocationRepository $itineraryLocationRepository) : Response 
+    {
+        $itinerary = $itineraryRepository->find($itineraryId);
+
+        if(!$itinerary) {
+           throw $this->createNotFoundException('Itinéraire introuvable');
+        }
+
+        // pour empêcher l'ajout du même lieu 2 fois
+        $existing = $itineraryLocationRepository->findOneBy([
+            'itinerary' => $itinerary,
+            'locationId' => $locationId
+        ]);
+
+        if($existing) {
+            $this->addFlash('warning', "Celieu est déjà présent dans l'itinéraire « {$itinerary->getItineraryName()} »");
+            return $this->redirectToRoute('itinerary_detail', ['itineraryId' => $itineraryId]);
+        }
+
+        $nextOrder = $itineraryLocationRepository->getNextOrderIndex($itinerary);
+
+        $itineraryLocation = new ItineraryLocation();
+        $itineraryLocation->setLocationId($locationId);
+        $itineraryLocation->setOrderIndex($nextOrder);
+        $itineraryLocation->setItinerary($itinerary);
+
+        $entityManager->persist($itineraryLocation);
+        $entityManager->flush();
+
+        $this->addFlash('success', "Lieu ajouté à l'itinéraire « {$itinerary->getItineraryName()} »");
+
+        return $this->redirectToRoute('itinerary_detail', [
+            'itineraryId' => $itinerary->getId()
+        ]);
+    }  
+
+    #[Route('/itinerary/{itineraryId}/remove-location/{locationId}', name: 'itinerary_remove_location', methods: ['POST'])]
+    public function removeLocationFromItinerary(int $itineraryId, string $locationId, Request $request, ItineraryRepository $itineraryRepository, ItineraryLocationRepository $itineraryLocationRepository, EntityManagerInterface $entityManager): Response {
+        $itinerary = $itineraryRepository->find($itineraryId);
+
+        if (!$itinerary) {
+            throw $this->createNotFoundException('Itinéraire introuvable');
+        }
+
+        // vérification du token
+        if(!$this->isCsrfTokenValid('remove_location_' . $locationId, $request->request->get('_token'))) {
+            $this->addFlash('error', 'Échec de la vérification CSRF');
+            return $this->redirectToRoute('itinerary_detail', ['itineraryId' => $itineraryId]);
+        }
+
+        $itineraryLocation = $itineraryLocationRepository->findOneBy([
+            'itinerary' => $itinerary,
+            'locationId' => $locationId,
+        ]);
+
+        $itinerary->removeItineraryLocation($itineraryLocation);
+
+        $entityManager->remove($itineraryLocation);
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Lieu retiré de l’itinéraire.');
+
+        return $this->redirectToRoute('itinerary_detail', ['itineraryId' => $itineraryId]);
+    }
 }
