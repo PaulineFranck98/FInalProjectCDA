@@ -145,12 +145,12 @@ fieldset.sweet-pot{
 }
 
 .scrollbar-hide::-webkit-scrollbar {
-  width: 0px;
-  height: 0px;
+    width: 0px;
+    height: 0px;
 }
 .scrollbar-hide {
-  -ms-overflow-style: none;  /* Internet Explorer & Edge */
-  scrollbar-width: none;     /* Firefox */
+    -ms-overflow-style: none; 
+    scrollbar-width: none;  
 }
 
 /* ===================================================== */
@@ -171,4 +171,66 @@ fieldset.sweet-pot{
 
 .shadow-search-location {
     box-shadow: inset 0px 6px 17px #01010117;
+}
+
+/* ===================================================== */
+
+/* =======================  ITINERARY REORDER  ======================== */
+
+.location-item {
+    cursor: grab;
+}
+
+.location-item:active {
+    cursor: grabbing;
+}
+
+/* ===================================================== */
+
+/* =======================  SEARCH LOCATION  ======================== */
+
+.maplibregl-popup.custom-popup .maplibregl-popup-content {
+    background: white;
+    border: 1px solid #7c3aed6b;
+    border-radius: 8px;   
+    box-shadow: 0 3px 7px rgba(0,0,0,0.2);
+    padding: 10px 12px;
+}
+
+.maplibregl-popup.custom-popup .maplibregl-popup-tip {
+    display: none;
+}
+
+
+.maplibregl-popup.custom-popup .popup-content {
+    text-align: left; 
+}
+
+.maplibregl-popup.custom-popup .popup-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px;
+    margin-bottom: 4px;
+}
+
+.maplibregl-popup.custom-popup .name {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #4c1d95;
+}
+
+.maplibregl-popup.custom-popup .city {
+    font-size: 0.85rem;
+    color: #6b7280;
+}
+
+.maplibregl-popup.custom-popup .type {
+    font-size: 0.85rem;
+    color: #464b54;
+}
+
+.maplibregl-popup.custom-popup .rating {
+    font-size: 0.8rem;
+    color: #f59e0b;
 }

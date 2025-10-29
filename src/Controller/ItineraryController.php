@@ -156,7 +156,7 @@ class ItineraryController extends AbstractController
         ]);
 
         if($existing) {
-            $this->addFlash('warning', "Celieu est déjà présent dans l'itinéraire « {$itinerary->getItineraryName()} »");
+            $this->addFlash('warning', "Ce lieu est déjà présent dans l'itinéraire « {$itinerary->getItineraryName()} »");
             return $this->redirectToRoute('itinerary_detail', ['itineraryId' => $itineraryId]);
         }
 

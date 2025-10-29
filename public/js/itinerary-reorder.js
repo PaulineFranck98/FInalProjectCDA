@@ -6,12 +6,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     new Sortable(list, {
         animation: 150,
-        handle: '.location-item', // zone draggable
+        handle: '.location-item', 
         ghostClass: 'bg-violet-100',
         onEnd: async function () {
-            const order = Array.from(list.querySelectorAll('.location-item'))
-                               .map(el => el.dataset.locationId);
+           
+            const orderedIds = Array.from(list.querySelectorAll('.location-item')).map(element => element.dataset.locationId);
+    
+            list.querySelectorAll('.location-item').forEach((element, index) => {
+                const indexSpan = element.querySelector('.location-index');
+                if (indexSpan) {
+                    indexSpan.textContent = index + 1;
+                }
+            });
 
+            if (window.updateItineraryOrderOnMap) {
+                window.updateItineraryOrderOnMap(orderedIds);
+            }
             try {
                 const response = await fetch(`/itinerary/${itineraryId}/reorder`, {
                     method: 'POST',
@@ -19,15 +29,17 @@ document.addEventListener('DOMContentLoaded', () => {
                         'Content-Type': 'application/json',
                         'X-Requested-With': 'XMLHttpRequest',
                     },
-                    body: JSON.stringify({ order }),
+                    body: JSON.stringify({ order: orderedIds }),
                 });
 
                 const result = await response.json();
-                if (!response.ok) throw new Error(result.error || 'Erreur serveur');
+                if (!response.ok) {
+                    throw new Error(result.error || 'Erreur serveur');
+                }
 
-                console.log('Nouvel ordre sauvegardé :', order);
-            } catch (error) {
-                console.error('Erreur lors de la mise à jour de l’ordre', error);
+                console.log('Nouvel ordre sauvegardé :', orderedIds);
+            } catch (e) {
+                console.error('Erreur lors de la mise à jour de l’ordre', e);
                 alert("Une erreur est survenue lors de la mise à jour de l’ordre.");
             }
         }

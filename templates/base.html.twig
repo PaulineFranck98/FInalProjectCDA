@@ -15,7 +15,7 @@
         {% block stylesheets %}
         
             <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-             <link href='https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.css' rel='stylesheet' />
+            <link href='https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.css' rel='stylesheet' />
              
             {{ encore_entry_link_tags('app') }}
         {% endblock %}
@@ -32,6 +32,7 @@
                 <div class="flash-message text-center p-4 mb-4 text-sm rounded-lg fixed left-1/2 -translate-x-1/2  z-[10000]
                     {% if label == 'success' %}bg-green-50 text-green-600
                     {% elseif label == 'error' %}bg-red-50 text-red-600
+                    {% elseif label == 'warning' %}bg-orange-50 text-orange-600
                     {% else %}bg-gray-100 text-gray-800{% endif %}">
                     {{ message }}
                 </div>
@@ -54,9 +55,7 @@
                         <li><a href="http://localhost:3000/sign-up" target="_blank">Espace partenaire</a></li>
                         <li><a href="{{ path('app_login') }}">Espace particulier</a></li>   
                     </ul>
-                </nav>
-
-            
+                </nav>        
         {% endif %}
         </header>
         <main class="flex-1 md:mt-[49px] lg:h-[calc(100vh-49px)] overflow-hidden">

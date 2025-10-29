@@ -4,7 +4,7 @@
 
 {% block body %}
 
-<div class="lg:flex lg:h-[calc(100vh-100px)] mt-6 lg:mx-8 gap-6">
+<div class="lg:flex lg:w-[80%] lg:h-[calc(100vh-100px)] mt-6 lg:mx-auto gap-6">
 
     {# ---------------------- COLONNE LISTE DES LIEUX ---------------------- #}
     <div id="itinerary-locations" data-itinerary-id="{{ itinerary.id }}" class="hidden lg:flex flex-col gap-4 lg:w-1/2 min-w-[375px] overflow-y-auto scrollbar-hide lg:rounded-xl lg:p-4 lg:shadow">
@@ -21,13 +21,23 @@
                         Départ prévu le {{ itinerary.departureDate|date('d/m/Y') }}
                     </p>
                 {% endif %}
+ 
+                <div class="mt-3">
+                    <a href="{{ path('location_search') }}" 
+                    class="bg-violet-800 hover:bg-violet-700 text-white text-sm font-medium px-4 py-2 rounded-md inline-flex items-center gap-2 transition">
+                        <i class="fa-solid fa-plus text-white"></i>
+                        Ajouter des lieux
+                    </a>
+                </div>
             </div>
+
             {% if itinerary.isPublic %}
                 <span class="bg-green-100 text-green-700 text-xs font-medium px-3 py-1 rounded-full">Public</span>
             {% else %}
                 <span class="bg-gray-200 text-gray-700 text-xs font-medium px-3 py-1 rounded-full">Privé</span>
             {% endif %}
         </div>
+
 
         {% if locations is empty %}
             <p class="text-gray-500 text-center py-10">Aucun lieu n’a encore été ajouté à cet itinéraire.</p>
@@ -37,10 +47,7 @@
                 <div  data-location-id="{{ location.id }}" class="location-item flex items-center gap-4 border border-violet-200 hover:border-violet-600 rounded-lg hover:bg-violet-50 transition h-[110px] p-2 justify-between">
                     <div class="flex items-center gap-4">
                         {% if location.images and location.images|length > 0 %}
-                            <img 
-                                src="{{ location.images[0].imageName|replace({'/upload/':'/upload/w_300/'}) }}"
-                                alt="{{ location.locationName }}"
-                                class="object-cover rounded-md h-full w-32">
+                            <img src="{{ location.images[0].imageName|replace({'/upload/':'/upload/w_300/'}) }}"  alt="{{ location.locationName }}" class="object-cover rounded-md h-full w-32">
                         {% else %}
                             <div class="w-32 h-full bg-gray-200 rounded-md flex items-center justify-center text-gray-400 text-sm">
                                 Aucune image
@@ -48,7 +55,9 @@
                         {% endif %}
 
                         <div class="flex flex-col justify-center gap-1">
-                            <p class="font-semibold text-violet-800">{{ item.order + 1 }}. {{ location.locationName }}</p>
+                            <p class="font-semibold text-violet-800">
+                               <span class="location-index">{{ item.order + 1 }}</span>. {{ location.locationName }}
+                            </p>
                             {% if location.city %}
                                 <p class="text-xs text-gray-600">{{ location.city }}</p>
                             {% endif %}
@@ -73,9 +82,7 @@
                         </div>
                     </div>
 
-                    <form method="post" 
-                        action="{{ path('itinerary_remove_location', { 'itineraryId': itinerary.id, 'locationId': location.id }) }}" 
-                        onsubmit="return confirm('Supprimer ce lieu de l’itinéraire ?');">
+                    <form method="post" action="{{ path('itinerary_remove_location', { 'itineraryId': itinerary.id, 'locationId': location.id }) }}"  onsubmit="return confirm('Supprimer ce lieu de l’itinéraire ?');">
 
                         <input type="hidden" name="_token" value="{{ csrf_token('remove_location_' ~ location.id) }}">
 
@@ -95,7 +102,11 @@
         <div 
             id="itinerary-map" 
             class="w-full bg-gray-200 rounded-xl h-full"
-            data-locations='{{ locations|map(location => location.data)|json_encode }}'>
+                data-locations='{{ locations|map(item => {
+                    "id": item.data.id,
+                    "order": item.order,
+                    "data": item.data
+                })|json_encode }}'>
             <span class="text-gray-500">Carte</span>
         </div>
     </div>
@@ -103,58 +114,8 @@
 
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 <script src="{{ asset('js/itinerary-reorder.js') }}"></script>
-
+<script src="{{ asset('js/itinerary-detail.js') }}"></script>
 <script src='https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.js'></script>
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const mapDiv = document.getElementById('itinerary-map');
-        const locations = JSON.parse(mapDiv.dataset.locations || '[]');
 
-        let center = [7.75, 48.58]; // défaut : Strasbourg :)
-        if (locations.length > 0 && locations[0].longitude && locations[0].latitude) {
-            center = [locations[0].longitude, locations[0].latitude];
-        }
-
-        const map = new maplibregl.Map({
-            container: 'itinerary-map',
-            style: "https://api.jawg.io/styles/jawg-lagoon.json?access-token=5Hj1eNrhxICEmCUA3n50cFITkKNPsXWcZFw3JKMebObcRBGRIBQnT1RQlRQ4RRoG",
-            zoom: 10,
-            center: center
-        });
-
-        maplibregl.setRTLTextPlugin(
-            'https://unpkg.com/@mapbox/mapbox-gl-rtl-text@0.3.0/dist/mapbox-gl-rtl-text.js'
-        );
-
-        const bounds = new maplibregl.LngLatBounds();
-
-        locations.forEach(location => {
-            const hasGeo = location.geo && Array.isArray(location.geo.coordinates);
-            if (hasGeo) {
-                const [lon, lat] = location.geo.coordinates;
-                bounds.extend([lon, lat]);
-
-                const element = document.createElement('div');
-                element.style.backgroundImage = 'url("/img/regular-pin-small.png")';
-                element.style.width = "45px";
-                element.style.height = "45px";
-                element.style.backgroundSize = "100%";
-
-                new maplibregl.Marker({ element })
-                    .setLngLat([lon, lat])
-                    .setPopup(new maplibregl.Popup().setText(location.locationName))
-                    .addTo(map);
-            }
-        });
-
-        if (!bounds.isEmpty()) {
-            map.fitBounds(bounds, {
-                padding: 50,
-                maxZoom: 14,
-                duration: 1000,
-            });
-        }
-    });
-</script>
 
 {% endblock %}

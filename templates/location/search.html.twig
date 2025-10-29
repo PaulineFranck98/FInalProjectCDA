@@ -10,6 +10,27 @@
     </button>
     <div id="filtersPanel" class="fixed inset-0 bg-white z-50 transform translate-x-full transition-transform duration-300 lg:relative lg:translate-x-0 lg:w-1/2 flex flex-col lg:flex-row gap-6 min-h-0 md:pt-10">
         <form method="get" class="flex flex-col gap-4 bg-white rounded-xl p-4 shadow lg:w-1/2  md:min-w-[320px] overflow-y-auto scrollbar-hide">
+
+            {# accès rapide itinéraires #}
+            <div class="flex flex-col gap-2 border border-violet-200 rounded-lg p-3 bg-violet-50">
+                <button id="toggleItineraries" type="button"  class="flex justify-between items-center text-violet-800 font-semibold w-full">
+                    <span><i class="fa-solid fa-map-location-dot mr-2"></i> Mes itinéraires</span>
+                    <i id="chevron" class="fa-solid fa-chevron-down text-sm transition-transform duration-300 cursor-pointer"></i>
+                </button>
+
+                <div id="itineraryList" class="hidden flex-col mt-2 text-sm">
+                    {% if app.user.itineraries is not empty %}
+                        {% for itinerary in app.user.itineraries %}
+                            <a href="{{ path('itinerary_detail', {'itineraryId': itinerary.id}) }}"
+                            class="text-violet-700 hover:text-violet-900 hover:underline py-1 px-2 rounded transition">
+                                {{ itinerary.itineraryName }}
+                            </a>
+                        {% endfor %}
+                    {% else %}
+                        <p class="text-gray-500 text-xs italic px-2">Aucun itinéraire pour l’instant.</p>
+                    {% endif %}
+                </div>
+            </div>
             <button id="closeFilters" type="button" class="self-end text-violet-700 mb-2 lg:hidden">
                 <i class="fa-solid fa-xmark text-2xl"></i>
             </button>
@@ -23,7 +44,7 @@
                             type="range" 
                             id="priceMin" 
                             name="priceMin"
-                            class="w-2/3 accent-violet-600 cursor-pointer"
+                            class="w-2/3 accent-violet-700 cursor-pointer"
                             min="{{ priceRange.minPrice }}" 
                             max="{{ priceRange.maxPrice }}" 
                             value="{{ filters.priceMin ?? priceRange.minPrice }}" 
@@ -41,7 +62,7 @@
                             type="range" 
                             id="priceMax" 
                             name="priceMax"
-                            class="w-2/3 accent-violet-600 cursor-pointer"
+                            class="w-2/3 accent-violet-700 cursor-pointer"
                             min="{{ priceRange.minPrice }}" 
                             max="{{ priceRange.maxPrice }}" 
                             value="{{ filters.priceMax ?? priceRange.maxPrice }}" 
@@ -134,7 +155,7 @@
         {# partie page avec pagination #}
         <div class="hidden lg:flex flex-col gap-4 lg:w-1/2 min-w-[375px]  overflow-y-auto scrollbar-hide lg:rounded-xl lg:p-4 lg:shadow ">
             {% for location in locations %}
-                <a href="{{ path('location_detail', {'id': location.id}) }}" class="flex items-center gap-4 border border-violet-200 hover:border-violet-600 rounded-lg  hover:bg-violet-50 transition h-[110px] p-2">
+                <div data-location-id="{{ location.id }}" class="relative flex items-center gap-4 border border-violet-200 hover:border-violet-600 rounded-lg  hover:bg-violet-50 transition h-[110px] p-2">
                     {% if location.images|length > 0 %}
                         <img 
                             src="{{ location.images[0].imageName|replace({'/upload/':'/upload/w_300/'}) }}"
@@ -146,8 +167,12 @@
                         </div>
                     {% endif %}
                     <div class="flex flex-col justify-center gap-1 ">
-                        <p class="font-semibold text-violet-800">{{ location.locationName }}</p>
-                         {% if location.city %}
+
+                        <a href="{{ path('location_detail', {'id': location.id}) }}" class="font-semibold text-violet-800 hover:underline">
+                            {{ location.locationName }}
+                        </a>
+                      
+                        {% if location.city %}
                                 <p class="text-xs text-gray-600 ">{{ location.city }}</p>
                         {% endif %}
 
@@ -168,7 +193,14 @@
                         {% endif %}
                        
                     </div>
-                </a>
+       
+                    <button 
+                        class="add-to-itinerary absolute top-[5px] right-2 text-violet-800 hover:text-violet-600 text-lg cursor-pointer"
+                        data-location-id="{{ location.id }}"
+                        title="Ajouter à un itinéraire">
+                        <i class="fa-solid fa-circle-plus"></i>
+                    </button>
+                </div>
             {% else %}
                 <p class="text-center text-gray-500">Aucun lieu trouvé.</p>
             {% endfor %}
@@ -229,5 +261,40 @@
 
 <script src='https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.js'></script>
 <script src="{{ asset('js/location-search.js') }}"></script>
+<script src="{{ asset('js/itinerary-modal.js') }}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const button = document.getElementById('toggleItineraries');
+        const list = document.getElementById('itineraryList');
+        const chevron = document.getElementById('chevron');
+
+        if (button && list) {
+            button.addEventListener('click', () => {
+                list.classList.toggle('hidden');
+                chevron.classList.toggle('rotate-180');
+            });
+        }
+    });
+</script>
+
+{# ---------------- MODALE ITINÉRAIRE ---------------- #}
+    <div id="itinerary-modal" class="hidden fixed inset-0 bg-black/50 flex justify-center items-center z-50">
+        <div class="relative bg-white rounded-xl p-6 w-full max-w-md">
+            <h2 class="text-xl font-semibold mb-4 text-violet-800">Choisir un itinéraire</h2>
+            <div id="itinerary-list">
+                <p class="text-gray-600">Chargement...</p>
+            </div>
+            <div class="text-center mt-6">
+                <a href="{{ path('itinerary_new') }}" id="create-itinerary-btn"
+                    class="bg-violet-800 text-white px-4 py-2 rounded-md hover:bg-violet-700">
+                    Créer un itinéraire
+                </a>
+            </div>
+            <button id="close-itinerary-modal" 
+                    class="absolute top-4 right-4 text-gray-500 text-lg hover:text-gray-800 cursor-pointer">
+                ×
+            </button>
+        </div>
+    </div>
 
 {% endblock %}
