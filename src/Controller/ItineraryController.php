@@ -47,6 +47,11 @@ class ItineraryController extends AbstractController
     {
         $itinerary = new Itinerary();
 
+        if (!$this->getUser()) {
+            $this->addFlash('error', "Vous devez être connecté pour créer un itinéraire.");
+            return $this->redirectToRoute('app_login');
+        }
+
         // l'utilisateur devient directement membre de l'itinéraire
         $itinerary->addUser($this->getUser());
 
@@ -60,7 +65,7 @@ class ItineraryController extends AbstractController
             $this->addFlash('success', 'Itinéraire créé avec succès');
 
             // je vérifie s'il vient de la page d'un lieu ?
-            $locationId = $request->query->get('locaitonId');
+            $locationId = $request->query->get('locationId');
             if($locationId) {
                 return $this->redirectToRoute('itinerary_add_location', [
                     'itineraryId' => $itinerary->getId(),
@@ -76,7 +81,7 @@ class ItineraryController extends AbstractController
         ]);
     }
 
- 
+
     #[Route('/itinerary/{itineraryId}', name:'itinerary_detail')]
     public function itineraryDetail(int $itineraryId, ApiHttpClient $apiHttpClient, ItineraryRepository $itineraryRepository, ItineraryLocationRepository $itineraryLocationRepository, RatingRepository $ratingRepository) : Response 
     {
@@ -84,6 +89,10 @@ class ItineraryController extends AbstractController
 
         if(!$itinerary) {
             throw $this->createNotFoundException('Itinéraire introuvable');
+        }
+
+        if ($response = $this->ensureUserAccess($itinerary)) {
+            return $response;
         }
 
         // récupère les lieux associés à l'itinéraire
@@ -113,6 +122,62 @@ class ItineraryController extends AbstractController
         ]);
     }
 
+    #[Route('/itinerary/{itineraryId}/edit', name: 'itinerary_edit')]
+    public function edit(int $itineraryId, Request $request, EntityManagerInterface $entityManager, ItineraryRepository $itineraryRepository): Response {
+        $itinerary = $itineraryRepository->find($itineraryId);
+
+        if (!$itinerary) {
+            throw $this->createNotFoundException('Itinéraire introuvable.');
+        }
+
+        if ($response = $this->ensureUserAccess($itinerary)) {
+            return $response;
+        }
+
+        $form = $this->createForm(ItineraryType::class, $itinerary);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Itinéraire mis à jour avec succès.');
+
+            return $this->redirectToRoute('itinerary_detail', ['itineraryId' => $itinerary->getId()]);
+        }
+
+        return $this->render('itinerary/edit.html.twig', [
+            'form' => $form,
+            'itinerary' => $itinerary
+        ]);
+    }
+
+    #[Route('/itinerary/{itineraryId}/delete', name: 'itinerary_delete', methods: ['POST'])]
+    public function delete(int $itineraryId, Request $request, EntityManagerInterface $entityManager, ItineraryRepository $itineraryRepository): Response {
+        $itinerary = $itineraryRepository->find($itineraryId);
+
+        if (!$itinerary) {
+            throw $this->createNotFoundException('Itinéraire introuvable.');
+        }
+
+        if ($response = $this->ensureUserAccess($itinerary)) {
+            return $response;
+        }
+
+        // Vérifie le token CSRF
+        if (!$this->isCsrfTokenValid('delete_itinerary_' . $itinerary->getId(), $request->request->get('_token'))) {
+            $this->addFlash('error', 'Échec de la vérification CSRF.');
+            return $this->redirectToRoute('itinerary_detail', ['itineraryId' => $itineraryId]);
+        }
+
+        $entityManager->remove($itinerary);
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Itinéraire supprimé avec succès.');
+
+        return $this->redirectToRoute('app_home');
+    }
+
+
     #[Route('/itinerary/{itineraryId}/reorder', name: 'itinerary_reorder', methods:['POST'])]
     public function reorderItineraryLocations(int $itineraryId, Request $request, ItineraryRepository $itineraryRepository, ItineraryLocationRepository $itineraryLocationRepository, EntityManagerInterface $entityManager) : JsonResponse 
     {
@@ -121,6 +186,16 @@ class ItineraryController extends AbstractController
         if(!$itinerary) {
             return $this->json(['error' => 'Itinéraire introuvable'], 404);
         }
+
+        // on vérifie que l'utilisateur est bien membre && connecté
+        if(!$this->getUser()) {
+            return $this->json(['error' => 'Utilisateur non connecté'], 401);
+        }
+
+        if(!$itinerary->getUsers()->contains($this->getUser())) {
+            return $this->json(['error' => 'Accès refusé'], 403);
+        }
+
 
         $data = json_decode($request->getContent(), true);
 
@@ -147,6 +222,10 @@ class ItineraryController extends AbstractController
 
         if(!$itinerary) {
            throw $this->createNotFoundException('Itinéraire introuvable');
+        }
+
+        if ($response = $this->ensureUserAccess($itinerary)) {
+            return $response;
         }
 
         // pour empêcher l'ajout du même lieu 2 fois
@@ -185,6 +264,10 @@ class ItineraryController extends AbstractController
             throw $this->createNotFoundException('Itinéraire introuvable');
         }
 
+        if ($response = $this->ensureUserAccess($itinerary)) {
+            return $response;
+        }
+
         // vérification du token
         if(!$this->isCsrfTokenValid('remove_location_' . $locationId, $request->request->get('_token'))) {
             $this->addFlash('error', 'Échec de la vérification CSRF');
@@ -204,5 +287,24 @@ class ItineraryController extends AbstractController
         $this->addFlash('success', 'Lieu retiré de l’itinéraire.');
 
         return $this->redirectToRoute('itinerary_detail', ['itineraryId' => $itineraryId]);
+    }
+
+    private function ensureUserAccess(?Itinerary $itinerary): ?Response
+    {
+        if (!$this->getUser()) {
+            $this->addFlash('error', "Vous devez être connecté pour accéder à cette page.");
+            return $this->redirectToRoute('app_login');
+        }
+
+        if (!$itinerary) {
+            throw $this->createNotFoundException('Itinéraire introuvable.');
+        }
+
+        if (!$itinerary->getUsers()->contains($this->getUser())) {
+            $this->addFlash('error', "Vous n'avez pas accès à cet itinéraire.");
+            return $this->redirectToRoute('app_home');
+        }
+
+        return null;
     }
 }

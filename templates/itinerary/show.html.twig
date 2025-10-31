@@ -5,25 +5,25 @@
 {% block body %}
 
 <div class="lg:flex lg:w-[80%] lg:h-[calc(100vh-100px)] mt-6 lg:mx-auto gap-6">
+ 
+    <div id="itinerary-locations" class="hidden lg:flex flex-col lg:w-1/2 min-w-[375px] lg:rounded-xl lg:p-4 lg:shadow max-h-[calc(100vh-2rem)]">
 
-    {# ---------------------- COLONNE LISTE DES LIEUX ---------------------- #}
-    <div id="itinerary-locations" data-itinerary-id="{{ itinerary.id }}" class="hidden lg:flex flex-col gap-4 lg:w-1/2 min-w-[375px] overflow-y-auto scrollbar-hide lg:rounded-xl lg:p-4 lg:shadow">
-
-        <div class="mb-4 flex justify-between items-center">
+        <div class="flex-shrink-0 mb-4 flex justify-between items-center">
             <div>
                 <h1 class="text-2xl font-semibold text-violet-800">{{ itinerary.itineraryName }}</h1>
                 <p class="text-gray-600 text-sm">
-                    {{ itinerary.duration }} jour{{ itinerary.duration > 1 ? 's' }} — 
+                    {{ itinerary.duration }} jour{{ itinerary.duration > 1 ? 's' }} —
                     créé le {{ itinerary.creationDate|date('d/m/Y') }}
                 </p>
+
                 {% if itinerary.departureDate %}
                     <p class="text-gray-600 text-sm">
                         Départ prévu le {{ itinerary.departureDate|date('d/m/Y') }}
                     </p>
                 {% endif %}
- 
+
                 <div class="mt-3">
-                    <a href="{{ path('location_search') }}" 
+                    <a href="{{ path('location_search') }}"
                     class="bg-violet-800 hover:bg-violet-700 text-white text-sm font-medium px-4 py-2 rounded-md inline-flex items-center gap-2 transition">
                         <i class="fa-solid fa-plus text-white"></i>
                         Ajouter des lieux
@@ -31,73 +31,95 @@
                 </div>
             </div>
 
-            {% if itinerary.isPublic %}
-                <span class="bg-green-100 text-green-700 text-xs font-medium px-3 py-1 rounded-full">Public</span>
-            {% else %}
-                <span class="bg-gray-200 text-gray-700 text-xs font-medium px-3 py-1 rounded-full">Privé</span>
-            {% endif %}
-        </div>
+            <div class="flex flex-col items-end gap-2">
+                {% if itinerary.isPublic %}
+                    <span class="bg-green-100 text-green-700 text-xs font-medium px-3 py-1 rounded-full">Public</span>
+                {% else %}
+                    <span class="bg-gray-200 text-gray-700 text-xs font-medium px-3 py-1 rounded-full">Privé</span>
+                {% endif %}
 
+                <div class="flex flex-col items-center gap-1 mt-1">
+                    <a href="{{ path('itinerary_edit', { itineraryId: itinerary.id }) }}"
+                    class="text-violet-700 hover:text-violet-900 text-sm" title="Modifier cet itinéraire">
+                        <i class="fa-solid fa-pen-to-square text-lg"></i>
+                    </a>
 
-        {% if locations is empty %}
-            <p class="text-gray-500 text-center py-10">Aucun lieu n’a encore été ajouté à cet itinéraire.</p>
-        {% else %}
-            {% for item in locations %}
-                {% set location = item.data %}
-                <div  data-location-id="{{ location.id }}" class="location-item flex items-center gap-4 border border-violet-200 hover:border-violet-600 rounded-lg hover:bg-violet-50 transition h-[110px] p-2 justify-between">
-                    <div class="flex items-center gap-4">
-                        {% if location.images and location.images|length > 0 %}
-                            <img src="{{ location.images[0].imageName|replace({'/upload/':'/upload/w_300/'}) }}"  alt="{{ location.locationName }}" class="object-cover rounded-md h-full w-32">
-                        {% else %}
-                            <div class="w-32 h-full bg-gray-200 rounded-md flex items-center justify-center text-gray-400 text-sm">
-                                Aucune image
-                            </div>
-                        {% endif %}
-
-                        <div class="flex flex-col justify-center gap-1">
-                            <p class="font-semibold text-violet-800">
-                               <span class="location-index">{{ item.order + 1 }}</span>. {{ location.locationName }}
-                            </p>
-                            {% if location.city %}
-                                <p class="text-xs text-gray-600">{{ location.city }}</p>
-                            {% endif %}
-
-                            {% if location.averageRating %}
-                                <div class="flex gap-1 text-gray-800 font-light text-sm">
-                                    <p>{{ location.averageRating|number_format(1, ',', '') }}</p>
-                                    <div class="text-[0.75rem]">{{ location.averageRating|round(1, 'floor')|stars|raw }}</div>
-                                </div>
-                            {% else %}
-                                <p class="text-sm text-gray-400">Pas encore noté</p>
-                            {% endif %}
-
-                            {% if location.duration and location.duration.onSiteTime %}
-                                <div class="flex gap-2 items-center text-gray-600">
-                                    <i class="fa-regular fa-clock text-sm"></i>
-                                    <p class="text-sm">
-                                        {{ location.duration.onSiteTime|duration_label('short') }}
-                                    </p>
-                                </div>
-                            {% endif %}
-                        </div>
-                    </div>
-
-                    <form method="post" action="{{ path('itinerary_remove_location', { 'itineraryId': itinerary.id, 'locationId': location.id }) }}"  onsubmit="return confirm('Supprimer ce lieu de l’itinéraire ?');">
-
-                        <input type="hidden" name="_token" value="{{ csrf_token('remove_location_' ~ location.id) }}">
-
-                        <button type="submit" class="text-red-600 hover:text-red-600 cursor-pointer">
-                           <i class="fa-regular fa-trash-can"></i>
+                    <form method="post"
+                        action="{{ path('itinerary_delete', { itineraryId: itinerary.id }) }}"
+                        onsubmit="return confirm('Supprimer définitivement cet itinéraire ?');">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete_itinerary_' ~ itinerary.id) }}">
+                        <button type="submit" class="text-red-600 hover:text-red-800 text-sm cursor-pointer" title="Supprimer l’itinéraire">
+                            <i class="fa-regular fa-trash-can text-lg"></i>
                         </button>
                     </form>
-
                 </div>
-            {% endfor %}
-        {% endif %}
+            </div>
+        </div>
+
+        <div class="flex-1 overflow-y-auto scrollbar-hide box-shadow-inset-itinerary p-3 rounded-lg sortable-locations"  data-itinerary-id="{{ itinerary.id }}">
+            {% if locations is empty %}
+                <p class="text-gray-500 text-center py-10">Aucun lieu n’a encore été ajouté à cet itinéraire.</p>
+            {% else %}
+                {% for item in locations %}
+                    {% set location = item.data %}
+                    <div data-location-id="{{ location.id }}"
+                        class="location-item flex items-center justify-between gap-4 border border-violet-200 hover:border-violet-600 rounded-lg hover:bg-violet-50 transition h-[110px] p-2 mb-2">
+
+                        <div class="flex items-center gap-4 h-full">
+                            {% if location.images and location.images|length > 0 %}
+                                <img src="{{ location.images[0].imageName|replace({'/upload/':'/upload/w_300/'}) }}"
+                                    alt="{{ location.locationName }}"
+                                    class="object-cover rounded-md h-full w-32">
+                            {% else %}
+                                <div class="w-32 h-full bg-gray-200 rounded-md flex items-center justify-center text-gray-400 text-sm">
+                                    Aucune image
+                                </div>
+                            {% endif %}
+
+                            <div class="flex flex-col justify-center gap-1">
+                                <a href="{{ path('location_detail', {'id': location.id}) }}"
+                                class="font-semibold text-violet-800 hover:underline">
+                                    <span class="location-index">{{ item.order + 1 }}</span>. {{ location.locationName }}
+                                </a>
+
+                                {% if location.city %}
+                                    <p class="text-xs text-gray-600">{{ location.city }}</p>
+                                {% endif %}
+
+                                {% if location.averageRating %}
+                                    <div class="flex gap-1 text-gray-800 font-light text-sm">
+                                        <p>{{ location.averageRating|number_format(1, ',', '') }}</p>
+                                        <div class="text-[0.75rem]">{{ location.averageRating|round(1, 'floor')|stars|raw }}</div>
+                                    </div>
+                                {% else %}
+                                    <p class="text-sm text-gray-400">Pas encore noté</p>
+                                {% endif %}
+
+                                {% if location.duration and location.duration.onSiteTime %}
+                                    <div class="flex gap-2 items-center text-gray-600">
+                                        <i class="fa-regular fa-clock text-sm"></i>
+                                        <p class="text-sm">
+                                            {{ location.duration.onSiteTime|duration_label('short') }}
+                                        </p>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <form method="post"
+                            action="{{ path('itinerary_remove_location', { 'itineraryId': itinerary.id, 'locationId': location.id }) }}"
+                            onsubmit="return confirm('Supprimer ce lieu de l’itinéraire ?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('remove_location_' ~ location.id) }}">
+                            <button type="submit" class="text-red-600 hover:text-red-600 cursor-pointer" title="Supprimer le lieu">
+                                <i class="fa-regular fa-trash-can"></i>
+                            </button>
+                        </form>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
     </div>
 
-
-    {# ---------------------- COLONNE CARTE ---------------------- #}
     <div class="lg:w-1/2  lg:h-full h-screen relative">
         <div 
             id="itinerary-map" 

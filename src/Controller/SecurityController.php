@@ -2,12 +2,21 @@
 
 namespace App\Controller;
 
+use App\Form\ChangePasswordFormType;
+use App\HttpClient\ApiHttpClient;
+use App\Repository\ItineraryRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use App\Repository\ItineraryLocationRepository;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class SecurityController extends AbstractController
 {
@@ -61,13 +70,7 @@ class SecurityController extends AbstractController
         return new Response(status: 200);
     }
 
-    // profile
 
-    #[Route(path: '/account/profile', name: 'show_profile')]
-    public function showProfile(): Response
-    {
-        return $this->render('profile/profile.html.twig');
-    }
 
     #[Route(path: '/account/dashboard', name: 'show_dashboard')]
     public function showDashboard(): Response
@@ -76,8 +79,197 @@ class SecurityController extends AbstractController
     }
 
     #[Route(path: '/account/ratings', name: 'show_ratings')]
-    public function showRatings(): Response
-    { 
-        return $this->render('security/ratings.html.twig');
+    public function showRatings(ApiHttpClient $apiHttpClient): Response
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        $ratings = $user->getRatings();
+
+        $data = [];
+
+        foreach ($ratings as $rating) {
+            $locationName = null;
+
+            try {
+                $location = $apiHttpClient->getLocation($rating->getLocationId());
+                $locationName = $location['locationName'] ?? null;
+            } catch (\Exception $e) {
+                $locationName = null;
+            }
+
+            $data[] = [
+                'rating' => $rating,
+                'locationName' => $locationName,
+            ];
+        }
+
+        return $this->render('profile/ratings.html.twig', [
+            'ratingsData' => $data,
+        ]);
     }
+
+
+   #[Route(path: '/account/itineraries', name: 'show_itineraries')]
+    public function showItineraries(ItineraryLocationRepository $itineraryLocationRepository, ApiHttpClient $apiHttpClient): Response
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        $itineraries = $user->getItineraries();
+
+        $data = [];
+
+        foreach ($itineraries as $itinerary) {
+            $first = $itineraryLocationRepository->findFirstByItinerary($itinerary);
+            $last = $itineraryLocationRepository->findLastByItinerary($itinerary);
+
+            $departure = null;
+            $arrival = null;
+
+            if ($first) {
+                try {
+                    $location = $apiHttpClient->getLocation($first->getLocationId());
+                    $departure = $location['locationName'] ?? null;
+                } catch (\Exception $e) {
+                    $departure = null;
+                }
+            }
+
+            if ($last) {
+                try {
+                    $location = $apiHttpClient->getLocation($last->getLocationId());
+                    $arrival = $location['locationName'] ?? null;
+                } catch (\Exception $e) {
+                    $arrival = null;
+                }
+            }
+
+            $data[] = [
+                'itinerary' => $itinerary,
+                'departure' => $departure,
+                'arrival' => $arrival,
+            ];
+        }
+
+        return $this->render('profile/itineraries.html.twig', [
+            'itinerariesData' => $data,
+        ]);
+    }
+
+
+    // profile
+    #[Route(path: '/account/profile', name: 'show_profile')]
+    public function showProfile(Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager): Response
+    {
+        /** @var \App\Entity\User $user */
+        $user = $this->getUser();
+
+
+        $form = $this->createForm(ChangePasswordFormType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $plainPassword = $form->get('plainPassword')->getData();
+
+            $hashedPassword = $passwordHasher->hashPassword($user, $plainPassword);
+            $user->setPassword($hashedPassword);
+
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Votre mot de passe a été mis à jour avec succès.');
+            return $this->redirectToRoute('show_profile');
+        }
+
+        return $this->render('profile/profile.html.twig', [
+            'changePasswordForm' => $form->createView(),
+        ]);
+    }
+
+
+    #[Route('/profile/update-username', name: 'profile_update_username', methods: ['POST'])]
+    public function updateUsername(Request $request, EntityManagerInterface $entityManager): JsonResponse
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+
+        
+        // if ($user->getGoogleId() !== null) {
+        //     return new JsonResponse(['error' => 'Les comptes Google ne peuvent pas modifier leur adresse e-mail.'], 403);
+        // }
+
+        $data = json_decode($request->getContent(), true);
+        $username = trim($data['username'] ?? '');
+
+        if (!$username) {
+            return new JsonResponse(['error' => 'Nom invalide.'], 400);
+        }
+
+        $user->setUsername($username);
+        $entityManager->flush();
+
+        return new JsonResponse(['success' => true]);
+    }
+
+    #[Route('/profile/update-email', name: 'profile_update_email', methods: ['POST'])]
+    public function updateEmail(Request $request, EntityManagerInterface $entityManager): JsonResponse
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        $data = json_decode($request->getContent(), true);
+        $email = trim($data['email'] ?? '');
+
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return new JsonResponse(['error' => 'Adresse e-mail invalide.'], 400);
+        }
+
+        
+        $user->setEmail($email);
+        $entityManager->flush();
+
+        return new JsonResponse(['success' => true]);
+    }
+
+    #[Route('/profile/update-picture', name: 'profile_update_picture', methods: ['POST'])]
+    public function updatePicture(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): JsonResponse
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+
+        // if ($user->getGoogleId()) {
+        //     return new JsonResponse(['error' => 'Impossible de modifier la photo pour un compte Google.'], 403);
+        // }
+
+        $file = $request->files->get('profilePicture');
+        if (!$file) {
+            return new JsonResponse(['error' => 'Aucun fichier reçu.'], 400);
+        }
+
+        if (!in_array($file->getMimeType(), ['image/jpeg', 'image/png', 'image/webp'])) {
+            return new JsonResponse(['error' => 'Format d’image invalide.'], 400);
+        }
+
+        $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+        $safeFilename = $slugger->slug($originalFilename);
+        $newFilename = $safeFilename.'-'.uniqid().'.'.$file->guessExtension();
+
+        try {
+            $file->move($this->getParameter('uploads_directory'), $newFilename);
+        } catch (\Exception $e) {
+            return new JsonResponse(['error' => 'Erreur lors du téléchargement du fichier.'], 500);
+        }
+
+        if ($user->getProfilePicture() && file_exists($this->getParameter('uploads_directory').'/'.$user->getProfilePicture())) {
+            unlink($this->getParameter('uploads_directory').'/'.$user->getProfilePicture());
+        }
+
+        $user->setProfilePicture($newFilename);
+        $entityManager->flush();
+
+        return new JsonResponse([
+            'success' => true,
+            'newPath' => '/uploads/' . $newFilename
+        ]);
+    }
+
+
+
 }

@@ -220,9 +220,27 @@
                                     <div class="swiper-slide">
                                         <div class="h-32 max-h-32 line-clamp-4 border border-violet-200 rounded-xl py-3 px-4 w-full">
                                             <div class="flex justify-between mb-1">
-                                                <div class="text-violet-700 text-[0.75rem]">
+                                                <div class="flex items-center  text-violet-700 text-[0.75rem]">
                                                     {{ review.rating|stars|raw }}
+
+                                                    {% if app.user and app.user == review.user %}
+                                                        <a href="{{ path('edit_rating', { id: review.id }) }}" title="Modifier votre avis" class="text-gray-500 hover:text-violet-700 transition ml-2 mr-1">
+                                                            <i class="fa-solid fa-pen-to-square"></i>
+                                                        </a>
+
+                                                        <form method="post"
+                                                            action="{{ path('delete_rating', { id: review.id }) }}"
+                                                            onsubmit="return confirm('Voulez-vous vraiment supprimer cet avis ?');"
+                                                            class="inline">
+                                                            <input type="hidden" name="_token" value="{{ csrf_token('delete_rating_' ~ review.id) }}">
+                                                            <button type="submit" title="Supprimer votre avis" class="text-gray-500 hover:text-red-600 transition cursor-pointer">
+                                                                <i class="fa-solid fa-trash"></i>
+                                                            </button>
+                                                        </form>
+                                                    {% endif %}
                                                 </div>
+
+
                                                 <p class="text-[0.75rem] text-gray-500">
                                                     {{ review.user.username ?? 'Anonyme' }} – 
                                                     {{ review.ratingDate|date('d/m/Y') }}

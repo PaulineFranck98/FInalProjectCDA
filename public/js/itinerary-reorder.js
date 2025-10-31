@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const list = document.getElementById('itinerary-locations');
+    const list = document.querySelector('.sortable-locations');
     if (!list) return;
 
     const itineraryId = list.dataset.itineraryId;
@@ -36,8 +36,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (!response.ok) {
                     throw new Error(result.error || 'Erreur serveur');
                 }
-
-                console.log('Nouvel ordre sauvegardé :', orderedIds);
             } catch (e) {
                 console.error('Erreur lors de la mise à jour de l’ordre', e);
                 alert("Une erreur est survenue lors de la mise à jour de l’ordre.");

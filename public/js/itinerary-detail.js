@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const locations = JSON.parse(mapDiv.dataset.locations || '[]');
 
-    let center = [7.75, 48.58]; // défaut : Strasbourg
+    let center = [7.75, 48.58]; // défaut : Strasbourg à modifier
     if (
         locations.length > 0 &&
         locations[0].data &&
@@ -78,7 +78,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateRouteLine() {
 
         const coords = locations
-            .slice() 
             .sort((a, b) => a.order - b.order)
             .filter(item => item.data.geo && Array.isArray(item.data.geo.coordinates))
             .map(item => {

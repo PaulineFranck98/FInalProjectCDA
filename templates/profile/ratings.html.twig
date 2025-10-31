@@ -1,29 +1,88 @@
 {% extends 'base.html.twig' %}
 
-% extends 'base.html.twig' %}
-
-{% block title %}Bienvenue sur votre profil {{ app.user.username }}{% endblock %}
+{% block title %} Vos avis {% endblock %}
 
 
 {% block body %}
 
 <section id="profile-dashboard" class="flex min-h-0 lg:h-[calc(100vh-49px)]">
-    <aside class="flex flex-col w-1/6 shadow-custom-aside">
-        {# <div>
-            <figure>
-                <img src="" alt="" />
-            </figure>
-        </div> #}
-        <ul class="w-full lg:pt-8">
+     <aside class="flex flex-col lg:w-1/5 shadow-custom-aside py-6">
+
+        <div class="flex flex-col items-center mb-8">
+            <div class="relative w-24 h-24 rounded-full overflow-hidden border-4 border-violet-100 shadow-md mb-3 group">
+
+                {% if app.user.profilePicture %}
+                    {% if app.user.googleId %}
+                        <img src="{{ app.user.profilePicture }}" alt="Photo de profil" class="w-full h-full object-cover">
+                    {% else %}
+                        <img id="profile-img" src="{{ asset('uploads/' ~ app.user.profilePicture) }}" alt="Photo de profil" class="w-full h-full object-cover">
+                    {% endif %}
+                {% else %}
+                    <img id="profile-img" src="{{ asset('images/default-avatar.png') }}" alt="Avatar par défaut" class="w-full h-full object-cover opacity-80">
+                {% endif %}
+
+                {% if app.user.googleId is null %}
+                    <label for="profile-upload" class="absolute inset-0 flex items-center justify-center bg-black opacity-0 group-hover:opacity-80 cursor-pointer transition">
+                        <i class="fa-solid fa-pen text-white text-lg"></i>
+                    </label>
+                    <input id="profile-upload" type="file" accept="image/*" class="hidden">
+                {% endif %}
+            </div>
+
+            <p class="text-violet-800 font-semibold text-center">{{ app.user.username ?? 'Utilisateur' }}</p>
+        </div>
+
+        <ul class="w-full lg:pt-2">
             <li class="px-6 py-2"><a href="" class="anchors-aside"><i class="fa-regular fa-clone mr-5"></i>Tableau de bord</a></li>
-            <li class="px-6 py-2"><a href="{{ path('show_profile') }}" class="active-anchor-aside anchors-aside"><i class="fa-regular fa-circle-user mr-5"></i>Profil</a></li>
-            <li class="px-6 py-2"><a href="" class="anchors-aside"><i class="fa-regular fa-map mr-5"></i>Itinéraires</a></li>
-            <li class="px-6 py-2"><a href="" class="anchors-aside"><i class="fa-regular fa-star mr-5"></i></i>Avis</a></li>
+            <li class="px-6 py-2"><a href="{{ path('show_profile') }}" class=" anchors-aside"><i class="fa-regular fa-circle-user mr-5"></i>Profil</a></li>
+            <li class="px-6 py-2"><a href="{{ path('show_itineraries') }}" class="anchors-aside"><i class="fa-regular fa-map mr-5"></i>Itinéraires</a></li>
+            <li class="px-6 py-2"><a href="{{ path('show_ratings') }}" class="anchors-aside active-anchor-aside"><i class="fa-regular fa-star mr-5"></i>Avis</a></li>
             <li class="px-6 py-2"><a href="" class="anchors-aside"><i class="fa-regular fa-heart mr-5"></i>Favoris</a></li>
             <li class="px-6 py-2"><a href="" class="anchors-aside"><i class="fa-regular fa-pen-to-square mr-5"></i>Lorem</a></li>
         </ul>
     </aside>
-    <section id="profile-container" class="border border-gray-200 w-full">
+    <section id="profile-container" class="border border-gray-200 w-full p-8 overflow-y-auto  scrollbar-hide">
+     <h2 class="text-2xl font-semibold text-violet-800 mb-8">Mes avis</h2>
+
+        {% if ratingsData is empty %}
+            <p class="text-gray-500 text-center py-10">Vous n’avez encore laissé aucun avis.</p>
+        {% else %}
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {% for data in ratingsData %}
+                    {% set rating = data.rating %}
+                    {% set locationName = data.locationName %}
+
+                    <div class="border border-gray-200 rounded-lg shadow-sm p-4 flex flex-col justify-between hover:shadow-md transition bg-gray-50">
+                        <div>
+                            <h3 class="text-violet-800 font-semibold text-lg mb-2 truncate">
+                                {{ locationName ?? 'Lieu inconnu' }}
+                            </h3>
+
+                            <p class="text-yellow-500 text-sm mb-2">
+                                {{ rating.rating|stars|raw }}
+                            </p>
+
+                            {% if rating.comment %}
+                                <p class="text-gray-700 text-sm italic mb-2">“{{ rating.comment }}”</p>
+                            {% endif %}
+
+                            <p class="text-xs text-gray-500">
+                                <i class="fa-regular fa-calendar mr-1 text-violet-600"></i>
+                                Posté le {{ rating.ratingDate|date('d/m/Y') }}
+                            </p>
+                        </div>
+
+                        <div class="mt-4 flex justify-end">
+                            <a href="#"
+                               class="text-sm bg-violet-700 text-white px-3 py-1 rounded-md hover:bg-violet-800 transition"
+                               title="Voir le détail de l’avis">
+                                Voir
+                            </a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
 
     </section>
 </section>

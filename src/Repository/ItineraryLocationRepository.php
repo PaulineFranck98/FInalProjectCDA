@@ -29,6 +29,29 @@ class ItineraryLocationRepository extends ServiceEntityRepository
             return $lastOrder !== null ? ((int)$lastOrder + 1) : 0;
     }
 
+    public function findFirstByItinerary(Itinerary $itinerary): ?ItineraryLocation
+    {
+        return $this->createQueryBuilder('il')
+            ->andWhere('il.itinerary = :itinerary')
+            ->setParameter('itinerary', $itinerary)
+            ->orderBy('il.orderIndex', 'ASC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    public function findLastByItinerary(Itinerary $itinerary): ?ItineraryLocation
+    {
+        return $this->createQueryBuilder('il')
+            ->andWhere('il.itinerary = :itinerary')
+            ->setParameter('itinerary', $itinerary)
+            ->orderBy('il.orderIndex', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+
 //    /**
 //     * @return ItineraryLocation[] Returns an array of ItineraryLocation objects
 //     */

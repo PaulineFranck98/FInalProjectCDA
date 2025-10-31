@@ -25,6 +25,11 @@ final class RatingController extends AbstractController
     #[Route('/rating/new/{locationId}', name:'new_rating')]
     public function new(Request $request, EntityManagerInterface $entityManager, ApiHttpClient $apiHttpClient, RatingRepository $ratingRepository, string $locationId): Response 
     { 
+        if (!$this->getUser()) {
+            $this->addFlash('error', "Vous devez être connecté pour laisser un avis.");
+            return $this->redirectToRoute('app_login');
+        }
+        
         $rating = new Rating();
 
         $location = $apiHttpClient->getLocation($locationId);
@@ -61,5 +66,67 @@ final class RatingController extends AbstractController
             'location' => $location,
             'existingRating' => $existingRating,
         ]);
+    }
+
+    #[Route('/rating/{id}/edit', name: 'edit_rating')]
+    public function edit(Rating $rating, Request $request, EntityManagerInterface $entityManager, ApiHttpClient $apiHttpClient): Response 
+    {
+        $location = $apiHttpClient->getLocation($rating->getLocationId());
+
+        if (!$this->getUser()) {
+            $this->addFlash('error', "Vous devez être connecté pour modifier un avis.");
+            return $this->redirectToRoute('app_login');
+        }
+
+     
+        if ($rating->getUser() !== $this->getUser()) {
+            $this->addFlash('error', "Vous n'avez pas le droit de modifier cet avis.");
+            return $this->redirectToRoute('app_home');
+        }
+
+        $form = $this->createForm(RatingType::class, $rating);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $rating->setRatingDate(new \DateTimeImmutable());
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Avis mis à jour avec succès.');
+            return $this->redirectToRoute('location_detail', ['id' => $rating->getLocationId()]);
+        }
+
+        return $this->render('rating/edit.html.twig', [
+            'form' => $form,
+            'rating' => $rating,
+            'location' => $location
+        ]);
+    }
+
+    #[Route('/rating/{id}/delete', name: 'delete_rating', methods: ['POST'])]
+    public function delete(Rating $rating, Request $request, EntityManagerInterface $entityManager): Response 
+    {
+     
+        if (!$this->getUser()) {
+            $this->addFlash('error', "Vous devez être connecté pour supprimer un avis.");
+            return $this->redirectToRoute('app_login');
+        }
+
+
+        if ($rating->getUser() !== $this->getUser()) {
+            $this->addFlash('error', "Vous n'avez pas le droit de supprimer cet avis.");
+            return $this->redirectToRoute('app_home');
+        }
+
+
+        if (!$this->isCsrfTokenValid('delete_rating_' . $rating->getId(), $request->request->get('_token'))) {
+            $this->addFlash('error', 'Échec de la vérification CSRF.');
+            return $this->redirectToRoute('location_detail', ['id' => $rating->getLocationId()]);
+        }
+
+        $entityManager->remove($rating);
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Avis supprimé avec succès.');
+        return $this->redirectToRoute('location_detail', ['id' => $rating->getLocationId()]);
     }
 }
