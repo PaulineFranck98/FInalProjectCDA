@@ -238,3 +238,13 @@ fieldset.sweet-pot{
     font-size: 0.8rem;
     color: #f59e0b;
 }
+
+
+#loader {
+    animation: fadeIn 0.4s ease forwards;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}

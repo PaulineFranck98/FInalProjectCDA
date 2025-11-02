@@ -29,11 +29,11 @@
                 {% endif %}
             </div>
 
-            <p class="text-violet-800 font-semibold text-center">{{ app.user.username ?? 'Utilisateur' }}</p>
+            <p class="text-violet-700 font-semibold text-center">{{ app.user.username ?? 'Utilisateur' }}</p>
         </div>
 
         <ul class="w-full lg:pt-2">
-            <li class="px-6 py-2"><a href="" class="anchors-aside"><i class="fa-regular fa-clone mr-5"></i>Tableau de bord</a></li>
+            <li class="px-6 py-2"><a href="{{ path('show_dashboard') }}" class="anchors-aside"><i class="fa-regular fa-clone mr-5"></i>Tableau de bord</a></li>
             <li class="px-6 py-2"><a href="{{ path('show_profile') }}" class="active-anchor-aside anchors-aside"><i class="fa-regular fa-circle-user mr-5"></i>Profil</a></li>
             <li class="px-6 py-2"><a href="{{ path('show_itineraries') }}" class="anchors-aside"><i class="fa-regular fa-map mr-5"></i>Itinéraires</a></li>
             <li class="px-6 py-2"><a href="{{ path('show_ratings') }}" class="anchors-aside"><i class="fa-regular fa-star mr-5"></i>Avis</a></li>
@@ -42,7 +42,7 @@
         </ul>
     </aside>
     <section id="profile-container" class="flex-1 p-8  overflow-y-auto">
-        <h2 class="text-2xl font-semibold text-violet-800 mb-8">Mon profil</h2>
+        <h2 class="text-2xl font-semibold text-violet-700 mb-8">Mon profil</h2>
 
         {% if app.user.googleId is not null %}
             <div class="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-md text-blue-800 text-sm flex items-start gap-2">
@@ -65,7 +65,7 @@
                 <p class="mt-2 text-gray-900 font-semibold" id="display-username">{{ app.user.username ?? 'Non défini' }}</p>
 
                 <form id="form-username" class="hidden mt-3" data-field="username">
-                    <input type="text" name="username" value="{{ app.user.username }}" class="border rounded-md px-2 py-1 w-full">
+                    <input type="text" name="username" value="{{ app.user.username }}" class="border rounded-md px-2 py-1 w-full border-gray-300">
                     <div class="flex justify-end gap-2 mt-3">
                         <button type="button" class="cancel-btn text-gray-500 text-sm">Annuler</button>
                         <button type="submit" class="bg-violet-800 text-white text-sm px-4 py-1 rounded-md">Enregistrer</button>
@@ -88,7 +88,7 @@
 
                 {% if app.user.googleId is null %}
                     <form id="form-email" class="hidden mt-3" data-field="email">
-                        <input type="email" name="email" value="{{ app.user.email }}" class="border rounded-md px-2 py-1 w-full">
+                        <input type="email" name="email" value="{{ app.user.email }}" class="border rounded-md px-2 py-1 w-full border-gray-300">
                         <div class="flex justify-end gap-2 mt-3">
                             <button type="button" class="cancel-btn text-gray-500 text-sm">Annuler</button>
                             <button type="submit" class="bg-violet-800 text-white text-sm px-4 py-1 rounded-md">Enregistrer</button>
@@ -102,8 +102,8 @@
                 <div class="md:col-span-2 border border-gray-200 rounded-lg p-4 shadow-sm">
                     <p class="text-gray-700 font-medium mb-3">Changer le mot de passe</p>
                     {{ form_start(changePasswordForm, { attr: { class: 'space-y-3' } }) }}
-                        {{ form_row(changePasswordForm.plainPassword.first, { label: 'Nouveau mot de passe', attr: { class: 'border rounded-md px-3 py-2 w-full' } }) }}
-                        {{ form_row(changePasswordForm.plainPassword.second, { label: 'Confirmer le mot de passe', attr: { class: 'border rounded-md px-3 py-2 w-full' } }) }}
+                        {{ form_row(changePasswordForm.plainPassword.first, { label: 'Nouveau mot de passe', attr: { class: 'border rounded-md px-3 py-2 w-full border-gray-300' } }) }}
+                        {{ form_row(changePasswordForm.plainPassword.second, { label: 'Confirmer le mot de passe', attr: { class: 'border rounded-md px-3 py-2 w-full border-gray-300' } }) }}
                         <button type="submit" class="bg-violet-800 text-white px-6 py-2 rounded-md font-medium hover:bg-violet-700">Mettre à jour</button>
                     {{ form_end(changePasswordForm) }}
                 </div>

@@ -12,7 +12,7 @@ class ApiHttpClient
     public function __construct(HttpClientInterface $client)
     {
         $this->client = $client;
-        $this->baseUrl = 'http://localhost:3000/api';
+        $this->baseUrl = 'http://localhost:3000/api/v1';
     }
 
     public function getLocations(): array

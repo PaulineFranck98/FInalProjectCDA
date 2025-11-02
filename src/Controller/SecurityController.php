@@ -2,8 +2,9 @@
 
 namespace App\Controller;
 
-use App\Form\ChangePasswordFormType;
 use App\HttpClient\ApiHttpClient;
+use App\Form\ChangePasswordFormType;
+use App\Repository\RatingRepository;
 use App\Repository\ItineraryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,6 +18,7 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use App\Entity\User;
 
 class SecurityController extends AbstractController
 {
@@ -71,12 +73,52 @@ class SecurityController extends AbstractController
     }
 
 
-
     #[Route(path: '/account/dashboard', name: 'show_dashboard')]
-    public function showDashboard(): Response
+    public function showDashboard(ItineraryRepository $itineraryRepository, RatingRepository $ratingRepository, ApiHttpClient $apiHttpClient): Response
     {
-        return $this->render('profile/dashboard.html.twig');
+        /** @var User $user */
+        $user = $this->getUser();
+
+       
+        $lastItineraries = $itineraryRepository->findLastByUser($user, 2);
+
+
+        $ratings = $ratingRepository->findBy(
+            ['user' => $user],
+            ['ratingDate' => 'DESC'],
+            2
+        );
+
+          $lastRatings = [];
+
+        foreach ($ratings as $rating) {
+            $locationName = null;
+
+            try {
+                $location = $apiHttpClient->getLocation($rating->getLocationId());
+                $locationName = $location['locationName'] ?? null;
+            } catch (\Exception $e) {
+                $locationName = null;
+            }
+
+            $lastRatings[] = [
+                'rating' => $rating,
+                'locationName' => $locationName,
+            ];
+        }
+
+        $stats = [
+            'itinerariesCount' => count($user->getItineraries()),
+            'ratingsCount' => count($user->getRatings()),
+        ];
+
+        return $this->render('profile/dashboard.html.twig', [
+            'lastItineraries' => $lastItineraries,
+            'lastRatings' => $lastRatings,
+            'stats' => $stats,
+        ]);
     }
+
 
     #[Route(path: '/account/ratings', name: 'show_ratings')]
     public function showRatings(ApiHttpClient $apiHttpClient): Response

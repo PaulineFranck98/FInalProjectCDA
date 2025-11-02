@@ -2,9 +2,10 @@
 
 namespace App\Repository;
 
+use App\Entity\User;
 use App\Entity\Itinerary;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @extends ServiceEntityRepository<Itinerary>
@@ -14,6 +15,18 @@ class ItineraryRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Itinerary::class);
+    }
+
+    public function findLastByUser(User $user, int $limit = 2): array
+    {
+        return $this->createQueryBuilder('i')
+            ->innerJoin('i.users', 'u')
+            ->andWhere('u = :user')
+            ->setParameter('user', $user)
+            ->orderBy('i.creationDate', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
     }
 
     //    /**

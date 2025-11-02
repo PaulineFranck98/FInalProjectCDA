@@ -1,8 +1,7 @@
-document.addEventListener('DOMContentLoaded', () => {
+function initItineraryModal() {
     const modal = document.getElementById('itinerary-modal');
     const closeBtn = document.getElementById('close-itinerary-modal');
     const itineraryList = document.getElementById('itinerary-list');
-
     const addButtons = document.querySelectorAll('#add-to-itinerary, .add-to-itinerary');
 
     addButtons.forEach(button => {
@@ -40,12 +39,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    closeBtn.addEventListener('click', () => {
-        modal.classList.add('hidden');
-    });
-
-
-    modal.addEventListener('click', (e) => {
+    closeBtn?.addEventListener('click', () => modal.classList.add('hidden'));
+    modal?.addEventListener('click', (e) => {
         if (e.target === modal) modal.classList.add('hidden');
     });
-});
+}
+
+document.addEventListener('DOMContentLoaded', initItineraryModal);
+

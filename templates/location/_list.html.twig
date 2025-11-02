@@ -1,0 +1,96 @@
+<div id="locationsContainer" data-locations='{{ locations|json_encode }}' class="hidden lg:flex flex-col gap-4 lg:w-1/2 min-w-[375px]  overflow-y-auto scrollbar-hide lg:rounded-xl lg:p-4 lg:shadow ">
+    {% for location in locations %}
+        <div data-location-id="{{ location.id }}" class="relative flex items-center gap-4 border border-violet-200 hover:border-violet-600 rounded-lg  hover:bg-violet-50 transition h-[110px] p-2">
+            {% if location.images|length > 0 %}
+                <img 
+                    src="{{ location.images[0].imageName|replace({'/upload/':'/upload/w_300/'}) }}"
+                    alt="{{ location.locationName }}"
+                    class="object-cover rounded-md h-full w-32">
+            {% else %}
+                <div class="w-32 h-full bg-gray-200 rounded-md flex items-center justify-center text-gray-400 text-sm ">
+                    Aucune image
+                </div>
+            {% endif %}
+            <div class="flex flex-col justify-center gap-1 ">
+
+                <a href="{{ path('location_detail', {'id': location.id}) }}" class="font-semibold text-violet-800 hover:underline">
+                    {{ location.locationName }}
+                </a>
+                
+                {% if location.city %}
+                        <p class="text-xs text-gray-600 ">{{ location.city }}</p>
+                {% endif %}
+
+                {% if location.averageRating %}
+                    <div class="flex gap-1 text-gray-800 font-light text-sm">
+                        <p>{{ location.averageRating|number_format(1, ',', '') }}</p>
+                        <div class="text-[0.75rem]">{{ location.averageRating|round(1, 'floor')|stars|raw }}</div>
+                    </div>
+                {% else %}
+                    <p class="text-sm text-gray-400">Pas encore noté</p>
+                {% endif %}
+                
+                {% if location.duration and location.duration.onSiteTime %}
+                    <div class="flex gap-2 items-center text-gray-600">
+                        <i class="fa-regular fa-clock text-sm"></i>
+                        <p class="text-sm "><label>{{ location.duration.onSiteTime|duration_label('short') }}</label></p>
+                    </div>    
+                {% endif %}
+                
+            </div>
+
+            <button 
+                class="add-to-itinerary absolute top-[5px] right-2 text-violet-800 hover:text-violet-600 text-lg cursor-pointer"
+                data-location-id="{{ location.id }}"
+                title="Ajouter à un itinéraire">
+                <i class="fa-solid fa-circle-plus"></i>
+            </button>
+        </div>
+    {% else %}
+        <p class="text-center text-gray-500">Aucun lieu trouvé.</p>
+    {% endfor %}
+
+    {% if pagination and pagination.totalPages > 1 %}
+        <nav class="flex justify-center mt-6" aria-label="Pagination">
+            <ul class="inline-flex items-center -space-x-px">
+                
+                {% set prevPage = pagination.page > 1 ? pagination.page - 1 : 1 %}
+                <li>
+                    <a  
+                        href="{{ path(app.request.attributes.get('_route'), filters|merge({'page': prevPage})) }}" 
+                        class="px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700"
+                        aria-label="Page précédente"
+                    >
+                        &laquo;
+                    </a>
+                </li>
+          
+                {% for p in 1..pagination.totalPages %}
+                    <li>
+                        <a href="{{ path(app.request.attributes.get('_route'), filters|merge({'page': p})) }}"
+                            class="px-3 py-2 leading-tight border border-gray-300
+                            {% if p == pagination.page %}
+                                text-white bg-violet-700
+                            {% else %}
+                                text-gray-500 bg-white hover:bg-gray-100 hover:text-gray-700
+                            {% endif %}
+                        ">
+                            {{ p }}
+                        </a>
+                    </li>
+                {% endfor %}
+                
+                {% set nextPage = pagination.page < pagination.totalPages ? pagination.page + 1 : pagination.totalPages %}
+                <li>
+                    <a  
+                        href="{{ path(app.request.attributes.get('_route'), filters|merge({'page': nextPage})) }}"
+                        class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700"
+                        aria-label="Page suivante"
+                    >
+                        &raquo;
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    {% endif %}
+</div>

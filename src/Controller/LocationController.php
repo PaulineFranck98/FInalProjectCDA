@@ -66,6 +66,15 @@ class LocationController extends AbstractController
         // évite de modifier le dernier élément de $locations
         unset($location);
 
+        if ($request->isXmlHttpRequest()) {
+            // je renvoie uniquement la partie HTML de la liste
+            return $this->render('location/_list.html.twig', [
+                'locations' => $locations,
+                'pagination' => $pagination,
+                'filters' => $filters,
+            ]);
+        }
+
         return $this->render('location/search.html.twig', [
             'locations' => $locations,
             'pagination' => $pagination,
