@@ -275,7 +275,7 @@
                 <div class="swiper-wrapper">
                     {% for nearbyLocation in nearby %}
                         <div class="swiper-slide ">
-                            <a href="{{ path('location_detail', {'id': location.id}) }}" class="flex flex-col  items-start">
+                            <a href="{{ path('location_detail', {'id': nearbyLocation.id}) }}" class="flex flex-col  items-start">
 
                                 <figure class="mb-3 w-[225px] h-[135px]">
                                    <img src="{{ nearbyLocation.images[0].imageName|replace({'/upload/':'/upload/w_300/'}) }}" alt="{{ nearbyLocation.locationName}}" loading="lazy" class="w-full h-full object-cover rounded-xl">
