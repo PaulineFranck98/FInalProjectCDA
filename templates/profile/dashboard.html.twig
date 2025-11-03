@@ -18,7 +18,7 @@
                         <img id="profile-img" src="{{ asset('uploads/' ~ app.user.profilePicture) }}" alt="Photo de profil" class="w-full h-full object-cover">
                     {% endif %}
                 {% else %}
-                    <img id="profile-img" src="{{ asset('images/default-avatar.png') }}" alt="Avatar par défaut" class="w-full h-full object-cover opacity-80">
+                    <img id="profile-img" src="{{ asset('img/default-avatar.png') }}" alt="Avatar par défaut" class="w-full h-full object-cover opacity-80">
                 {% endif %}
 
                 {% if app.user.googleId is null %}

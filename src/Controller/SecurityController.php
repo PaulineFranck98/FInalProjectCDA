@@ -22,7 +22,6 @@ use App\Entity\User;
 
 class SecurityController extends AbstractController
 {
-    
     // change this part
     public const SCOPES = [
         'google' => [],
@@ -233,11 +232,6 @@ class SecurityController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
 
-        
-        // if ($user->getGoogleId() !== null) {
-        //     return new JsonResponse(['error' => 'Les comptes Google ne peuvent pas modifier leur adresse e-mail.'], 403);
-        // }
-
         $data = json_decode($request->getContent(), true);
         $username = trim($data['username'] ?? '');
 
@@ -276,10 +270,6 @@ class SecurityController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
 
-        // if ($user->getGoogleId()) {
-        //     return new JsonResponse(['error' => 'Impossible de modifier la photo pour un compte Google.'], 403);
-        // }
-
         $file = $request->files->get('profilePicture');
         if (!$file) {
             return new JsonResponse(['error' => 'Aucun fichier reçu.'], 400);
@@ -311,7 +301,4 @@ class SecurityController extends AbstractController
             'newPath' => '/uploads/' . $newFilename
         ]);
     }
-
-
-
 }

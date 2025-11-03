@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 class ItineraryController extends AbstractController
 {
-    // récupération des itinéraires pour affichage dans la modal
+    // affichage dans la modale
     #[Route('/api/itineraries', name:'api_user_itineraries')]
     public function userItineraries(): JsonResponse 
     {
@@ -95,13 +95,12 @@ class ItineraryController extends AbstractController
             return $response;
         }
 
-        // récupère les lieux associés à l'itinéraire
         $itineraryLocations = $itineraryLocationRepository->findBy(
             ['itinerary' => $itinerary], 
             ['orderIndex' => 'ASC']
         );
 
-        // récupère les détails de chaque lieu
+
         $locations = [];
         foreach($itineraryLocations as $itineraryLocation) {
             $locationId = $itineraryLocation->getLocationId();
@@ -163,7 +162,6 @@ class ItineraryController extends AbstractController
             return $response;
         }
 
-        // Vérifie le token CSRF
         if (!$this->isCsrfTokenValid('delete_itinerary_' . $itinerary->getId(), $request->request->get('_token'))) {
             $this->addFlash('error', 'Échec de la vérification CSRF.');
             return $this->redirectToRoute('itinerary_detail', ['itineraryId' => $itineraryId]);
@@ -187,7 +185,6 @@ class ItineraryController extends AbstractController
             return $this->json(['error' => 'Itinéraire introuvable'], 404);
         }
 
-        // on vérifie que l'utilisateur est bien membre && connecté
         if(!$this->getUser()) {
             return $this->json(['error' => 'Utilisateur non connecté'], 401);
         }
@@ -268,7 +265,6 @@ class ItineraryController extends AbstractController
             return $response;
         }
 
-        // vérification du token
         if(!$this->isCsrfTokenValid('remove_location_' . $locationId, $request->request->get('_token'))) {
             $this->addFlash('error', 'Échec de la vérification CSRF');
             return $this->redirectToRoute('itinerary_detail', ['itineraryId' => $itineraryId]);
