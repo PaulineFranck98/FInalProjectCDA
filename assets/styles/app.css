@@ -118,11 +118,13 @@ fieldset.sweet-pot{
 }
 
 .mySwiper .swiper-wrapper .swiper-slide,
-.mySwiper .swiper-wrapper .swiper-slide figure {
+.mySwiper .swiper-wrapper .swiper-slide figure,
+.mySwiper2 .swiper-wrapper .swiper-slide figure {
     @apply h-[100px] flex items-center justify-center overflow-hidden;
 }
 
- .swiper-slide img {
+ .mySwiper .swiper-slide img, 
+ .mySwiper2 .swiper-slide img {
     @apply rounded-[5px] cursor-pointer h-full w-full object-cover;
 }
 

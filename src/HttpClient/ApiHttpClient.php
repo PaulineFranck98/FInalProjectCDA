@@ -27,6 +27,13 @@ class ApiHttpClient
         return $response->toArray();
     }
 
+    public function getLocationsByZipcode(string $zipcode): array
+    {
+        $response = $this->client->request('GET', $this->baseUrl . '/public/location/by-zipcode/' . $zipcode);
+        return $response->toArray();
+    }
+
+
     public function searchLocations(array $filters = []): array
     {
         $url = $this->baseUrl . '/public/location';

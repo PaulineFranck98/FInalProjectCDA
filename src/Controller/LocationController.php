@@ -5,14 +5,15 @@ namespace App\Controller;
 use App\Entity\Membre;
 use App\HttpClient\ApiHttpClient;
 use App\Repository\RatingRepository;
+use App\Service\LocationDistanceService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use App\Service\LocationSearchServiceInterface;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Messenger\Transport\Serialization\Serializer;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
-use App\Service\LocationSearchServiceInterface;
 
 class LocationController extends AbstractController
 {
@@ -91,9 +92,25 @@ class LocationController extends AbstractController
 
     
     #[Route('/location/{id}', name: 'location_detail')]
-    public function getLocation(string $id, ApiHttpClient $apiHttpClient, RatingRepository $ratingRepository): Response
+    public function getLocation(string $id, ApiHttpClient $apiHttpClient, RatingRepository $ratingRepository, LocationDistanceService $distanceService): Response
     {   
         $location = $apiHttpClient->getLocation($id);
+
+        if (!isset($location['latitude'], $location['longitude'], $location['zipcode'])) {
+            throw $this->createNotFoundException("Coordonnées manquantes");
+        }
+
+        
+        $zipcodePrefix = substr($location['zipcode'], 0, 2);
+
+        $nearLocations = $apiHttpClient->getLocationsByZipcode($zipcodePrefix);
+        $nearLocations = $nearLocations['data'] ?? $nearLocations; 
+
+        $nearby = $distanceService->findNearest($nearLocations, (float) $location['latitude'], (float) $location['longitude'], 5);
+
+        //  j'exclue le lieu actuel si jamais il est présent
+        $nearby = array_filter($nearby, fn($loc) => $loc['id'] !== $location['id']);
+
 
         $averageRating = $ratingRepository->getAverageRating($id);
 
@@ -106,10 +123,7 @@ class LocationController extends AbstractController
             'location' => $location,
             'ratings' => $ratings,
             'averageRating' => $averageRating,
+            'nearby' => $nearby
         ]);
-    }
-
-
-
-   
+    } 
 }
