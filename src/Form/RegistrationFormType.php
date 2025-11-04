@@ -5,16 +5,17 @@ namespace App\Form;
 use App\Entity\User;
 use App\Form\FormExtension\HoneyPotType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\Validator\Constraints\File;
 
 class RegistrationFormType extends HoneyPotType
 {
@@ -23,6 +24,12 @@ class RegistrationFormType extends HoneyPotType
         parent::buildForm($builder, $options); // appelle builder de HoneyPotType
         
         $builder
+            ->add('username', TextType::class, [
+                'label' => "Définissez votre nom d'utilisateur",
+                'attr' => [
+                    'class' => 'input-base'
+                ],
+            ])
             ->add('email', EmailType::class, [
                 'label' => 'Renseignez votre adresse mail',
                 'attr' => [

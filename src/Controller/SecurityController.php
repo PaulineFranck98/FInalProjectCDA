@@ -2,11 +2,14 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\HttpClient\ApiHttpClient;
+use App\Repository\UserRepository;
 use App\Form\ChangePasswordFormType;
 use App\Repository\RatingRepository;
 use App\Repository\ItineraryRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -18,7 +21,6 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use App\Entity\User;
 
 class SecurityController extends AbstractController
 {
@@ -299,6 +301,29 @@ class SecurityController extends AbstractController
         return new JsonResponse([
             'success' => true,
             'newPath' => '/uploads/' . $newFilename
+        ]);
+    }
+
+    #[Route(path: '/admin/dashboard', name: 'admin_dashboard')]
+    public function adminDashboard(Security $security) : Response {
+
+        if($security->isGranted('ROLE_ADMIN') == false) {
+            return $this->json(['error' => 'Accès refusé'], 403);
+        }
+    }
+
+    #[Route(path:'/admin/list-users', name: 'admin_list_users')]
+    public function adminListUsers(UserRepository $userRepository, Security $security) : Response {
+
+        if($security->isGranted('ROLE_ADMIN') == false) {
+            return $this->json(['error' => 'Accès refusé'], 403);
+        }
+
+        /** @var User $user */
+        $users = $userRepository->findAll();
+
+        return $this->render('admin/users.html.twig', [
+            'users' => $users,
         ]);
     }
 }
