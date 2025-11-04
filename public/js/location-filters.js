@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const form = document.getElementById("filtersForm");
     const container = document.getElementById("locationsContainer");
     const mapDiv = document.getElementById("search-map");
+    const pageInput = document.getElementById("pageInput");
     const url = window.location.pathname; 
 
     if (!form || !container) return;
@@ -37,6 +38,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
             if (newContainer) {
                 container.innerHTML = newContainer.innerHTML;
+
+                initPagination();
+                
                 if (typeof initItineraryModal === "function") {
                     initItineraryModal();
                 }
@@ -54,13 +58,41 @@ document.addEventListener("DOMContentLoaded", function () {
             `;
         }
     }
+    
+    function initPagination() {
+        const paginationLinks = container.querySelectorAll("nav a");
+        paginationLinks.forEach(link => {
+            link.addEventListener("click", (e) => {
+                e.preventDefault();
+                const urlObj = new URL(link.href);
+                const newPage = urlObj.searchParams.get("page") || 1;
+
+                // je mets à jour la valeur du champ caché
+                if (pageInput) pageInput.value = newPage;
+
+                fetchResults();
+            });
+        });
+    }
 
     // je détecte les changements sur les champs
+    // form.querySelectorAll("input").forEach(input => {
+    //     const eventName = input.type === "range" || input.type === "text" ? "input" : "change";
+    //     input.addEventListener(eventName, () => {
+    //         clearTimeout(window._filterTimeout);
+    //         window._filterTimeout = setTimeout(fetchResults, 300); // pour éviter trop d'appels
+    //     });
+    // });
+
+    // retourne à la page 1 quand le filtre change
     form.querySelectorAll("input").forEach(input => {
         const eventName = input.type === "range" || input.type === "text" ? "input" : "change";
         input.addEventListener(eventName, () => {
+            if (pageInput) pageInput.value = 1;
             clearTimeout(window._filterTimeout);
-            window._filterTimeout = setTimeout(fetchResults, 300); // pour éviter trop d'appels
+            window._filterTimeout = setTimeout(fetchResults, 300);
         });
     });
+
+    initPagination();
 });

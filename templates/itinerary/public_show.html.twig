@@ -1,0 +1,98 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{ itinerary.itineraryName }} - Itinéraire public{% endblock %}
+
+{% block body %}
+<div class="lg:flex lg:w-[80%] lg:h-[calc(100vh-100px)] mt-6 lg:mx-auto gap-6">
+
+    <div id="itinerary-locations" class="flex flex-col lg:w-1/2 min-w-[375px] lg:rounded-xl lg:p-4 lg:shadow max-h-[calc(100vh-2rem)]">
+        <div class="flex-shrink-0 mb-4 flex justify-between items-center">
+            <div>
+                <h1 class="text-2xl font-semibold text-violet-800">{{ itinerary.itineraryName }}</h1>
+                <p class="text-gray-600 text-sm">
+                    {{ itinerary.duration }} jour{{ itinerary.duration > 1 ? 's' }} — 
+                    créé le {{ itinerary.creationDate|date('d/m/Y') }}
+                </p>
+
+                {% if itinerary.departureDate %}
+                    <p class="text-gray-600 text-sm">
+                        Départ prévu le {{ itinerary.departureDate|date('d/m/Y') }}
+                    </p>
+                {% endif %}
+            </div>
+
+            {% if itinerary.isPublic %}
+                <span class="bg-green-100 text-green-700 text-xs font-medium px-3 py-1 rounded-full">Public</span>
+            {% else %}
+                <span class="bg-gray-200 text-gray-700 text-xs font-medium px-3 py-1 rounded-full">Privé</span>
+            {% endif %}
+        </div>
+
+        <div class="flex-1 overflow-y-auto scrollbar-hide box-shadow-inset-itinerary p-3 rounded-lg">
+            {% if locations is empty %}
+                <p class="text-gray-500 text-center py-10">Aucun lieu n’a encore été ajouté à cet itinéraire.</p>
+            {% else %}
+                {% for item in locations %}
+                    {% set location = item.data %}
+                    <div class="flex items-center justify-between gap-4 border border-violet-200 rounded-lg hover:bg-violet-50 transition h-[110px] p-2 mb-2">
+                        <div class="flex items-center gap-4 h-full">
+                            {% if location.images and location.images|length > 0 %}
+                                <img src="{{ location.images[0].imageName|replace({'/upload/':'/upload/w_300/'}) }}"
+                                     alt="{{ location.locationName }}"
+                                     class="object-cover rounded-md h-full w-32">
+                            {% else %}
+                                <div class="w-32 h-full bg-gray-200 rounded-md flex items-center justify-center text-gray-400 text-sm">
+                                    Aucune image
+                                </div>
+                            {% endif %}
+
+                            <div class="flex flex-col justify-center gap-1">
+                                <a href="{{ path('location_detail', {'id': location.id}) }}"
+                                   class="font-semibold text-violet-800 hover:underline">
+                                   <span class="location-index">{{ item.order + 1 }}</span>. {{ location.locationName }}
+                                </a>
+
+                                {% if location.city %}
+                                    <p class="text-xs text-gray-600">{{ location.city }}</p>
+                                {% endif %}
+
+                                {% if location.averageRating %}
+                                    <div class="flex gap-1 text-gray-800 font-light text-sm">
+                                        <p>{{ location.averageRating|number_format(1, ',', '') }}</p>
+                                        <div class="text-[0.75rem]">{{ location.averageRating|round(1, 'floor')|stars|raw }}</div>
+                                    </div>
+                                {% else %}
+                                    <p class="text-sm text-gray-400">Pas encore noté</p>
+                                {% endif %}
+
+                                {% if location.duration and location.duration.onSiteTime %}
+                                    <div class="flex gap-2 items-center text-gray-600">
+                                        <i class="fa-regular fa-clock text-sm"></i>
+                                        <p class="text-sm">
+                                            {{ location.duration.onSiteTime|duration_label('short') }}
+                                        </p>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="lg:w-1/2 lg:h-full h-screen relative">
+        <div id="itinerary-map"
+             class="w-full bg-gray-200 rounded-xl h-full"
+             data-locations='{{ locations|map(item => {
+                 "id": item.data.id,
+                 "order": item.order,
+                 "data": item.data
+             })|json_encode }}'>
+             <span class="text-gray-500">Carte</span>
+        </div>
+    </div>
+</div>
+
+<script src='https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.js'></script>
+<script src="{{ asset('js/itinerary-detail.js') }}"></script>
+{% endblock %}

@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -59,10 +60,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: Itinerary::class, mappedBy: 'users')]
     private Collection $itineraries;
 
+    /**
+     * @var Collection<int, Itinerary>
+     */
+    #[ORM\OneToMany(targetEntity: Itinerary::class, mappedBy: 'createdBy')]
+    private Collection $createdItineraries;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $registrationDate = null;
+
     public function __construct()
     {
         $this->ratings = new ArrayCollection();
         $this->itineraries = new ArrayCollection();
+        $this->createdItineraries = new ArrayCollection();
+        $this->registrationDate = new \DateTimeImmutable();
     }
 
     public function getId(): ?int
@@ -241,6 +253,48 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         if ($this->itineraries->removeElement($itinerary)) {
             $itinerary->removeUser($this);
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Itinerary>
+     */
+    public function getCreatedItineraries(): Collection
+    {
+        return $this->createdItineraries;
+    }
+
+    public function addCreatedItinerary(Itinerary $createdItinerary): static
+    {
+        if (!$this->createdItineraries->contains($createdItinerary)) {
+            $this->createdItineraries->add($createdItinerary);
+            $createdItinerary->setCreatedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCreatedItinerary(Itinerary $createdItinerary): static
+    {
+        if ($this->createdItineraries->removeElement($createdItinerary)) {
+            // set the owning side to null (unless already changed)
+            if ($createdItinerary->getCreatedBy() === $this) {
+                $createdItinerary->setCreatedBy(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getRegistrationDate(): ?\DateTimeInterface
+    {
+        return $this->registrationDate;
+    }
+
+    public function setRegistrationDate(?\DateTimeInterface $registrationDate): static
+    {
+        $this->registrationDate = $registrationDate;
 
         return $this;
     }

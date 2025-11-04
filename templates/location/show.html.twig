@@ -269,24 +269,38 @@
         </div>
     
         {# ----------------- A PROXIMITE ----------------- #}
-        <section class="mt-7 h-64  bg-[#393939] p-5 lg:px-44">           
+        <section class="mt-7  h-72  bg-[#393939] p-5 lg:px-44">           
             <h2 class="text-white font-semibold text-xl mb-3">À proximité</h2>
              <div class="swiper mySwiperNearby" >
                 <div class="swiper-wrapper">
                     {% for nearbyLocation in nearby %}
-                        <div class="swiper-slide ">
-                            <a href="{{ path('location_detail', {'id': nearbyLocation.id}) }}" class="flex flex-col  items-start">
-
-                                <figure class="mb-3 w-[225px] h-[135px]">
-                                   <img src="{{ nearbyLocation.images[0].imageName|replace({'/upload/':'/upload/w_300/'}) }}" alt="{{ nearbyLocation.locationName}}" loading="lazy" class="w-full h-full object-cover rounded-xl">
+                        <div class="swiper-slide">
+                            <a href="{{ path('location_detail', {'id': nearbyLocation.id}) }}" class="flex flex-col items-start">
+                                <figure class="mb-3 w-[225px] h-[135px] relative">
+                                    {% if nearbyLocation.images|length > 0 %}
+                                        <img 
+                                            src="{{ nearbyLocation.images[0].imageName|replace({'/upload/':'/upload/w_300/'}) }}" 
+                                            alt="{{ nearbyLocation.locationName }}"
+                                            loading="lazy" 
+                                            class="w-full h-full object-cover rounded-xl">
+                                    {% else %}
+                                        <div class="w-full h-full bg-gray-300 rounded-xl flex flex-col items-center justify-center text-gray-500 text-sm">
+                                            <i class="fa-regular fa-image text-2xl mb-1"></i>
+                                            <span>Aucune image</span>
+                                        </div>
+                                    {% endif %}
                                 </figure>
-                                <p><span class="text-white">{{ nearbyLocation.locationName }}</span><span class=" text-[#cdd1d7] text-sm"> - {{ nearbyLocation.city }}</span></p>
-                                <p class="text-[#cdd1d7]  text-sm ">{{ nearbyLocation.type.typeName }}</p>
+
+                                <p>
+                                    <span class="text-white">{{ nearbyLocation.locationName }}</span>
+                                    <span class="text-[#cdd1d7] text-sm"> - {{ nearbyLocation.city }}</span>
+                                </p>
+                                <p class="text-[#cdd1d7] text-sm">{{ nearbyLocation.type.typeName }}</p>
                             </a>
                         </div>
                     {% else %}
                         <div class="swiper-slide">
-                            <p class="  text-neutral-400 text-center py-8">Aucun lieu trouvé à proximité.</p>
+                            <p class="text-neutral-400 text-center py-8">Aucun lieu trouvé à proximité.</p>
                         </div>
                     {% endfor %}
                 </div>
@@ -390,7 +404,7 @@
             }
 
 
-            // MODAL
+            // MODALE IMAGES
             const modal = document.getElementById("image-modal");
             const modalImg = document.getElementById("modal-img");
             const closeBtn = document.getElementById("close-modal");
@@ -416,24 +430,6 @@
     </script>
 
     {# ---------------- MODALE ITINÉRAIRE ---------------- #}
-    <div id="itinerary-modal" class="hidden fixed inset-0 bg-black/50 flex justify-center items-center z-50">
-        <div class="relative bg-white rounded-xl p-6 w-full max-w-md">
-            <h2 class="text-xl font-semibold mb-4 text-violet-800">Choisir un itinéraire</h2>
-            <div id="itinerary-list">
-                <p class="text-gray-600">Chargement...</p>
-            </div>
-            <div class="text-center mt-6">
-                <a href="{{ path('itinerary_new') }}" id="create-itinerary-btn"
-                    class="bg-violet-800 text-white px-4 py-2 rounded-md hover:bg-violet-700">
-                    Créer un itinéraire
-                </a>
-            </div>
-            <button id="close-itinerary-modal" 
-                    class="absolute top-4 right-4 text-gray-500 text-lg hover:text-gray-800 cursor-pointer">
-                ×
-            </button>
-        </div>
-    </div>
-
+    {% include 'location/partials/_itinerary_modal.html.twig' %}
 
 {% endblock %}

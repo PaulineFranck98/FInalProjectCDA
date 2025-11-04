@@ -85,4 +85,12 @@ class ApiHttpClient
         $response = $this->client->request('GET', $this->baseUrl . '/' . $endpoint);
         return $response->toArray();
     }
+
+    public function getLocationStats(): array
+    {
+        $response = $this->client->request('GET', $this->baseUrl.'/public/location/stats');
+        $data = $response->toArray(false);
+
+        return $data;
+    }
 }

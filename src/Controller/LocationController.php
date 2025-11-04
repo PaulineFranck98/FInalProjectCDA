@@ -32,6 +32,8 @@ class LocationController extends AbstractController
     {
         $filters = $request->query->all(); 
 
+        $minRating = isset($filters['minRating']) ? (float)$filters['minRating'] : null;
+
         $result = $locationSearchService->search($filters);
 
         // gestion d'erreur API Next
@@ -49,13 +51,6 @@ class LocationController extends AbstractController
         $locations = $result['locations'];
         $pagination = $result['pagination'];
 
-        $types = $apiHttpClient->getFilterData('type');
-        $durations = $apiHttpClient->getFilterData('duration');
-        $conforts = $apiHttpClient->getFilterData('confort');
-        $intensities = $apiHttpClient->getFilterData('intensity');
-        $themes = $apiHttpClient->getFilterData('theme');
-        $companions = $apiHttpClient->getFilterData('companion');
-        $priceRange = $apiHttpClient->getFilterData('location/price-range');
 
         // & crée une référence : pointeur direct vers l'élément du tableau
         foreach($locations as &$location) {
@@ -66,6 +61,20 @@ class LocationController extends AbstractController
         }
         // évite de modifier le dernier élément de $locations
         unset($location);
+
+        //  filtre par note minimale 
+        if ($minRating) {
+            $locations = array_filter($locations, function ($loc) use ($minRating) {
+                return isset($loc['averageRating']) && $loc['averageRating'] >= $minRating;
+            });
+            // Réindexe le tableau après filtrage
+            $locations = array_values($locations);
+
+             // recalcul pagination après filtrage symfony
+            $filteredCount = count($locations);
+            $pagination['total'] = $filteredCount;
+            $pagination['totalPages'] = max(1, ceil($filteredCount / $pagination['pageSize']));
+        }
 
         if ($request->isXmlHttpRequest()) {
             // je renvoie uniquement la partie HTML de la liste
@@ -80,13 +89,13 @@ class LocationController extends AbstractController
             'locations' => $locations,
             'pagination' => $pagination,
             'filters' => $filters,
-            'types' => $types,
-            'durations' => $durations,
-            'conforts' => $conforts,
-            'intensities' => $intensities,
-            'themes' => $themes,
-            'companions' => $companions,
-            'priceRange' => $priceRange,
+            'types' => $apiHttpClient->getFilterData('type'),
+            'durations' => $apiHttpClient->getFilterData('duration'),
+            'conforts' => $apiHttpClient->getFilterData('confort'),
+            'intensities' => $apiHttpClient->getFilterData('intensity'),
+            'themes' => $apiHttpClient->getFilterData('theme'),
+            'companions' => $apiHttpClient->getFilterData('companion'),
+            'priceRange' => $apiHttpClient->getFilterData('location/price-range'),
         ]);
     }
 

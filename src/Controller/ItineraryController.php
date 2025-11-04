@@ -54,6 +54,8 @@ class ItineraryController extends AbstractController
 
         // l'utilisateur devient directement membre de l'itinéraire
         $itinerary->addUser($this->getUser());
+        
+        $itinerary->setCreatedBy($this->getUser());
 
         $form = $this->createForm(ItineraryType::class, $itinerary);
         $form->handleRequest($request);

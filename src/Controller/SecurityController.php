@@ -200,7 +200,7 @@ class SecurityController extends AbstractController
 
 
     // profile
-    #[Route(path: '/account/profile', name: 'show_profile')]
+    #[Route(path: '/profile', name: 'show_profile')]
     public function showProfile(Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager): Response
     {
         /** @var \App\Entity\User $user */
@@ -301,29 +301,6 @@ class SecurityController extends AbstractController
         return new JsonResponse([
             'success' => true,
             'newPath' => '/uploads/' . $newFilename
-        ]);
-    }
-
-    #[Route(path: '/admin/dashboard', name: 'admin_dashboard')]
-    public function adminDashboard(Security $security) : Response {
-
-        if($security->isGranted('ROLE_ADMIN') == false) {
-            return $this->json(['error' => 'Accès refusé'], 403);
-        }
-    }
-
-    #[Route(path:'/admin/list-users', name: 'admin_list_users')]
-    public function adminListUsers(UserRepository $userRepository, Security $security) : Response {
-
-        if($security->isGranted('ROLE_ADMIN') == false) {
-            return $this->json(['error' => 'Accès refusé'], 403);
-        }
-
-        /** @var User $user */
-        $users = $userRepository->findAll();
-
-        return $this->render('admin/users.html.twig', [
-            'users' => $users,
         ]);
     }
 }

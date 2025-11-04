@@ -1,0 +1,21 @@
+<form id="filtersForm" method="get"
+      class="flex flex-col gap-4 bg-white rounded-xl p-4 shadow lg:w-1/2  md:min-w-[320px] overflow-y-auto scrollbar-hide">
+
+    <input type="hidden" name="page" id="pageInput" value="{{ filters.page ?? 1 }}">
+
+    {% include 'location/partials/_filters_block_itineraries.html.twig' %}
+
+    <button id="closeFilters" type="button" class="self-end text-violet-700 mb-2 lg:hidden">
+        <i class="fa-solid fa-xmark text-2xl"></i>
+    </button>
+
+    <input type="text" name="city" placeholder="Ville" class="border border-gray-300 rounded px-4 py-2 w-full" value="{{ filters.city ?? '' }}" />
+    
+    {% include 'location/partials/_filters_blocks.html.twig' %}
+
+
+    <div class="w-full flex justify-center items-center gap-4 text-red-600 border border-red-300 bg-red-50 rounded-md py-2">
+        <i class="fa-regular fa-trash-can"></i>
+        <a href="{{ path('location_search') }}">Réinitialiser</a>
+    </div>
+</form>

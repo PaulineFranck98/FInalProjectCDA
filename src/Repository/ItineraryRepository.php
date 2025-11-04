@@ -29,6 +29,28 @@ class ItineraryRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function countCreatedAfter(\DateTimeInterface $date): int
+    {
+        return $this->createQueryBuilder('i')
+            ->select('COUNT(i.id)')
+            ->where('i.creationDate >= :date')
+            ->setParameter('date', $date)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    public function countCreatedBetween(\DateTimeInterface $start, \DateTimeInterface $end): int
+    {
+        return $this->createQueryBuilder('i')
+            ->select('COUNT(i.id)')
+            ->where('i.creationDate >= :start')
+            ->andWhere('i.creationDate < :end')
+            ->setParameter('start', $start)
+            ->setParameter('end', $end)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
     //    /**
     //     * @return Itinerary[] Returns an array of Itinerary objects
     //     */

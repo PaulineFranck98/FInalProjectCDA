@@ -43,6 +43,9 @@ class Itinerary
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'itineraries')]
     private Collection $users;
 
+    #[ORM\ManyToOne(inversedBy: 'createdItineraries')]
+    private ?User $createdBy = null;
+
     public function __construct()
     {
         $this->creationDate = new \DateTimeImmutable();
@@ -165,6 +168,18 @@ class Itinerary
     public function removeUser(User $user): static
     {
         $this->users->removeElement($user);
+
+        return $this;
+    }
+
+    public function getCreatedBy(): ?User
+    {
+        return $this->createdBy;
+    }
+
+    public function setCreatedBy(?User $createdBy): static
+    {
+        $this->createdBy = $createdBy;
 
         return $this;
     }

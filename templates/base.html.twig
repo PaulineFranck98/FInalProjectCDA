@@ -45,7 +45,13 @@
                     <li><a href="{{ path('app_home') }}">Accueil</a></li>
                     <li><a href="{{ path('location_search') }}">Rechercher</a></li>
                     <li><a href="#">Itinéraire</a></li>
-                    <li><a href="{{ path('show_dashboard') }}">Profil</a></li>
+                    <li>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <a href="{{ path('admin_dashboard') }}">Profil</a>
+                        {% else %}
+                            <a href="{{ path('show_dashboard') }}">Profil</a>
+                        {% endif %}
+                    </li>
                     <li><a href="{{ path('app_logout') }}">Déconnexion</a></li>
                 </ul>
             </nav>
