@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\HttpClient\ApiHttpClient;
 use App\Repository\RatingRepository;
 use App\Repository\ItineraryRepository;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Repository\ItineraryLocationRepository;
@@ -13,6 +14,41 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class PublicController extends AbstractController
 {
+    #[Route('/public/itineraries/discover', name: 'itinerary_discover')]
+    public function discover(Request $request, ItineraryRepository $itineraryRepository): Response 
+    {   
+        $filters = [
+            'duration' => $request->query->get('duration') !== null && $request->query->get('duration') !== '' ? (int)$request->query->get('duration')  : null,
+            'sort'     => $request->query->get('sort', 'recent'),
+            'page'     => max(1, (int)$request->query->get('page', 1)),
+        ];
+
+        $limit = 10;
+
+        $itineraries = $itineraryRepository->findPublicItineraries($filters['duration'], $filters['sort']);
+
+        $total = count($itineraries);
+        $totalPages = max(1, ceil($total / $limit));
+        $offset = ($filters['page'] - 1) * $limit;
+        $pagedItineraries = array_slice($itineraries, $offset, $limit);
+
+        $pagination = [
+            'page' => $filters['page'],
+            'total' => $total,
+            'limit' => $limit,
+            'totalPages' => $totalPages,
+        ];
+
+
+        $template = $request->isXmlHttpRequest() ? 'itinerary/_list.html.twig' : 'itinerary/discover.html.twig';
+
+        return $this->render($template, [
+            'itinerariesData' => $pagedItineraries,
+            'pagination' => $pagination,
+            'filters' => $filters,
+        ]);
+    }
+
     #[Route(path: '/public/user/{id}', name: 'public_profile')]
     public function publicProfile(User $user, ItineraryRepository $itineraryRepository, RatingRepository $ratingRepository, ApiHttpClient $apiHttpClient): Response 
     {
@@ -26,11 +62,10 @@ class PublicController extends AbstractController
         foreach ($itineraries as $itinerary) {
             $itinerariesData[] = [
                 'itinerary' => $itinerary,
-                // départ/arrivée ici plus tard
+                // départ/arrivée ici plus tard ?
             ];
         }
 
-        // avis
         $ratings = $ratingRepository->findBy(
             ['user' => $user],
             ['ratingDate' => 'DESC']
@@ -96,5 +131,4 @@ class PublicController extends AbstractController
             'locations' => $locations,
         ]);
     }
-
 }

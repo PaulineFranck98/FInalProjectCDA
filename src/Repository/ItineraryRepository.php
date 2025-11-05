@@ -51,6 +51,23 @@ class ItineraryRepository extends ServiceEntityRepository
             ->getSingleScalarResult();
     }
 
+
+    public function findPublicItineraries(?int $duration = null, string $sort = 'recent'): array
+    {
+        $qb = $this->createQueryBuilder('i')
+            ->where('i.isPublic = true');
+
+        if ($duration !== null) {
+            $qb->andWhere('i.duration = :duration')
+            ->setParameter('duration', $duration);
+        }
+
+        $orderDirection = $sort === 'old' ? 'ASC' : 'DESC';
+        $qb->orderBy('i.creationDate', $orderDirection);
+
+        return $qb->getQuery()->getResult();
+    }
+
     //    /**
     //     * @return Itinerary[] Returns an array of Itinerary objects
     //     */

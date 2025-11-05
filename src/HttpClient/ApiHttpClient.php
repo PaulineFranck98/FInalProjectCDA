@@ -16,11 +16,11 @@ class ApiHttpClient
         $this->baseUrl = $_ENV['NEXT_API_BASE_URL'] ?? 'http://localhost:3000/api/v1';
     }
 
-    public function getLocations(): array
-    {
-        $response = $this->client->request('GET', $this->baseUrl.'/public/location');
-        return $response->toArray();
-    }
+    // public function getLocations(): array
+    // {
+    //     $response = $this->client->request('GET', $this->baseUrl.'/public/location');
+    //     return $response->toArray();
+    // }
     
     public function getLocation(string $id): array
     {
