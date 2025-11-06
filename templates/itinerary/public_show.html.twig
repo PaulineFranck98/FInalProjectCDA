@@ -7,17 +7,44 @@
     <div id="itinerary-locations" class="flex flex-col lg:w-1/2 min-w-[375px] lg:rounded-xl lg:p-4 lg:shadow max-h-[calc(100vh-2rem)]">
         <div class="flex-shrink-0 mb-4 flex justify-between items-center">
             <div>
-                <h1 class="text-2xl font-semibold text-violet-800">{{ itinerary.itineraryName }}</h1>
-                <p class="text-gray-600 text-sm">
-                    {{ itinerary.duration }} jour{{ itinerary.duration > 1 ? 's' }} — 
-                    créé le {{ itinerary.creationDate|date('d/m/Y') }}
-                </p>
+                <h1 class="text-2xl font-semibold text-violet-800 mb-4">{{ itinerary.itineraryName }}</h1>
 
-                {% if itinerary.departureDate %}
-                    <p class="text-gray-600 text-sm">
-                        Départ prévu le {{ itinerary.departureDate|date('d/m/Y') }}
+                {% if itinerary.createdBy is defined and itinerary.createdBy is not null %}
+                    {% set creatorName = itinerary.createdBy.username ?? itinerary.createdBy.name ?? 'Anonyme' %}
+
+                    <p class="text-sm text-gray-600 mb-4">
+                        <i class="fa-regular fa-user text-violet-600 mr-1"></i>
+                        Créé par
+                        {% if itinerary.createdBy.id is defined %}
+                            <a href="{{ path('public_profile', { id: itinerary.createdBy.id }) }}"
+                            class="font-medium text-violet-700 hover:text-violet-900 hover:underline transition">
+                                {{ creatorName }}
+                            </a>
+                        {% else %}
+                            <span class="font-medium text-violet-700">{{ creatorName }}</span>
+                        {% endif %}
+                    </p>
+                {% else %}
+                    <p class="text-sm text-gray-600 mb-4">
+                        <i class="fa-regular fa-user text-violet-600 mr-1"></i>
+                        Créé par <span class="font-medium text-violet-700">Anonyme</span>
                     </p>
                 {% endif %}
+
+                <div class="flex flex-col gap-1 text-sm text-gray-700">
+                    <div class="flex items-center gap-2">
+                        <i class="fa-regular fa-clock text-violet-600"></i>
+                        <span>
+                            Durée : <span class="font-medium text-violet-700">{{ itinerary.duration }}</span>
+                            jour{{ itinerary.duration > 1 ? 's' }}
+                        </span>
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <i class="fa-regular fa-calendar text-violet-600"></i>
+                        <span>Créé le {{ itinerary.creationDate|date('d/m/Y') }}</span>
+                    </div>
+                </div>
             </div>
 
             {% if itinerary.isPublic %}
@@ -33,17 +60,38 @@
             {% else %}
                 {% for item in locations %}
                     {% set location = item.data %}
-                    <div class="flex items-center justify-between gap-4 border border-violet-200 rounded-lg hover:bg-violet-50 transition h-[110px] p-2 mb-2">
-                        <div class="flex items-center gap-4 h-full">
-                            {% if location.images and location.images|length > 0 %}
-                                <img src="{{ location.images[0].imageName|replace({'/upload/':'/upload/w_300/'}) }}"
-                                     alt="{{ location.locationName }}"
-                                     class="object-cover rounded-md h-full w-32">
+
+                    {% set hasDiscount = location.discounts is defined and location.discounts|length > 0 %}
+                    {% set discountValue = hasDiscount ? ('-' ~ location.discounts[0].percentage ~ '%') : null %}
+
+                    <div class="relative flex items-center gap-4 border rounded-lg transition h-[110px] p-2 mb-2
+                            {% if hasDiscount %}
+                                border-violet-400 bg-violet-50 hover:border-violet-700 hover:bg-violet-100
                             {% else %}
-                                <div class="w-32 h-full bg-gray-200 rounded-md flex items-center justify-center text-gray-400 text-sm">
-                                    Aucune image
-                                </div>
+                                border-violet-200 hover:border-violet-600 hover:bg-violet-50
                             {% endif %}
+                        ">
+                       
+                       
+                        <div class="flex items-center gap-4 h-full">
+                             <div class="relative w-32 h-full">
+                                {% if location.images and location.images|length > 0 %}
+                                    <img 
+                                        src="{{ location.images[0].imageName|replace({'/upload/':'/upload/w_300/'}) }}"
+                                        alt="{{ location.locationName }}"
+                                        class="object-cover rounded-md h-full w-full">
+                                {% else %}
+                                    <div class="w-full h-full bg-gray-200 rounded-md flex items-center justify-center text-gray-400 text-sm">
+                                        Aucune image
+                                    </div>
+                                {% endif %}
+
+                                {% if hasDiscount %}
+                                    <div class="absolute top-1 left-1 bg-violet-700 text-white text-[0.7rem] font-semibold px-2 py-0.5 rounded-md shadow">
+                                        {{ discountValue }}
+                                    </div>
+                                {% endif %}
+                            </div>
 
                             <div class="flex flex-col justify-center gap-1">
                                 <a href="{{ path('location_detail', {'id': location.id}) }}"

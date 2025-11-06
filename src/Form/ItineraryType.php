@@ -2,17 +2,18 @@
 
 namespace App\Form;
 
-use App\Entity\Itinerary;
 use App\Entity\User;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use App\Entity\Itinerary;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 class ItineraryType extends AbstractType
 {
@@ -32,10 +33,20 @@ class ItineraryType extends AbstractType
             ->add('departureDate', DateType::class, [
                 'label' => 'Date de départ prévue',
                 'widget' => 'single_text',
+                'attr' => [
+                    'min' => (new \DateTime())->format('Y-m-d'),
+                ],
                 'label_attr' => ['class' => 'mb-2']
             ])
-            ->add('isPublic', CheckboxType::class, [
-                'label' => "Souhaitez-vous que votre itinéraire soit public ?"
+            ->add('isPublic', ChoiceType::class, [
+                'label' => "Visibilité de l'itinéraire",
+                'choices' => [
+                    'Privé' => false,
+                    'Public' => true,
+                ],
+                'expanded' => false,
+                'multiple' => false,
+                'placeholder' => 'Choisissez la visibilité',
             ])
             ->add('save', SubmitType::class, [
                 'label' => "Créer l'itinéraire",

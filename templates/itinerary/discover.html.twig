@@ -15,8 +15,7 @@
                value="{{ filters.duration ?? '' }}"
                class="border border-gray-300 rounded-md p-2 text-sm focus:ring-2 focus:ring-violet-500 focus:border-violet-500">
 
-        <select name="sort"
-                class="border border-gray-300 rounded-md p-2 text-sm focus:ring-2 focus:ring-violet-500 focus:border-violet-500">
+        <select name="sort"class="border border-gray-300 rounded-md p-2 text-sm focus:ring-2 focus:ring-violet-500 focus:border-violet-500">
             <option value="recent" {% if filters.sort == 'recent' %}selected{% endif %}>Les plus récents</option>
             <option value="old" {% if filters.sort == 'old' %}selected{% endif %}>Les plus anciens</option>
         </select>
