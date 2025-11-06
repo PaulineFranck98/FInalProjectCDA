@@ -10,9 +10,20 @@
                     <h3 class="text-lg font-semibold text-violet-700 leading-tight truncate">
                         {{ itinerary.itineraryName }}
                     </h3>
-                    <span class="px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap bg-green-100 text-green-700">
-                        Public
-                    </span>
+
+                    {% if app.user %}
+                        <button 
+                            class="favorite-btn text-xl transition cursor-pointer"
+                            data-itinerary-id="{{ itinerary.id }}"
+                            title="{{ app.user.favoriteItineraries.contains(itinerary) ? 'Retirer des favoris' : 'Ajouter aux favoris' }}"
+                        >
+                            {% if app.user.favoriteItineraries.contains(itinerary) %}
+                                <i class="fa-solid fa-heart text-violet-600"></i>
+                            {% else %}
+                                <i class="fa-regular fa-heart text-gray-400 hover:text-violet-600"></i>
+                            {% endif %}
+                        </button>
+                    {% endif %}
                 </div>
 
                 <p class="text-sm text-gray-500 mb-3 flex items-center">

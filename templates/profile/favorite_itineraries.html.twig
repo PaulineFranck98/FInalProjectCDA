@@ -1,0 +1,98 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Vos itinéraires favoris {% endblock %}
+
+
+{% block body %}
+
+<section id="profile-dashboard" class="flex min-h-0 lg:h-[calc(100vh-49px)]">
+
+    {% include 'partials/_profile_aside.html.twig' %}
+    
+    <section id="profile-container" class="border border-gray-200 w-full  p-8  overflow-y-auto  scrollbar-hide bg-gray-50 ">
+
+        <h2 class="text-2xl font-semibold text-violet-700 mb-8">Mes itinéraires favoris</h2>
+
+        {% if app.user.favoriteItineraries is empty %}
+            <p class="text-gray-500 text-center py-10">Vous n’avez encore aucun itinéraire favori.</p>
+        {% else %}
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {% for itinerary in app.user.favoriteItineraries %}
+
+                {% set creator = itinerary.createdBy %}
+                {% set isOwner = app.user and creator and app.user.id == creator.id %}
+
+                
+                    <div class="bg-white border border-gray-100 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between overflow-hidden">
+                        <div class="p-4 flex flex-col flex-grow">
+                            <div class="flex items-center justify-between mb-3">
+                                <h3 class="text-lg font-semibold text-violet-700 leading-tight truncate">
+                                    {{ itinerary.itineraryName }}
+                                </h3>
+
+                                <button 
+                                    class="favorite-btn text-xl transition cursor-pointer"
+                                    data-itinerary-id="{{ itinerary.id }}"
+                                    title="{{ app.user.favoriteItineraries.contains(itinerary) ? 'Retirer des favoris' : 'Ajouter aux favoris' }}"
+                                >
+                                    {% if app.user.favoriteItineraries.contains(itinerary) %}
+                                        <i class="fa-solid fa-heart  text-violet-700"></i>
+                                    {% else %}
+                                        <i class="fa-regular fa-heart text-gray-400 hover:text-violet-600"></i>
+                                    {% endif %}
+                                </button>
+                           
+                            </div>
+
+                            <p class="text-sm text-gray-500 mb-3 flex items-center">
+                                <i class="fa-regular fa-user mr-2 text-violet-500"></i>
+                                Créé par
+
+                                {% if creator and creator.username is not empty %}
+                                    {% if isOwner %}
+                                        <a href="{{ path('show_dashboard') }}" class="ml-1 font-semibold hover:text-violet-700">
+                                            {{ creator.username }}
+                                        </a>
+                                    {% else %}
+                                        <a href="{{ path('public_profile', { id: creator.id }) }}" class="ml-1 font-semibold hover:text-violet-700">
+                                            {{ creator.username }}
+                                        </a>
+                                    {% endif %}
+                                {% else %}
+                                    <span class="ml-1 font-semibold text-gray-400">Anonyme</span>
+                                {% endif %}
+                            </p>
+
+                            <div class="text-sm text-gray-600 space-y-1">
+                                {% if itinerary.duration %}
+                                    <p>
+                                        <i class="fa-solid fa-route mr-1 text-violet-600"></i>
+                                        <span class="font-medium">Durée :</span>
+                                        {{ itinerary.duration }} jour{{ itinerary.duration > 1 ? 's' }}
+                                    </p>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="bg-gray-50 p-3 flex justify-between items-center border-t border-gray-100">
+                            <p class="text-xs text-gray-400">
+                                Publié le {{ itinerary.creationDate|date('d/m/Y') }}
+                            </p>
+                            {% if isOwner %}
+                                <a href="{{ path('itinerary_detail', { itineraryId: itinerary.id }) }}" class="text-sm bg-violet-700 text-white px-3 py-1.5 rounded-md hover:bg-violet-800 transition" title="Voir le détail de votre itinéraire">
+                                    <i class="fa-solid fa-eye mr-1"></i> Voir
+                                </a>
+                            {% else %}
+                                <a href="{{ path('public_itinerary_detail', { itineraryId: itinerary.id }) }}" class="text-sm bg-violet-700 text-white px-3 py-1.5 rounded-md hover:bg-violet-800 transition" title="Voir le détail de l'itinéraire public">
+                                    <i class="fa-solid fa-eye mr-1"></i> Voir
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </section>
+</section>
+
+{% endblock %}

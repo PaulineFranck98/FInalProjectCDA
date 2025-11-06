@@ -69,12 +69,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $registrationDate = null;
 
+    /**
+     * @var Collection<int, Itinerary>
+     */
+    #[ORM\ManyToMany(targetEntity: Itinerary::class, inversedBy: 'favoritedBy')]
+    private Collection $favoriteItineraries;
+
     public function __construct()
     {
         $this->ratings = new ArrayCollection();
         $this->itineraries = new ArrayCollection();
         $this->createdItineraries = new ArrayCollection();
         $this->registrationDate = new \DateTimeImmutable();
+        $this->favoriteItineraries = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -295,6 +302,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setRegistrationDate(?\DateTimeInterface $registrationDate): static
     {
         $this->registrationDate = $registrationDate;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Itinerary>
+     */
+    public function getFavoriteItineraries(): Collection
+    {
+        return $this->favoriteItineraries;
+    }
+
+    public function addFavoriteItinerary(Itinerary $favoriteItinerary): static
+    {
+        if (!$this->favoriteItineraries->contains($favoriteItinerary)) {
+            $this->favoriteItineraries->add($favoriteItinerary);
+        }
+
+        return $this;
+    }
+
+    public function removeFavoriteItinerary(Itinerary $favoriteItinerary): static
+    {
+        $this->favoriteItineraries->removeElement($favoriteItinerary);
 
         return $this;
     }

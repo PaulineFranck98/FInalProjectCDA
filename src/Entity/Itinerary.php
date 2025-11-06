@@ -46,11 +46,18 @@ class Itinerary
     #[ORM\ManyToOne(inversedBy: 'createdItineraries')]
     private ?User $createdBy = null;
 
+    /**
+     * @var Collection<int, User>
+     */
+    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'favoriteItineraries')]
+    private Collection $favoritedBy;
+
     public function __construct()
     {
         $this->creationDate = new \DateTimeImmutable();
         $this->itineraryLocations = new ArrayCollection();
         $this->users = new ArrayCollection();
+        $this->favoritedBy = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -180,6 +187,33 @@ class Itinerary
     public function setCreatedBy(?User $createdBy): static
     {
         $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getFavoritedBy(): Collection
+    {
+        return $this->favoritedBy;
+    }
+
+    public function addFavoritedBy(User $favoritedBy): static
+    {
+        if (!$this->favoritedBy->contains($favoritedBy)) {
+            $this->favoritedBy->add($favoritedBy);
+            $favoritedBy->addFavoriteItinerary($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFavoritedBy(User $favoritedBy): static
+    {
+        if ($this->favoritedBy->removeElement($favoritedBy)) {
+            $favoritedBy->removeFavoriteItinerary($this);
+        }
 
         return $this;
     }

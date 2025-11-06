@@ -5,55 +5,74 @@
 <div class="lg:flex lg:w-[80%] lg:h-[calc(100vh-100px)] mt-6 lg:mx-auto gap-6">
 
     <div id="itinerary-locations" class="flex flex-col lg:w-1/2 min-w-[375px] lg:rounded-xl lg:p-4 lg:shadow max-h-[calc(100vh-2rem)]">
-        <div class="flex-shrink-0 mb-4 flex justify-between items-center">
-            <div>
-                <h1 class="text-2xl font-semibold text-violet-800 mb-4">{{ itinerary.itineraryName }}</h1>
+        <div class="flex-shrink-0 mb-4">
+   
+            <div class="flex items-center justify-between mb-4">
+                <h1 class="text-2xl font-semibold text-violet-800">{{ itinerary.itineraryName }}</h1>
 
-                {% if itinerary.createdBy is defined and itinerary.createdBy is not null %}
-                    {% set creatorName = itinerary.createdBy.username ?? itinerary.createdBy.name ?? 'Anonyme' %}
-
-                    <p class="text-sm text-gray-600 mb-4">
-                        <i class="fa-regular fa-user text-violet-600 mr-1"></i>
-                        Créé par
-                        {% if itinerary.createdBy.id is defined %}
-                            <a href="{{ path('public_profile', { id: itinerary.createdBy.id }) }}"
-                            class="font-medium text-violet-700 hover:text-violet-900 hover:underline transition">
-                                {{ creatorName }}
-                            </a>
+                {% if app.user %}
+                    <button 
+                        class="favorite-btn text-2xl transition cursor-pointer"
+                        data-itinerary-id="{{ itinerary.id }}"
+                        title="{{ app.user.favoriteItineraries.contains(itinerary) ? 'Retirer des favoris' : 'Ajouter aux favoris' }}"
+                    >
+                        {% if app.user.favoriteItineraries.contains(itinerary) %}
+                            <i class="fa-solid fa-heart text-violet-600"></i>
                         {% else %}
-                            <span class="font-medium text-violet-700">{{ creatorName }}</span>
+                            <i class="fa-regular fa-heart text-gray-400 hover:text-violet-600"></i>
                         {% endif %}
-                    </p>
-                {% else %}
-                    <p class="text-sm text-gray-600 mb-4">
-                        <i class="fa-regular fa-user text-violet-600 mr-1"></i>
-                        Créé par <span class="font-medium text-violet-700">Anonyme</span>
-                    </p>
+                    </button>
                 {% endif %}
+            </div>
 
-                <div class="flex flex-col gap-1 text-sm text-gray-700">
-                    <div class="flex items-center gap-2">
-                        <i class="fa-regular fa-clock text-violet-600"></i>
-                        <span>
-                            Durée : <span class="font-medium text-violet-700">{{ itinerary.duration }}</span>
-                            jour{{ itinerary.duration > 1 ? 's' }}
-                        </span>
-                    </div>
+     
+            {% if itinerary.createdBy is defined and itinerary.createdBy is not null %}
+                {% set creatorName = itinerary.createdBy.username ?? itinerary.createdBy.name ?? 'Anonyme' %}
+                <p class="text-sm text-gray-600 mb-4">
+                    <i class="fa-regular fa-user text-violet-600 mr-1"></i>
+                    Créé par
+                    {% if itinerary.createdBy.id is defined %}
+                        <a href="{{ path('public_profile', { id: itinerary.createdBy.id }) }}"
+                        class="font-medium text-violet-700 hover:text-violet-900 hover:underline transition">
+                            {{ creatorName }}
+                        </a>
+                    {% else %}
+                        <span class="font-medium text-violet-700">{{ creatorName }}</span>
+                    {% endif %}
+                </p>
+            {% else %}
+                <p class="text-sm text-gray-600 mb-4">
+                    <i class="fa-regular fa-user text-violet-600 mr-1"></i>
+                    Créé par <span class="font-medium text-violet-700">Anonyme</span>
+                </p>
+            {% endif %}
 
-                    <div class="flex items-center gap-2">
-                        <i class="fa-regular fa-calendar text-violet-600"></i>
-                        <span>Créé le {{ itinerary.creationDate|date('d/m/Y') }}</span>
-                    </div>
+         
+    
+            <div class="flex flex-col gap-1 text-sm text-gray-700">
+                <div class="flex items-center gap-2">
+                    <i class="fa-regular fa-clock text-violet-600"></i>
+                    <span>
+                        Durée : <span class="font-medium text-violet-700">{{ itinerary.duration }}</span>
+                        jour{{ itinerary.duration > 1 ? 's' }}
+                    </span>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <i class="fa-regular fa-calendar text-violet-600"></i>
+                    <span>Créé le {{ itinerary.creationDate|date('d/m/Y') }}</span>
                 </div>
             </div>
 
-            {% if itinerary.isPublic %}
-                <span class="bg-green-100 text-green-700 text-xs font-medium px-3 py-1 rounded-full">Public</span>
-            {% else %}
-                <span class="bg-gray-200 text-gray-700 text-xs font-medium px-3 py-1 rounded-full">Privé</span>
-            {% endif %}
-        </div>
 
+            <p class="text-sm text-gray-600 mt-4">
+                <i class="fa-solid fa-heart text-violet-600 mr-1"></i>
+                Ajouté en favori par 
+                <span id="favorites-count">{{ itinerary.favoritedBy|length }}</span> utilisateur{{ itinerary.favoritedBy|length > 1 ? 's' }}
+            </p>
+
+          
+        </div>
         <div class="flex-1 overflow-y-auto scrollbar-hide box-shadow-inset-itinerary p-3 rounded-lg">
             {% if locations is empty %}
                 <p class="text-gray-500 text-center py-10">Aucun lieu n’a encore été ajouté à cet itinéraire.</p>
@@ -143,4 +162,6 @@
 
 <script src='https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.js'></script>
 <script src="{{ asset('js/itinerary-detail.js') }}"></script>
+<script src="{{ asset('js/itinerary-favorite.js') }}"></script>
+
 {% endblock %}

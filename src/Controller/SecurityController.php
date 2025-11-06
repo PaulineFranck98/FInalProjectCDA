@@ -201,6 +201,12 @@ class SecurityController extends AbstractController
         ]);
     }
 
+    #[Route(path:'/account/favorite/itineraries', name: 'favorite_itineraries')]
+    public function favoriteItineraries() : Response 
+    {
+        return $this->render('profile/favorite_itineraries.html.twig');
+    }
+
 
     // profile
     #[Route(path: '/profile', name: 'show_profile')]

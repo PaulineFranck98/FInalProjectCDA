@@ -3,9 +3,9 @@
 {% block title %}Découvrir les itinéraires{% endblock %}
 
 {% block body %}
-<div class="max-w-7xl mx-auto px-4 py-8">
-    <h1 class="text-2xl font-semibold text-violet-700 mb-6">
-        <i class="fa-solid fa-route text-violet-700 mr-2"></i><span class="">Découvrez les itinéraires des autres membres</span>
+<div class="max-w-7xl mx-auto py-6 px-8 my-5 bg-gray-50 rounded-md  shadow-inner">
+    <h1 class="text-2xl font-semibold text-gray-700 mb-6 text-center">
+        <i class="fa-solid fa-route text-gray-700 mr-2 "></i><span>Découvrez les itinéraires des autres membres</span>
     </h1>
 
     <form id="filtersForm" class="mb-6 grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -13,9 +13,9 @@
 
         <input type="number" name="duration" placeholder="Durée (jours)" min="1"
                value="{{ filters.duration ?? '' }}"
-               class="border border-gray-300 rounded-md p-2 text-sm focus:ring-2 focus:ring-violet-500 focus:border-violet-500">
+               class="border border-gray-300 rounded-md p-2 text-sm bg-white">
 
-        <select name="sort"class="border border-gray-300 rounded-md p-2 text-sm focus:ring-2 focus:ring-violet-500 focus:border-violet-500">
+        <select name="sort"class="border border-gray-300 rounded-md p-2 text-sm bg-white">
             <option value="recent" {% if filters.sort == 'recent' %}selected{% endif %}>Les plus récents</option>
             <option value="old" {% if filters.sort == 'old' %}selected{% endif %}>Les plus anciens</option>
         </select>
@@ -31,4 +31,5 @@
 </div>
 
 <script src="{{ asset('js/itinerary-search.js') }}"></script>
+<script src="{{ asset('js/itinerary-favorite.js') }}"></script>
 {% endblock %}
