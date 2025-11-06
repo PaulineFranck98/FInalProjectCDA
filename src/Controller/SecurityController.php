@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Repository\ItineraryLocationRepository;
+use App\Repository\UserVisitedLocationRepository;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -207,6 +208,44 @@ class SecurityController extends AbstractController
         return $this->render('profile/favorite_itineraries.html.twig');
     }
 
+    #[Route('/account/visited-locations', name: 'show_visited_locations')]
+    public function showVisitedLocations(UserVisitedLocationRepository $visitedRepository, ApiHttpClient $apiClient): Response 
+    {
+        /** @var \App\Entity\User $user */
+        $user = $this->getUser();
+
+        if (!$user) {
+            return new JsonResponse(['error' => 'Unauthorized'], 401);
+        }
+
+        $visited = $visitedRepository->findBy(['user' => $user], ['visitedAt' => 'DESC']);
+
+        $visitedLocations = [];
+
+        foreach ($visited as $visitedLocation) {
+            try {
+                $locationData = $apiClient->getLocation($visitedLocation->getLocationId());
+                $visitedLocations[] = [
+                    'location' => $locationData,
+                    'visitedAt' => $visitedLocation->getVisitedAt(),
+                ];
+            } catch (\Throwable $e) {
+                // si le lieu est supprimé côté Next
+                $visitedLocations[] = [
+                    'location' => [
+                        'locationName' => 'Lieu introuvable',
+                        'city' => '-',
+                        'images' => [],
+                    ],
+                    'visitedAt' => $visitedLocation->getVisitedAt(),
+                ];
+            }
+        }
+
+        return $this->render('profile/visited_locations.html.twig', [
+            'visitedLocations' => $visitedLocations,
+        ]);
+    }
 
     // profile
     #[Route(path: '/profile', name: 'show_profile')]

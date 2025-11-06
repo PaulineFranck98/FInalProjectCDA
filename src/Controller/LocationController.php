@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Membre;
 use App\HttpClient\ApiHttpClient;
+use App\Entity\UserVisitedLocation;
 use App\Repository\RatingRepository;
 use App\Service\LocationDistanceService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -11,6 +12,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Service\LocationSearchServiceInterface;
+use App\Repository\UserVisitedLocationRepository;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Messenger\Transport\Serialization\Serializer;
@@ -28,8 +31,11 @@ class LocationController extends AbstractController
 
 
     #[Route('/location', name: 'location_search')]
-    public function search(Request $request, LocationSearchServiceInterface $locationSearchService, ApiHttpClient $apiHttpClient, RatingRepository $ratingRepository): Response
+    public function search(Request $request, LocationSearchServiceInterface $locationSearchService, ApiHttpClient $apiHttpClient, RatingRepository $ratingRepository, UserVisitedLocationRepository $visitedRepository): Response
     {
+        /** @var User|null $user */
+        $user = $this->getUser();
+
         $filters = $request->query->all(); 
 
         $minRating = isset($filters['minRating']) ? (float)$filters['minRating'] : null;
@@ -51,7 +57,6 @@ class LocationController extends AbstractController
         $locations = $result['locations'];
         $pagination = $result['pagination'];
 
-
         // & crée une référence : pointeur direct vers l'élément du tableau
         foreach($locations as &$location) {
             $locationId = $location['id'] ?? null;
@@ -62,23 +67,30 @@ class LocationController extends AbstractController
         // évite de modifier le dernier élément de $locations
         unset($location);
 
-        //  filtre par note minimale 
-        if ($minRating) {
-            $locations = array_filter($locations, function ($loc) use ($minRating) {
-                return isset($loc['averageRating']) && $loc['averageRating'] >= $minRating;
-            });
-            // Réindexe le tableau après filtrage
-            $locations = array_values($locations);
+    
+        if ($user && !empty($filters['excludeVisited'])) {
+            $visitedIds = array_map(fn($visited) => $visited->getLocationId(), $visitedRepository->findBy(['user' => $user]));
 
-             // recalcul pagination après filtrage symfony
-            $filteredCount = count($locations);
-            $pagination['total'] = $filteredCount;
-            $pagination['totalPages'] = max(1, ceil($filteredCount / $pagination['pageSize']));
+            if ($visitedIds) {
+                // je filtre les lieux non visités et réindexe le tableau
+                $locations = array_values(array_filter($locations, fn($location) => !in_array($location['id'], $visitedIds, true)));
+            }
+        }
+
+
+        $minRating = (float) ($filters['minRating'][0] ?? 0);
+        if ($minRating > 0) {
+            // je filtre les lieux selon la note minimale
+            $locations = array_values(array_filter($locations, fn($location) => !empty($location['averageRating']) && $location['averageRating'] >= $minRating));
+
+            // je mets à jour la pagination
+            $pagination['total'] = count($locations);
+            $pagination['totalPages'] = max(1, ceil($pagination['total'] / $pagination['pageSize']));
         }
 
         if ($request->isXmlHttpRequest()) {
             // je renvoie uniquement la partie HTML de la liste
-            return $this->render('location/_list.html.twig', [
+            return $this->render('location/partials/_list.html.twig', [
                 'locations' => $locations,
                 'pagination' => $pagination,
                 'filters' => $filters,
@@ -117,8 +129,8 @@ class LocationController extends AbstractController
 
         $nearby = $distanceService->findNearest($nearLocations, (float) $location['latitude'], (float) $location['longitude'], 5);
 
-        //  j'exclue le lieu actuel si jamais il est présent
-        $nearby = array_filter($nearby, fn($loc) => $loc['id'] !== $location['id']);
+        //  j'exclus le lieu actuel si jamais il est présent
+        $nearby = array_filter($nearby, fn($location) => $location['id'] !== $location['id']);
 
 
         $averageRating = $ratingRepository->getAverageRating($id);
@@ -135,4 +147,71 @@ class LocationController extends AbstractController
             'nearby' => $nearby
         ]);
     } 
+
+    #[Route('/visited/location/{id}', name: 'add_visited_location', methods: ['POST'])]
+    public function addVisitedLocation(string $id, Request $request, EntityManagerInterface $entityManager, UserVisitedLocationRepository $visitedRepository): JsonResponse 
+    {
+        /** @var \App\Entity\User $user */
+        $user = $this->getUser();
+        if (!$user) {
+            return new JsonResponse(['error' => 'Unauthorized'], 401);
+        }
+
+        $data = json_decode($request->getContent(), true);
+        $dateString = $data['visitedAt'] ?? null;
+
+        if (!$dateString) {
+            return new JsonResponse(['error' => 'Date manquante'], 400);
+        }
+
+        $visitedAt = new \DateTimeImmutable($dateString);
+
+        // je vérifie si le lieu est déjà enregistré
+        $existing = $visitedRepository->findOneBy([
+            'user' => $user,
+            'locationId' => $id,
+        ]);
+
+        if ($existing) {
+            return new JsonResponse(['error' => 'Déjà enregistré comme visité'], 400);
+        }
+
+        $visited = new UserVisitedLocation();
+        $visited->setUser($user)
+                ->setLocationId($id)
+                ->setVisitedAt($visitedAt);
+
+        $entityManager->persist($visited);
+        $entityManager->flush();
+
+        return new JsonResponse([
+            'success' => true,
+            'locationId' => $id,
+            'visitedAt' => $visitedAt->format('Y-m-d'),
+        ]);
+    }
+
+    #[Route('/visited/location/{id}', name: 'remove_visited_location', methods: ['DELETE'])]
+    public function removeVisitedLocation(string $id, EntityManagerInterface $entityManager, UserVisitedLocationRepository $visitedRepository ): JsonResponse 
+    {
+        /** @var \App\Entity\User $user */
+        $user = $this->getUser();
+        if (!$user) {
+            return new JsonResponse(['error' => 'Unauthorized'], 401);
+        }
+
+        $existing = $visitedRepository->findOneBy([
+            'user' => $user,
+            'locationId' => $id,
+        ]);
+
+        if (!$existing) {
+            return new JsonResponse(['error' => 'Lieu non trouvé'], 404);
+        }
+
+        $entityManager->remove($existing);
+        $entityManager->flush();
+
+        return new JsonResponse(['success' => true, 'locationId' => $id]);
+    }
 }

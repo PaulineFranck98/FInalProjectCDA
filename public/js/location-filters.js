@@ -3,7 +3,10 @@ document.addEventListener("DOMContentLoaded", function () {
     const container = document.getElementById("locationsContainer");
     const mapDiv = document.getElementById("search-map");
     const pageInput = document.getElementById("pageInput");
+
+
     const url = window.location.pathname; 
+
 
     if (!form || !container) return;
 
@@ -74,15 +77,6 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         });
     }
-
-    // je détecte les changements sur les champs
-    // form.querySelectorAll("input").forEach(input => {
-    //     const eventName = input.type === "range" || input.type === "text" ? "input" : "change";
-    //     input.addEventListener(eventName, () => {
-    //         clearTimeout(window._filterTimeout);
-    //         window._filterTimeout = setTimeout(fetchResults, 300); // pour éviter trop d'appels
-    //     });
-    // });
 
     // retourne à la page 1 quand le filtre change
     form.querySelectorAll("input").forEach(input => {

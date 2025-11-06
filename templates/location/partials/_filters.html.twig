@@ -8,11 +8,27 @@
     <button id="closeFilters" type="button" class="self-end text-violet-700 mb-2 lg:hidden">
         <i class="fa-solid fa-xmark text-2xl"></i>
     </button>
-
+    <div class="flex items-center justify-between border border-violet-300 rounded px-4 py-3">
+        <label for="excludeVisited" class="text-sm font-medium text-violet-700 flex items-center gap-2">
+            <i class="fa-solid fa-person-walking text-violet-700"></i>
+            Masquer les lieux visités
+        </label>
+        <label class="relative inline-flex items-center cursor-pointer">
+            <input 
+                type="checkbox" 
+                id="excludeVisited" 
+                name="excludeVisited" 
+                value="1"
+                class="sr-only peer"
+                {% if filters.excludeVisited is defined and filters.excludeVisited == '1' %}checked{% endif %}
+            >
+            <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-2 peer-focus:ring-violet-300  peer-checked:after:translate-x-full peer-checked:after:border-white  after:content-[''] after:absolute after:top-[2px] after:left-[2px]  after:bg-white after:border-gray-300 after:border after:rounded-full  after:h-5 after:w-5 after:transition-all peer-checked:bg-violet-700">
+            </div>
+        </label>
+    </div>
     <input type="text" name="city" placeholder="Ville" class="border border-gray-300 rounded px-4 py-2 w-full" value="{{ filters.city ?? '' }}" />
     
     {% include 'location/partials/_filters_blocks.html.twig' %}
-
 
     <div class="w-full flex justify-center items-center gap-4 text-red-600 border border-red-300 bg-red-50 rounded-md py-2">
         <i class="fa-regular fa-trash-can"></i>

@@ -42,10 +42,7 @@
                     <i class="fa-regular fa-user mr-5"></i>Utilisateurs
                 </a>
             </li>
-
-        
         </ul> 
-
 
     {% else %}
         <ul class="w-full lg:pt-2">
@@ -62,27 +59,29 @@
                    <i class="fa-regular fa-circle-user mr-5"></i>Profil
                 </a>
             </li>
-
             <li class="px-6 py-2">
                 <a href="{{ path('show_itineraries') }}" 
                    class="anchors-aside {{ current_route == 'show_itineraries' ? 'active-anchor-aside' }}">
                    <i class="fa-regular fa-map mr-5"></i>Itinéraires
                 </a>
+            </li>            
+            <li class="px-6 py-2">
+                <a href="{{ path('show_visited_locations') }}" 
+                class="anchors-aside {{ current_route == 'show_visited_locations' ? 'active-anchor-aside' }}">
+                    <i class="fa-solid fa-location-dot mr-5"></i>Lieux visités
+                </a>
             </li>
-
             <li class="px-6 py-2">
                 <a href="{{ path('show_ratings') }}" 
                    class="anchors-aside {{ current_route == 'show_ratings' ? 'active-anchor-aside' }}">
                    <i class="fa-regular fa-star mr-5"></i>Avis
                 </a>
             </li>
-
             <li class="px-6 py-2">
                 <a href="{{ path('favorite_itineraries') }}" class="anchors-aside {{ current_route == 'favorite_itineraries' ? 'active-anchor-aside' }}">
                     <i class="fa-regular fa-heart mr-5"></i>Itinéraires favoris
                 </a>
             </li>
-
             <li class="px-6 py-2">
                 <a href="#" class="anchors-aside {{ current_route == 'show_lorem' ? 'active-anchor-aside' }}">
                     <i class="fa-regular fa-pen-to-square mr-5"></i>Lorem
@@ -91,5 +90,3 @@
         </ul>
     {% endif %}
 </aside>
-
-

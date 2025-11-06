@@ -23,10 +23,10 @@ function initItineraryModal() {
                            class="text-violet-700 underline">Créer un itinéraire</a>
                     `;
                 } else {
-                    itineraryList.innerHTML = itineraries.map(it => `
+                    itineraryList.innerHTML = itineraries.map(itinerary => `
                         <div class="flex justify-between items-center border-b py-2">
-                            <span>${it.itineraryName}</span>
-                            <a href="/itinerary/${it.id}/add-location/${locationId}" 
+                            <span>${itinerary.itineraryName}</span>
+                            <a href="/itinerary/${itinerary.id}/add-location/${locationId}" 
                                class="text-violet-700 underline hover:text-violet-900">
                                Ajouter
                             </a>

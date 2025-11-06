@@ -75,6 +75,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: Itinerary::class, inversedBy: 'favoritedBy')]
     private Collection $favoriteItineraries;
 
+    /**
+     * @var Collection<int, UserVisitedLocation>
+     */
+    #[ORM\OneToMany(targetEntity: UserVisitedLocation::class, mappedBy: 'user')]
+    private Collection $userVisitedLocations;
+
     public function __construct()
     {
         $this->ratings = new ArrayCollection();
@@ -82,6 +88,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->createdItineraries = new ArrayCollection();
         $this->registrationDate = new \DateTimeImmutable();
         $this->favoriteItineraries = new ArrayCollection();
+        $this->userVisitedLocations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -328,5 +335,45 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->favoriteItineraries->removeElement($favoriteItinerary);
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, UserVisitedLocation>
+     */
+    public function getUserVisitedLocations(): Collection
+    {
+        return $this->userVisitedLocations;
+    }
+
+    public function addUserVisitedLocation(UserVisitedLocation $userVisitedLocation): static
+    {
+        if (!$this->userVisitedLocations->contains($userVisitedLocation)) {
+            $this->userVisitedLocations->add($userVisitedLocation);
+            $userVisitedLocation->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserVisitedLocation(UserVisitedLocation $userVisitedLocation): static
+    {
+        if ($this->userVisitedLocations->removeElement($userVisitedLocation)) {
+            // set the owning side to null (unless already changed)
+            if ($userVisitedLocation->getUser() === $this) {
+                $userVisitedLocation->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function hasVisitedLocation(string $locationId): bool
+    {
+        foreach ($this->userVisitedLocations as $visited) {
+            if ($visited->getLocationId() === $locationId) {
+                return true;
+            }
+        }
+        return false;
     }
 }
