@@ -83,6 +83,8 @@ class SecurityController extends AbstractController
        
         $lastItineraries = $itineraryRepository->findLastByUser($user, 2);
 
+        $upcomingItineraries = $itineraryRepository->findUpcomingByUser($user, 2);
+
 
         $ratings = $ratingRepository->findBy(
             ['user' => $user],
@@ -115,6 +117,7 @@ class SecurityController extends AbstractController
 
         return $this->render('profile/dashboard.html.twig', [
             'lastItineraries' => $lastItineraries,
+            'upcomingItineraries' => $upcomingItineraries,
             'lastRatings' => $lastRatings,
             'stats' => $stats,
         ]);

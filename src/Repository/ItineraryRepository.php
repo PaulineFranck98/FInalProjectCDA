@@ -29,6 +29,21 @@ class ItineraryRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function findUpcomingByUser(User $user, int $limit = 2): array
+    {
+        return $this->createQueryBuilder('i')
+            ->innerJoin('i.users', 'u')
+            ->andWhere('u = :user')
+            ->andWhere('i.departureDate > :now')
+            ->setParameter('user', $user)
+            ->setParameter('now', new \DateTimeImmutable())
+            ->orderBy('i.departureDate', 'ASC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+
+
     public function countCreatedAfter(\DateTimeInterface $date): int
     {
         return $this->createQueryBuilder('i')
