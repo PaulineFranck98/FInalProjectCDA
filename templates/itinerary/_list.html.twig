@@ -11,7 +11,7 @@
                         {{ itinerary.itineraryName }}
                     </h3>
 
-                    {% if app.user %}
+                    {% if app.user and not isOwner %}
                         <button 
                             class="favorite-btn text-xl transition cursor-pointer"
                             data-itinerary-id="{{ itinerary.id }}"

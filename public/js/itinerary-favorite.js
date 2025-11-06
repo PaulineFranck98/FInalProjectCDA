@@ -1,20 +1,19 @@
- document.addEventListener('DOMContentLoaded', () => {
-    const button = document.querySelector('.favorite-btn');
+document.addEventListener('click', async (e) => {
+    const button = e.target.closest('.favorite-btn');
     if (!button) return;
 
-    button.addEventListener('click', async () => {
-        const itineraryId = button.dataset.itineraryId;
+    const itineraryId = button.dataset.itineraryId;
+    const icon = button.querySelector('i');
 
+    try {
         const response = await fetch(`/favorite/itinerary/${itineraryId}`, {
             method: 'POST',
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest',
-            },
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
         });
 
         const data = await response.json();
         if (data.success) {
-            const icon = button.querySelector('i');
+
             const count = document.getElementById('favorites-count');
 
             if (data.isFavorite) {
@@ -30,6 +29,9 @@
             if (count) {
                 count.textContent = data.favoritesCount;
             }
+
         }
-    });
+    } catch (error) {
+        console.error('Erreur favoris :', error);
+    }
 });
