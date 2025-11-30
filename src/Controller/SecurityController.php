@@ -2,11 +2,13 @@
 
 namespace App\Controller;
 
+use Dom\Entity;
 use App\Entity\User;
 use App\HttpClient\ApiHttpClient;
 use App\Repository\UserRepository;
 use App\Form\ChangePasswordFormType;
 use App\Repository\RatingRepository;
+use App\Service\UserDeletionService;
 use App\Repository\ItineraryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -350,5 +352,39 @@ class SecurityController extends AbstractController
             'success' => true,
             'newPath' => '/uploads/' . $newFilename
         ]);
+    }
+
+    #[Route('/profile/delete', name: 'delete_account', methods: ['POST'])]
+    public function deleteAccount(EntityManagerInterface $entityManager): Response 
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+
+        if (!$user) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $user->setIsPendingDeletion(true);
+        $user->setPseudonymizedAt(new \DateTimeImmutable());
+
+        $entityManager->flush();
+
+        $this->addFlash('warning', "Votre compte sera supprimé dans 30 jours.");
+        return $this->redirectToRoute('app_logout');
+    }
+
+    #[Route('/profile/cancel-deletion', name: 'cancel_deletion')]
+    public function cancelDeletion(EntityManagerInterface $entityManager): Response
+    {
+            /** @var User $user */
+        $user = $this->getUser();
+
+        $user->setIsPendingDeletion(false);
+        $user->setPseudonymizedAt(null);
+
+        $entityManager->flush();
+
+        $this->addFlash('success', "Votre compte a été réactivé !");
+        return $this->redirectToRoute('show_profile');
     }
 }

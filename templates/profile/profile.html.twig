@@ -79,9 +79,52 @@
                     </div>
                 {% endif %}
             </div>
+
+            <div class="mt-10 border border-red-200 bg-red-50 text-red-800 px-6 py-4 rounded-lg shadow-sm">
+                <h3 class="font-semibold text-red-700 text-lg mb-2">Supprimer mon compte</h3>
+                <p class="text-sm mb-4">
+                    La suppression rendra votre compte inaccessible immédiatement.  
+                    Vous disposerez de <strong>30 jours</strong> pour le récupérer avant la suppression définitive.
+                </p>
+
+                <button 
+                    id="delete-account-btn"
+                    class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md font-medium transition">
+                    Supprimer mon compte
+                </button>
+            </div>
+
+            <div id="delete-modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+                <div class="bg-white rounded-xl p-8 w-11/12 max-w-md shadow-lg">
+                    <h3 class="text-xl font-semibold text-red-700 mb-4">Confirmer la suppression</h3>
+                    <p class="text-gray-700 text-sm mb-6">
+                        Êtes-vous sûr de vouloir supprimer votre compte ?<br>
+                        Votre compte sera désactivé immédiatement, et définitivement supprimé dans <strong>30 jours</strong>.
+                    </p>
+
+                    <div class="flex justify-end gap-3">
+                        <button id="cancel-delete" class="px-4 py-2 text-gray-600 hover:text-gray-800">Annuler</button>
+                        <form method="post" action="{{ path('delete_account') }}">
+                            <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md">
+                                Oui, supprimer
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </section>
     </div>
 </section>
+
+<script>
+    document.getElementById('delete-account-btn').addEventListener('click', () => {
+        document.getElementById('delete-modal').classList.remove('hidden');
+    });
+
+    document.getElementById('cancel-delete').addEventListener('click', () => {
+        document.getElementById('delete-modal').classList.add('hidden');
+    });
+</script>
 
 <script src="{{ asset('js/profile.js') }}"></script>
 

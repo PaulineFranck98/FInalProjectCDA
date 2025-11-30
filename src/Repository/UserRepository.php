@@ -65,6 +65,19 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->getSingleScalarResult();
     }
 
+    public function findUsersReadyForDeletion(): array
+    {
+        $limitDate = (new \DateTimeImmutable())->modify('-30 days');
+
+        return $this->createQueryBuilder('u')
+            ->where('u.isPendingDeletion = true')
+            ->andWhere('u.pseudonymizedAt <= :limit')
+            ->setParameter('limit', $limitDate)
+            ->getQuery()
+            ->getResult();
+    }
+
+
     //    /**
     //     * @return User[] Returns an array of User objects
     //     */

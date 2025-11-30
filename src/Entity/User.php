@@ -81,6 +81,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: UserVisitedLocation::class, mappedBy: 'user')]
     private Collection $userVisitedLocations;
 
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $pseudonymizedAt = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $isPendingDeletion = false;
+
     public function __construct()
     {
         $this->ratings = new ArrayCollection();
@@ -375,5 +381,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             }
         }
         return false;
+    }
+
+    public function getPseudonymizedAt(): ?\DateTimeImmutable
+    {
+        return $this->pseudonymizedAt;
+    }
+
+    public function setPseudonymizedAt(?\DateTimeImmutable $pseudonymizedAt): static
+    {
+        $this->pseudonymizedAt = $pseudonymizedAt;
+
+        return $this;
+    }
+
+
+    public function isPendingDeletion(): ?bool
+    {
+        return $this->isPendingDeletion;
+    }
+
+    public function setIsPendingDeletion(?bool $isPendingDeletion): static
+    {
+        $this->isPendingDeletion = $isPendingDeletion;
+
+        return $this;
     }
 }
