@@ -67,6 +67,19 @@ class ItineraryRepository extends ServiceEntityRepository
     }
 
 
+    public function findMostFavoritedPublicItineraries(int $limit = 3): array
+    {
+        return $this->createQueryBuilder('i')
+            ->select('i AS itinerary, COUNT(f) AS favoritesCount')
+            ->leftJoin('i.favoritedBy', 'f')
+            ->where('i.isPublic = true')
+            ->groupBy('i.id')
+            ->orderBy('favoritesCount', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+
     public function findPublicItineraries(?int $duration = null, string $sort = 'recent'): array
     {
         $qb = $this->createQueryBuilder('i')

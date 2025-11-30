@@ -51,6 +51,17 @@ class ItineraryLocationRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
+    public function findMostPopularLocations(int $limit = 3): array
+    {
+        return $this->createQueryBuilder('il')
+            ->select('il.locationId, COUNT(il.locationId) AS usageCount')
+            ->groupBy('il.locationId')
+            ->orderBy('usageCount', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+
 
 //    /**
 //     * @return ItineraryLocation[] Returns an array of ItineraryLocation objects

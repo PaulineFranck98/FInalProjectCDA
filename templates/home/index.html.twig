@@ -1,7 +1,148 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello HomeController!{% endblock %}
+{% block title %}Découvrez des lieux et créez vos itinéraires – ShareMyWay{% endblock %}
+
+{% block meta_description %}<meta name="description" content="Découvrez les meilleurs lieux en France, créez vos itinéraires personnalisés et explorez les découvertes des autres voyageurs avec ShareMyWay.">{% endblock %}
 
 {% block body %}
+
+<section id="hero" class="w-full bg-gradient-to-b from-violet-50 to-white py-16">
+    <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center gap-12">
+        <div class="flex-1 space-y-6">
+            <h1 class="text-3xl md:text-5xl font-bold text-violet-800 leading-tight">
+                Explorez la France.<br>
+                Créez vos itinéraires.<br>
+                Partagez vos découvertes.
+            </h1>
+            <p class="text-gray-600 text-lg">
+                ShareMyWay vous permet de découvrir des lieux uniques, créer vos propres itinéraires, et partager vos avis avec la communauté.
+            </p>
+            <div class="flex gap-4 mt-4">
+                <a href="{{ path('location_search') }}" class="bg-violet-700 text-white px-6 py-3 rounded-lg hover:bg-violet-800 transition">Explorer les lieux</a>
+                <a href="#regions" class="border border-violet-700 text-violet-700 px-6 py-3 rounded-lg hover:bg-violet-50 transition">Voir les régions</a>
+            </div>
+        </div>
+        <div class="flex-1 flex justify-center md:justify-end relative">
+            <img src="/img/mockups/laptop_mockup.webp" alt="Aperçu de l’application ShareMyWay affichée sur ordinateur" class="w-[430px] md:w-[520px] drop-shadow-xl select-none">
+            <img src="/img/mockups/phone-mockup.webp" alt="Aperçu de l’application ShareMyWay affichée sur téléphone" class="w-36 md:w-48 absolute top-10 left-0 md:left-14  drop-shadow-2xl select-none rotate-[5deg]">
+        </div>
+    </div>
+</section>
+<section id="regions" class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-6">
+        <h2 class="text-2xl md:text-3xl font-semibold text-violet-800 mb-8 text-center">Où souhaitez-vous voyager ?</h2>
+        <p class="text-center text-gray-600 mb-12">Choisissez une super-région pour commencer votre exploration.</p>
+
+        {# TODO remplacer les régions + ajouter formes  #}
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6">
+            {% set regions = ['Hauts-de-France', 'Normandie', 'Île-de-France', 'Grand-Est', 'Bretagne', 'Pays-de-la-Loire', 'Centre-Val-de-Loire', 'Bourgogne-Franche-Comté', 'Nouvelle-Aquitaine', 'Auvergne-Rhône-Alpes', 'Occitanie', 'Provence-Alpes-Côte-d’Azur'] %}
+
+            {% for region in regions %}
+                <a href="{{ path('location_search', { region: region }) }}" class="bg-violet-50 border border-violet-200 rounded-xl py-6 text-center font-medium text-violet-700 hover:bg-violet-100 transition shadow-sm">
+                    {{ region }}
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+<section id="why-sharemyway" class="py-20 bg-gradient-to-b from-white to-violet-50">
+    <div class="max-w-7xl mx-auto px-6">
+        <h2 class="text-2xl md:text-3xl font-semibold text-violet-800 mb-12 text-center">
+            Pourquoi utiliser ShareMyWay ?
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+            <div class="text-center space-y-4">
+                <div class="text-violet-700 text-5xl">
+                    <i class="fa-solid fa-map-location-dot"></i>
+                </div>
+                <h3 class="font-semibold text-xl text-violet-800">Explorez des lieux uniques</h3>
+                <p class="text-gray-600">Découvrez des lieux culturels, naturels et touristiques partagés par les utilisateurs.</p>
+            </div>
+            <div class="text-center space-y-4">
+                <div class="text-violet-700 text-5xl">
+                    <i class="fa-solid fa-route"></i>
+                </div>
+                <h3 class="font-semibold text-xl text-violet-800">Créez vos itinéraires</h3>
+                <p class="text-gray-600">Assemblez vos étapes facilement et partagez vos parcours avec la communauté.</p>
+            </div>
+            <div class="text-center space-y-4">
+                <div class="text-violet-700 text-5xl">
+                    <i class="fa-solid fa-star"></i>
+                </div>
+                <h3 class="font-semibold text-xl text-violet-800">Laissez votre avis</h3>
+                <p class="text-gray-600">Partagez vos impressions et aidez les autres voyageurs à découvrir les meilleurs lieux.</p>
+            </div>
+        </div>
+    </div>
+</section>
+<section id="popular-locations" class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-6">
+        <h2 class="text-2xl md:text-3xl font-semibold text-violet-800 mb-12 text-center">Lieux populaires</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% for item in popular_locations %}
+                {% set location = item.data %}
+                <a href="/location/{{ location.id }}" class="relative block">
+                    <div class="absolute -top-3 -left-3 bg-violet-600 text-white w-10 h-10  rounded-full flex items-center justify-center shadow-lg text-lg font-semibold z-10">
+                        {{ loop.index }}
+                    </div>
+                    <div class="bg-white rounded-xl shadow-md hover:shadow-lg transition p-4">
+                        {% if location.images and location.images[0] is defined %}
+                            <img src="{{ location.images[0].imageName ?? '' }}" alt="Photo du lieu {{ location.locationName }} à {{ location.city }}" class="w-full h-40 object-cover rounded-lg mb-4">
+                        {% else %}
+                            <div class="w-full h-40 bg-gray-200 flex items-center justify-center text-gray-500 italic text-sm">Aucune image</div>
+                        {% endif %}
+                        <h3 class="font-semibold text-violet-700">{{ location.locationName }} <span class="text-gray-500 font-light text-sm"> — {{ location.city }}</span></h3>
+                        <p class="text-gray-500 text-sm mt-1">Ajouté dans <span class="font-semibold text-violet-700">{{ item.count }} itinéraires</span></p>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+        <div class="text-center mt-10">
+            <a href="{{ path('location_search') }}" class="text-violet-700 font-medium hover:underline">Voir tous les lieux →</a>
+        </div>
+    </div>
+</section>
+
+<div class="sm:w-80 h-1 bg-violet-300 mx-auto rounded-full mb-12"></div>
+
+<section id="popular-itineraries" class="pt-8 pb-20">
+    <div class="max-w-7xl mx-auto px-6">
+        <h2 class="text-2xl md:text-3xl font-semibold text-violet-800 mb-12 text-center">Itinéraires populaires</h2>
+        {% if popular_itineraries is empty %}
+            <p class="text-center text-gray-500">Aucun itinéraire populaire pour le moment.</p>
+        {% else %}
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                {% for item in popular_itineraries %}
+                    {% set itinerary = item.itinerary %}
+                    {% set favorites = item.favoritesCount %}
+                    <a href="{{ path('itinerary_detail', { itineraryId: itinerary.id }) }}" class="relative block">
+                        <div class="absolute -top-3 -left-3 bg-violet-600   text-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg text-lg font-semibold z-10">
+                            {{ loop.index }}
+                        </div>
+                        <div class=" rounded-xl  border border-violet-200 shadow-sm hover:shadow-lg transition p-6">
+                            <h3 class="text-lg font-semibold text-violet-700 mb-3">{{ itinerary.itineraryName }}</h3>
+                            <p class="text-sm text-gray-900 mb-2 flex items-center">
+                                <i class="fa-solid fa-heart text-red-500 mr-2"></i>
+                                <span class="font-medium">Ajouté en favori par {{ favorites }} utilisateur{{ favorites > 1 ? 's' : '' }}</span>
+                            </p>
+                            {% if itinerary.duration is defined and itinerary.duration %}
+                                <p class="text-sm text-gray-900 mb-2 flex items-center">
+                                    <i class="fa-solid fa-route text-violet-600 mr-2"></i>
+                                    {{ itinerary.duration }} jour{{ itinerary.duration > 1 ? 's' : '' }}
+                                </p>
+                            {% endif %}
+                            <div class="text-right mt-4">
+                                <span class="inline-block bg-violet-700 text-white px-4 py-2 rounded-lg text-sm hover:bg-violet-800 transition">Voir l’itinéraire</span>
+                            </div>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+            <div class="text-center mt-10">
+                <a href="{{ path('itinerary_discover') }}" class="text-violet-700 font-medium hover:underline">Voir tous les itinéraires →</a>
+            </div>
+        {% endif %}
+    </div>
+</section>
 
 {% endblock %}
