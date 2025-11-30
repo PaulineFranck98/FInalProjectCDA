@@ -1,20 +1,23 @@
 {% extends 'base.html.twig' %}
 {% block title %}Recherche de lieux{% endblock %}
 
+{% block meta_description %}
+    <meta name="description" content="Recherchez des lieux touristiques, culturels ou naturels partout en France. Filtrez par région, catégorie ou distance et explorez les endroits les plus appréciés de ShareMyWay.">
+{% endblock %}
+
 {% block body %}
 
-<div class="flex flex-col lg:flex-row lg:gap-6 m-auto lg:w-[80%] lg:h-[calc(100vh-49px)] pb-10">
-    <button id="openFilters"
-            class="fixed top-2 right-4 bg-violet-700 text-white px-4 py-2 rounded-full shadow-lg z-50 lg:hidden">
+<div class=" max-w-7xl mx-auto flex flex-col lg:flex-row lg:gap-6 m-auto lg:h-[calc(100vh-49px)] pb-10">
+    <button id="openFilters" aria-label="Ouvrir les filtres" class="fixed top-2 right-4 bg-violet-700 text-white px-4 py-2 rounded-full shadow-lg z-50 lg:hidden">
         <i class="fa-solid fa-sliders"></i> Filtres
     </button>
 
-    <div id="filtersPanel" class="fixed inset-0 bg-white z-50 transform translate-x-full transition-transform duration-300 lg:relative lg:translate-x-0 lg:w-1/2 flex flex-col lg:flex-row gap-6 min-h-0 md:pt-10"> 
+    <div id="filtersPanel" class="fixed inset-0 bg-white z-50 transform translate-x-full transition-transform duration-300 lg:relative lg:translate-x-0  flex flex-col lg:flex-row gap-6 min-h-0 md:pt-10"> 
         {% include 'location/partials/_filters.html.twig' %}
         {% include 'location/partials/_list.html.twig' %}
     </div>
    
-    <div class="lg:w-1/2 lg:pt-10 lg:h-full h-screen relative">
+    <div class="w-full pt-10 lg:h-full h-screen relative">
         <div id="search-map" class="w-full  bg-gray-200 rounded-xl h-full" data-locations='{{ locations|json_encode }}'>
             <span class="text-gray-500">Carte</span>
         </div>

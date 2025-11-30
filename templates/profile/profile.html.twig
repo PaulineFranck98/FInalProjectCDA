@@ -5,81 +5,82 @@
 
 {% block body %}
 
-<section id="profile-dashboard" class="flex min-h-0 lg:h-[calc(100vh-49px)]">
+<section id="profile-dashboard" class="py-10 ">
+    <div class="max-w-7xl mx-auto px-6 flex min-h-0 lg:h-[calc(100vh-49px)] gap-6">
   
-    {% include 'profile/partials/_profile_aside.html.twig' %}
+        {% include 'profile/partials/_profile_aside.html.twig' %}
 
-    <section id="profile-container" class="border border-gray-200 w-full  p-8  overflow-y-auto  scrollbar-hide bg-gray-50">
+        <section id="profile-container" class="border border-gray-200 w-full  p-8  overflow-y-auto  scrollbar-hide bg-gray-50">
 
-        <h2 class="text-2xl font-semibold text-violet-700 mb-8">Mon profil</h2>
+            <h2 class="text-2xl font-semibold text-violet-700 mb-8">Mon profil</h2>
 
-        {% if app.user.googleId is not null %}
-            <div class="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-md text-blue-800 text-sm flex items-start gap-2">
-                <i class="fa-brands fa-google mt-0.5"></i>
-                <p>
-                    Vous êtes connecté avec votre compte <strong>Google</strong>.<br>
-                    Par conséquent, il n’est pas possible de modifier votre adresse e-mail ou votre mot de passe depuis votre profil.
-                </p>
-            </div>
-        {% endif %}
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 ">
-            <div class="border border-gray-200 rounded-lg p-4 shadow-sm bg-white">
-                <div class="flex justify-between items-center">
-                    <p class="text-gray-700 font-medium">Nom d’utilisateur</p>
-                    <button class="text-violet-700 hover:text-violet-900 edit-btn" data-target="username">
-                        <i class="fa-solid fa-pen"></i>
-                    </button>
+            {% if app.user.googleId is not null %}
+                <div class="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-md text-blue-800 text-sm flex items-start gap-2">
+                    <i class="fa-brands fa-google mt-0.5"></i>
+                    <p>
+                        Vous êtes connecté avec votre compte <strong>Google</strong>.<br>
+                        Par conséquent, il n’est pas possible de modifier votre adresse e-mail ou votre mot de passe depuis votre profil.
+                    </p>
                 </div>
-                <p class="mt-2 text-gray-900 font-semibold" id="display-username">{{ app.user.username ?? 'Non défini' }}</p>
+            {% endif %}
 
-                <form id="form-username" class="hidden mt-3" data-field="username">
-                    <input type="text" name="username" value="{{ app.user.username }}" class="border rounded-md px-2 py-1 w-full border-gray-300">
-                    <div class="flex justify-end gap-2 mt-3">
-                        <button type="button" class="cancel-btn text-gray-500 text-sm">Annuler</button>
-                        <button type="submit" class="bg-violet-800 text-white text-sm px-4 py-1 rounded-md">Enregistrer</button>
-                    </div>
-                </form>
-            </div>
-
-            <div class="border border-gray-200 rounded-lg p-4 shadow-sm bg-white">
-                <div class="flex justify-between items-center">
-                    <p class="text-gray-700 font-medium">Adresse e-mail</p>
-
-                    {% if app.user.googleId is null %}
-                        <button class="text-violet-700 hover:text-violet-900 edit-btn" data-target="email">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 ">
+                <div class="border border-gray-200 rounded-lg p-4 shadow-sm bg-white">
+                    <div class="flex justify-between items-center">
+                        <p class="text-gray-700 font-medium">Nom d’utilisateur</p>
+                        <button class="text-violet-700 hover:text-violet-900 edit-btn" data-target="username">
                             <i class="fa-solid fa-pen"></i>
                         </button>
-                    {% endif %}
-                </div>
+                    </div>
+                    <p class="mt-2 text-gray-900 font-semibold" id="display-username">{{ app.user.username ?? 'Non défini' }}</p>
 
-                <p class="mt-2 text-gray-900 font-semibold" id="display-email">{{ app.user.email }}</p>
-
-                {% if app.user.googleId is null %}
-                    <form id="form-email" class="hidden mt-3" data-field="email">
-                        <input type="email" name="email" value="{{ app.user.email }}" class="border rounded-md px-2 py-1 w-full border-gray-300">
+                    <form id="form-username" class="hidden mt-3" data-field="username">
+                        <input type="text" name="username" value="{{ app.user.username }}" class="border rounded-md px-2 py-1 w-full border-gray-300">
                         <div class="flex justify-end gap-2 mt-3">
                             <button type="button" class="cancel-btn text-gray-500 text-sm">Annuler</button>
                             <button type="submit" class="bg-violet-800 text-white text-sm px-4 py-1 rounded-md">Enregistrer</button>
                         </div>
                     </form>
+                </div>
+
+                <div class="border border-gray-200 rounded-lg p-4 shadow-sm bg-white">
+                    <div class="flex justify-between items-center">
+                        <p class="text-gray-700 font-medium">Adresse e-mail</p>
+
+                        {% if app.user.googleId is null %}
+                            <button class="text-violet-700 hover:text-violet-900 edit-btn" data-target="email">
+                                <i class="fa-solid fa-pen"></i>
+                            </button>
+                        {% endif %}
+                    </div>
+
+                    <p class="mt-2 text-gray-900 font-semibold" id="display-email">{{ app.user.email }}</p>
+
+                    {% if app.user.googleId is null %}
+                        <form id="form-email" class="hidden mt-3" data-field="email">
+                            <input type="email" name="email" value="{{ app.user.email }}" class="border rounded-md px-2 py-1 w-full border-gray-300">
+                            <div class="flex justify-end gap-2 mt-3">
+                                <button type="button" class="cancel-btn text-gray-500 text-sm">Annuler</button>
+                                <button type="submit" class="bg-violet-800 text-white text-sm px-4 py-1 rounded-md">Enregistrer</button>
+                            </div>
+                        </form>
+                    {% endif %}
+                </div>
+
+            
+                {% if app.user.googleId is null %}
+                    <div class="md:col-span-2 border border-gray-200 rounded-lg p-4 shadow-sm bg-white">
+                        <p class="text-gray-700 font-medium mb-3">Changer le mot de passe</p>
+                        {{ form_start(changePasswordForm, { attr: { class: 'space-y-3' } }) }}
+                            {{ form_row(changePasswordForm.plainPassword.first, { label: 'Nouveau mot de passe', attr: { class: 'border rounded-md px-3 py-2 w-full border-gray-300' } }) }}
+                            {{ form_row(changePasswordForm.plainPassword.second, { label: 'Confirmer le mot de passe', attr: { class: 'border rounded-md px-3 py-2 w-full border-gray-300' } }) }}
+                            <button type="submit" class="bg-violet-800 text-white px-6 py-2 rounded-md font-medium hover:bg-violet-700">Mettre à jour</button>
+                        {{ form_end(changePasswordForm) }}
+                    </div>
                 {% endif %}
             </div>
-
-         
-            {% if app.user.googleId is null %}
-                <div class="md:col-span-2 border border-gray-200 rounded-lg p-4 shadow-sm bg-white">
-                    <p class="text-gray-700 font-medium mb-3">Changer le mot de passe</p>
-                    {{ form_start(changePasswordForm, { attr: { class: 'space-y-3' } }) }}
-                        {{ form_row(changePasswordForm.plainPassword.first, { label: 'Nouveau mot de passe', attr: { class: 'border rounded-md px-3 py-2 w-full border-gray-300' } }) }}
-                        {{ form_row(changePasswordForm.plainPassword.second, { label: 'Confirmer le mot de passe', attr: { class: 'border rounded-md px-3 py-2 w-full border-gray-300' } }) }}
-                        <button type="submit" class="bg-violet-800 text-white px-6 py-2 rounded-md font-medium hover:bg-violet-700">Mettre à jour</button>
-                    {{ form_end(changePasswordForm) }}
-                </div>
-            {% endif %}
-        </div>
-    </section>
-
+        </section>
+    </div>
 </section>
 
 <script src="{{ asset('js/profile.js') }}"></script>

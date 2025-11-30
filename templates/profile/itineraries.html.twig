@@ -5,7 +5,8 @@
 
 {% block body %}
 
-<section id="profile-dashboard" class="flex min-h-0 lg:h-[calc(100vh-49px)]">
+<section id="profile-dashboard" class="py-10 ">
+    <div class="max-w-7xl mx-auto px-6 flex min-h-0 lg:h-[calc(100vh-49px)] gap-6">
 
     {% include 'profile/partials/_profile_aside.html.twig' %}
     
@@ -16,7 +17,7 @@
         {% if itinerariesData is empty %}
         <p class="text-gray-500 text-center py-10">Vous n’avez encore créé aucun itinéraire.</p>
         {% else %}
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 {% for data in itinerariesData %}
                     {% set itinerary = data.itinerary %}
                     {% set departure = data.departure %}
@@ -58,10 +59,7 @@
                         </div>
 
                         <div class="mt-4 flex justify-end">
-                            <a href="{{ path('itinerary_detail', { itineraryId: itinerary.id }) }}"
-                                class="text-sm bg-violet-700 text-white px-3 py-1 rounded-md hover:bg-violet-800 transition"
-                                title="Voir le détail de l'itinéraire"
-                            >
+                            <a href="{{ path('itinerary_detail', { itineraryId: itinerary.id }) }}" class="text-sm bg-violet-700 text-white px-3 py-1 rounded-md hover:bg-violet-800 transition" title="Voir le détail de l'itinéraire">
                                 Voir
                             </a>
                         </div>
@@ -70,6 +68,7 @@
             </div>
         {% endif %}
     </section>
+    </div>
 </section>
 
 {% endblock %}

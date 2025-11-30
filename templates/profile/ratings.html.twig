@@ -5,53 +5,55 @@
 
 {% block body %}
 
-<section id="profile-dashboard" class="flex min-h-0 lg:h-[calc(100vh-49px)]">
+<section id="profile-dashboard" class="py-10 ">
+    <div class="max-w-7xl mx-auto px-6 flex min-h-0 lg:h-[calc(100vh-49px)] gap-6">
 
-    {% include 'profile/partials/_profile_aside.html.twig' %}
-    
-    <section id="profile-container" class="border border-gray-200 w-full  p-8 overflow-y-auto scrollbar-hide bg-gray-50">
-     <h2 class="text-2xl font-semibold text-violet-700 mb-8">Mes avis</h2>
+        {% include 'profile/partials/_profile_aside.html.twig' %}
+        
+        <section id="profile-container" class="border border-gray-200 w-full  p-8 overflow-y-auto scrollbar-hide bg-gray-50">
+        <h2 class="text-2xl font-semibold text-violet-700 mb-8">Mes avis</h2>
 
-        {% if ratingsData is empty %}
-            <p class="text-gray-500 text-center py-10">Vous n’avez encore laissé aucun avis.</p>
-        {% else %}
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {% for data in ratingsData %}
-                    {% set rating = data.rating %}
-                    {% set locationName = data.locationName %}
+            {% if ratingsData is empty %}
+                <p class="text-gray-500 text-center py-10">Vous n’avez encore laissé aucun avis.</p>
+            {% else %}
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    {% for data in ratingsData %}
+                        {% set rating = data.rating %}
+                        {% set locationName = data.locationName %}
 
-                    <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-4 flex flex-col justify-between hover:shadow-md transition ">
-                        <div>
-                            <h3 class="text-violet-700 font-semibold text-lg mb-2 truncate">
-                                {{ locationName ?? 'Lieu inconnu' }}
-                            </h3>
+                        <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-4 flex flex-col justify-between hover:shadow-md transition ">
+                            <div>
+                                <h3 class="text-violet-700 font-semibold text-lg mb-2 truncate">
+                                    {{ locationName ?? 'Lieu inconnu' }}
+                                </h3>
 
-                            <p class="text-yellow-500 text-sm mb-2">
-                                {{ rating.rating|stars|raw }}
-                            </p>
+                                <p class="text-yellow-500 text-sm mb-2">
+                                    {{ rating.rating|stars|raw }}
+                                </p>
 
-                            {% if rating.comment %}
-                                <p class="text-gray-700 text-sm italic mb-2">“{{ rating.comment }}”</p>
-                            {% endif %}
+                                {% if rating.comment %}
+                                    <p class="text-gray-700 text-sm italic mb-2">“{{ rating.comment }}”</p>
+                                {% endif %}
 
-                            <p class="text-xs text-gray-500">
-                                <i class="fa-regular fa-calendar mr-1 text-violet-600"></i>
-                                Posté le {{ rating.ratingDate|date('d/m/Y') }}
-                            </p>
+                                <p class="text-xs text-gray-500">
+                                    <i class="fa-regular fa-calendar mr-1 text-violet-600"></i>
+                                    Posté le {{ rating.ratingDate|date('d/m/Y') }}
+                                </p>
+                            </div>
+
+                            <div class="mt-4 flex justify-end">
+                            {#  TODO : ajouter lien vers l'avis #}
+                                <a href="#" class="text-sm bg-violet-700 text-white px-3 py-1 rounded-md hover:bg-violet-800 transition"  title="Voir le détail de l’avis">
+                                    Voir
+                                </a>
+                            </div>
                         </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
 
-                        <div class="mt-4 flex justify-end">
-                        {#  TODO : ajouter lien vers l'avis #}
-                            <a href="#" class="text-sm bg-violet-700 text-white px-3 py-1 rounded-md hover:bg-violet-800 transition"  title="Voir le détail de l’avis">
-                                Voir
-                            </a>
-                        </div>
-                    </div>
-                {% endfor %}
-            </div>
-        {% endif %}
-
-    </section>
+        </section>
+    </div>
 </section>
 
 {% endblock %}

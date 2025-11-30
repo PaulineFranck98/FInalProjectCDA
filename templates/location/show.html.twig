@@ -45,7 +45,7 @@
                                     {% if discount.isActive %}
                                     <div class="border border-violet-700 rounded-md py-2 px-4 flex items-center gap-3 mt-4 lg:mb-5 bg-violet-100 md:w-fit lg:w-fit w-full">
                                         <i class="fa-solid fa-tags text-violet-700"></i>
-                                        <p  class=" font-medium text-violet-700">Code : <span class="font-semibold">{{ discount.code }}</span>  offrant {{ discount.percentage }}% de réduction</p>
+                                        <p  class=" font-medium text-sm  text-violet-700">Code : <span class="font-semibold">{{ discount.code }}</span>  offrant {{ discount.percentage }}% de réduction</p>
                                     </div>
                                     {% endif %}
                                 {% endfor %}
@@ -80,7 +80,7 @@
 
 
                             <div class="my-8 w-full flex justify-center lg:mt-6 lg:mb-8">
-                                <p class="bg-violet-800 py-3 lg:py-2 rounded-3xl text-white font-medium text-center w-fit lg:w-full lg:rounded-2xl btn-violet">
+                                <p class="bg-violet-800 py-3 px-2 rounded-3xl text-white font-medium text-center w-fit lg:w-full lg:rounded-2xl btn-violet">
                                     <a href="#" id="add-to-itinerary" data-location-id="{{ location.id }}">
                                         Ajouter à mon itinéraire
                                     </a>
