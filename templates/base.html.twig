@@ -16,12 +16,17 @@
         
             <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
             <link href='https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.css' rel='stylesheet' />
+            
              
             {{ encore_entry_link_tags('app') }}
         {% endblock %}
 
         {% block javascripts %}
             <script src="https://kit.fontawesome.com/d004286c36.js" crossorigin="anonymous"></script>
+
+            <script src="/tarteaucitron/tarteaucitron.js"></script>
+            {# <link rel="stylesheet" href="/tarteaucitron/css/tarteaucitron.css" /> #}
+            <script src="/js/cookie-consent.js"></script>
           
             {{ encore_entry_script_tags('app') }}
         {% endblock %}
