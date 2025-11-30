@@ -25,7 +25,6 @@
             <script src="https://kit.fontawesome.com/d004286c36.js" crossorigin="anonymous"></script>
 
             <script src="/tarteaucitron/tarteaucitron.js"></script>
-            {# <link rel="stylesheet" href="/tarteaucitron/css/tarteaucitron.css" /> #}
             <script src="/js/cookie-consent.js"></script>
           
             {{ encore_entry_script_tags('app') }}
@@ -43,7 +42,7 @@
                 </div>
             {% endfor %}
         {% endfor %}
-        <header class="fixed top-0 left-0 w-full z-50 bg-white border-b border-b-gray-200 md:h-[49px] flex items-center">
+        <header class="fixed top-0 left-0 w-full z-100 bg-white border-b border-b-gray-200 md:h-[49px] flex items-center">
         {% if app.user %}
             <nav class="hidden sm:block w-full">
                 <ul class='flex justify-between font-medium  text-violet-700 my-3 mx-6 lg:mx-44'>
@@ -70,15 +69,33 @@
         {% endif %}
         </header>
         <main class="flex-1 md:mt-[49px] lg:h-[calc(100vh-49px)] overflow-hidden">
-            
 
-            {% block body %}{% endblock %}  
+            {% block body %}{% endblock %}
         </main>
+        <footer class="border-t border-gray-200 bg-gray-100 text-violet-700 py-6 mt-10">
+            <div class="max-w-6xl mx-auto px-6 flex flex-col items-center justify-between gap-4 text-sm">
 
-         {# {% if app.user %}   
-        <footer class=" border-t border-t-gray-300 py-2 text-violet-700 bg-gray-100 h-[100px] fixed bottom-0 w-full text-sm">
+                <div class="flex items-center gap-2">
+                    <span class="text-xl">⚫️</span>
+                    <span class="font-semibold">ShareMyWay</span>
+                </div>
+
+                <nav class="flex flex-wrap items-center justify-center gap-4 text-violet-700" target="_blank">
+                    <a href="{{ path('cgu') }}" class="hover:underline" target="_blank">CGU</a>
+                    <a href="{{ path('politique_confidentialite') }}" class="hover:underline" target="_blank">Politique de confidentialité</a>
+                    <a href="{{ path('politique_cookies') }}" class="hover:underline" target="_blank">Politique de cookies</a>
+                    <a href="#tarteaucitron" class="hover:underline" target="_blank">Gérer mes cookies</a>
+                    <a href="{{ path('mentions_legales') }}" class="hover:underline" target="_blank">Mentions légales</a>
+                    <a href="{{ path('contact') }}" class="hover:underline" target="_blank">Contact</a>
+                </nav>
+
+                <div class="text-gray-500 text-xs">
+                    © {{ "now"|date("Y") }} ShareMyWay — Tous droits réservés
+                </div>
+
+            </div>
         </footer>
-        {% endif %} #}
+
         <script>
             document.addEventListener("DOMContentLoaded", () => {
             const flashMessages = document.querySelectorAll(".flash-message");

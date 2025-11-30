@@ -1,0 +1,98 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}CGU – ShareMyWay{% endblock %}
+
+{% block body %}
+<section class="max-w-4xl mx-auto px-6 py-10 space-y-6 text-sm leading-relaxed">
+    <h1 class="text-2xl font-semibold text-violet-800 mb-4">
+        Conditions Générales d’Utilisation (CGU)
+    </h1>
+
+    <p>
+        Les présentes Conditions Générales d’Utilisation (ci-après les « CGU ») ont pour objet
+        de définir les modalités et conditions d’utilisation du site
+        <strong>ShareMyWay</strong> (ci-après le « Site »).
+    </p>
+
+    <h2 class="text-lg font-semibold text-violet-800 mt-6">1. Présentation du service</h2>
+    <p>
+        ShareMyWay est un site permettant aux utilisateurs de créer des itinéraires à partir
+        des lieux référencés sur le Site, de découvrir les itinéraires créés par d’autres
+        utilisateurs, de laisser des avis/commentaires et de mettre des lieux en favoris.
+        Le Site est réalisé dans le cadre d’un projet de diplôme.
+    </p>
+
+    <h2 class="text-lg font-semibold text-violet-800 mt-6">2. Accès au Site</h2>
+    <p>
+        L’accès au Site est gratuit (hors coût de connexion Internet) et ouvert à tout
+        utilisateur disposant d’un accès au réseau Internet. Certaines fonctionnalités peuvent
+        nécessiter la création d’un compte utilisateur.
+    </p>
+
+    <h2 class="text-lg font-semibold text-violet-800 mt-6">3. Création de compte</h2>
+    <p>
+        Pour utiliser certaines fonctionnalités (création d’itinéraires, avis, favoris), 
+        l’utilisateur peut être amené à créer un compte. L’utilisateur s’engage à fournir 
+        des informations exactes et à jour, et à maintenir la confidentialité de ses 
+        identifiants.
+    </p>
+
+    <h2 class="text-lg font-semibold text-violet-800 mt-6">4. Contenus publiés par les utilisateurs</h2>
+    <p>
+        L’utilisateur reste seul responsable des contenus (itinéraires, avis, commentaires, etc.)
+        qu’il publie sur le Site. Il s’engage à ne pas publier de contenus :
+    </p>
+    <ul class="list-disc list-inside ml-4">
+        <li>contraires à l’ordre public ou aux bonnes mœurs ;</li>
+        <li>diffamatoires, injurieux, haineux, violents ou discriminatoires ;</li>
+        <li>portant atteinte à des droits de tiers (droit d’auteur, image, vie privée, etc.).</li>
+    </ul>
+    <p>
+        L’éditeur du Site se réserve le droit de supprimer sans préavis tout contenu jugé
+        inapproprié ou non conforme aux présentes CGU.
+    </p>
+
+    <h2 class="text-lg font-semibold text-violet-800 mt-6">5. Propriété intellectuelle</h2>
+    <p>
+        La structure générale du Site ainsi que les textes, graphiques, logos, design et
+        éléments le composant sont la propriété de l’éditeur ou font l’objet d’une licence
+        d’utilisation. Toute reproduction ou représentation, totale ou partielle, sans
+        autorisation est interdite.
+    </p>
+
+    <h2 class="text-lg font-semibold text-violet-800 mt-6">6. Responsabilité</h2>
+    <p>
+        Le Site est fourni « en l’état », dans le cadre d’un projet étudiant. Bien que tout
+        soit mis en œuvre pour assurer la fiabilité des informations, l’éditeur ne peut
+        garantir l’exactitude, l’exhaustivité ou la mise à jour de l’ensemble des contenus.
+    </p>
+    <p>
+        L’éditeur ne saurait être tenu responsable en cas de :
+    </p>
+    <ul class="list-disc list-inside ml-4">
+        <li>difficultés de fonctionnement ou interruption temporaire du Site ;</li>
+        <li>perte de données ou dommages résultant de l’utilisation du Site ;</li>
+        <li>contenus publiés par les utilisateurs.</li>
+    </ul>
+
+    <h2 class="text-lg font-semibold text-violet-800 mt-6">7. Données personnelles et cookies</h2>
+    <p>
+        Pour toute information relative au traitement des données personnelles et à
+        l’utilisation des cookies, l’utilisateur est invité à consulter la
+        <a href="{{ path('politique_confidentialite') }}" class="text-violet-700 underline">Politique de confidentialité</a>
+        et la
+        <a href="{{ path('politique_cookies') }}" class="text-violet-700 underline">Politique de cookies</a>.
+    </p>
+
+    <h2 class="text-lg font-semibold text-violet-800 mt-6">8. Modification des CGU</h2>
+    <p>
+        L’éditeur se réserve le droit de modifier les présentes CGU à tout moment.
+        La version en vigueur est celle accessible sur le Site à la date de consultation.
+    </p>
+
+    <h2 class="text-lg font-semibold text-violet-800 mt-6">9. Droit applicable</h2>
+    <p>
+        Les présentes CGU sont soumises au droit français.
+    </p>
+</section>
+{% endblock %}

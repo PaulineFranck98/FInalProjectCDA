@@ -1,0 +1,105 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Politique de confidentialité – ShareMyWay{% endblock %}
+
+{% block body %}
+<section class="max-w-4xl mx-auto px-6 py-10 space-y-6 text-sm leading-relaxed">
+    <h1 class="text-2xl font-semibold text-violet-800 mb-4">
+        Politique de confidentialité
+    </h1>
+
+    <p>
+        La présente Politique de confidentialité a pour objectif d’informer les utilisateurs
+        du site <strong>ShareMyWay</strong> sur la manière dont leurs données personnelles
+        peuvent être collectées, traitées et protégées.
+    </p>
+
+    <h2 class="text-lg font-semibold text-violet-800 mt-6">1. Responsable du traitement</h2>
+    <p>
+        Le site ShareMyWay est développé dans le cadre d’un projet de diplôme.
+        Aucune structure juridique n’est actuellement constituée.  
+        Pour toute question liée aux données personnelles, vous pouvez contacter :
+    </p>
+    <p>
+        Email : <a href="mailto:sharemyway@gmail.com" class="text-violet-700 underline">sharemyway@gmail.com</a><br>
+        Adresse : adresse disponible sur demande.
+    </p>
+
+    <h2 class="text-lg font-semibold text-violet-800 mt-6">2. Données collectées</h2>
+    <p>
+        Selon votre utilisation du Site, les données suivantes peuvent être collectées :
+    </p>
+    <ul class="list-disc list-inside ml-4">
+        <li>Informations de compte (adresse e-mail, pseudonyme, mot de passe chiffré) ;</li>
+        <li>Données de navigation (pages consultées, actions réalisées, préférences) ;</li>
+        <li>Contenus que vous publiez (itinéraires, avis, favoris).</li>
+    </ul>
+
+    <h2 class="text-lg font-semibold text-violet-800 mt-6">3. Finalités des traitements</h2>
+    <p>Les données sont utilisées pour :</p>
+    <ul class="list-disc list-inside ml-4">
+        <li>permettre la création et la gestion de votre compte ;</li>
+        <li>permettre la création, la consultation et le partage d’itinéraires ;</li>
+        <li>afficher vos avis et favoris ;</li>
+        <li>améliorer le fonctionnement et l’ergonomie du Site ;</li>
+        <li>répondre à vos demandes via la page de contact.</li>
+    </ul>
+
+    <h2 class="text-lg font-semibold text-violet-800 mt-6">4. Base légale</h2>
+    <p>
+        Les traitements sont fondés sur :
+    </p>
+    <ul class="list-disc list-inside ml-4">
+        <li>votre consentement (par exemple pour certains cookies) ;</li>
+        <li>l’exécution des fonctionnalités que vous utilisez sur le Site ;</li>
+        <li>l’intérêt légitime à assurer le bon fonctionnement du Site.</li>
+    </ul>
+
+    <h2 class="text-lg font-semibold text-violet-800 mt-6">5. Durée de conservation</h2>
+    <p>
+        Les données sont conservées pendant la durée d’existence de votre compte
+        ou le temps nécessaire à la réalisation des finalités mentionnées ci-dessus,
+        puis peuvent être archivées ou supprimées.
+    </p>
+
+    <h2 class="text-lg font-semibold text-violet-800 mt-6">6. Destinataires des données</h2>
+    <p>
+        Les données collectées sont destinées uniquement au développement et au suivi du projet
+        ShareMyWay. Elles ne sont pas cédées à des tiers à des fins commerciales.
+    </p>
+
+    <h2 class="text-lg font-semibold text-violet-800 mt-6">7. Vos droits</h2>
+    <p>
+        Conformément à la réglementation applicable, vous disposez des droits suivants :
+    </p>
+    <ul class="list-disc list-inside ml-4">
+        <li>droit d’accès à vos données ;</li>
+        <li>droit de rectification des données inexactes ou incomplètes ;</li>
+        <li>droit d’effacement dans certains cas ;</li>
+        <li>droit de limitation du traitement ;</li>
+        <li>droit d’opposition au traitement ;</li>
+        <li>droit à la portabilité des données (le cas échéant).</li>
+    </ul>
+    <p>
+        Pour exercer vos droits, vous pouvez contacter :
+        <a href="mailto:sharemyway@gmail.com" class="text-violet-700 underline">sharemyway@gmail.com</a>.
+    </p>
+
+    <h2 class="text-lg font-semibold text-violet-800 mt-6">8. Cookies</h2>
+    <p>
+        Le Site utilise des cookies et autres traceurs pour améliorer votre expérience et
+        mesurer certains usages. La gestion des cookies est assurée via le gestionnaire
+        de consentement <strong>Tarteaucitron.js</strong>.
+    </p>
+    <p>
+        Pour plus d’informations, consultez la
+        <a href="{{ path('politique_cookies') }}" class="text-violet-700 underline">
+            Politique de cookies
+        </a>
+        et/ou
+        <a href="#tarteaucitron" class="text-violet-700 underline">
+            gérez vos préférences
+        </a>.
+    </p>
+</section>
+{% endblock %}

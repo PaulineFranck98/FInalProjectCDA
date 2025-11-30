@@ -17,11 +17,4 @@ class HomeController extends AbstractController
             'controller_name' => 'HomeController',
         ]);
     }
-
-
-    #[Route('/politique-cookies', name: 'politique_cookies')]
-    public function politiqueCookies(): Response
-    {
-        return $this->render('politique_cookies.html.twig');
-    }
 }

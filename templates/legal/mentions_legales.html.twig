@@ -1,0 +1,67 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mentions légales – ShareMyWay{% endblock %}
+
+{% block body %}
+<section class="max-w-4xl mx-auto px-6 py-10 space-y-6 text-sm leading-relaxed">
+    <h1 class="text-2xl font-semibold text-violet-800 mb-4">
+        Mentions légales
+    </h1>
+
+    <h2 class="text-lg font-semibold text-violet-800 mt-6">1. Éditeur du site</h2>
+    <p>
+        Le site <strong>ShareMyWay</strong> est développé dans le cadre d’un projet de diplôme.
+        Il n’est pas exploité à ce jour par une structure juridique immatriculée.
+    </p>
+    <p>
+        Contact principal :<br>
+        Email : <a href="mailto:sharemyway@gmail.com" class="text-violet-700 underline">sharemyway@gmail.com</a><br>
+        Adresse : adresse disponible sur demande.
+    </p>
+
+    <h2 class="text-lg font-semibold text-violet-800 mt-6">2. Hébergeur</h2>
+    <p>
+        Le site est hébergé par :
+    </p>
+    <p>
+        <strong>HOSTINGER operations, UAB</strong><br>
+        Švitrigailos str. 34, Vilnius 03230, Lithuania<br>
+        Téléphone : +370 6450 3378<br>
+        Email : domains@hostinger.com
+    </p>
+
+    <h2 class="text-lg font-semibold text-violet-800 mt-6">3. Propriété intellectuelle</h2>
+    <p>
+        L’ensemble des éléments composant le Site (textes, design, interface, fonctionnalités,
+        logo, etc.) sont protégés par la législation en vigueur sur la propriété intellectuelle.
+        Toute reproduction, représentation, modification ou diffusion sans autorisation est
+        interdite.
+    </p>
+
+    <h2 class="text-lg font-semibold text-violet-800 mt-6">4. Liens hypertextes</h2>
+    <p>
+        Le Site peut contenir des liens vers d’autres sites. L’éditeur ne peut être tenu
+        responsable du contenu de ces sites tiers.
+    </p>
+
+    <h2 class="text-lg font-semibold text-violet-800 mt-6">5. Responsabilité</h2>
+    <p>
+        Le Site est fourni dans le cadre d’un projet étudiant. L’éditeur ne garantit pas
+        l’absence d’erreurs, de bugs ou d’interruptions de service. L’utilisation du Site
+        se fait sous la seule responsabilité de l’utilisateur.
+    </p>
+
+    <h2 class="text-lg font-semibold text-violet-800 mt-6">6. Données personnelles</h2>
+    <p>
+        Pour toute information concernant les données personnelles et l’utilisation des
+        cookies, l’utilisateur est invité à consulter la
+        <a href="{{ path('politique_confidentialite') }}" class="text-violet-700 underline">
+            Politique de confidentialité
+        </a>
+        et la
+        <a href="{{ path('politique_cookies') }}" class="text-violet-700 underline">
+            Politique de cookies
+        </a>.
+    </p>
+</section>
+{% endblock %}

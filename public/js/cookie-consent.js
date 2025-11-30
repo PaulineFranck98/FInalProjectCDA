@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
     tarteaucitron.init({
-        "privacyUrl": "/politique-cookies",
+        "privacyUrl": "/legal/politique-cookies",
         "hashtag": "#tarteaucitron",
         "cookieName": "tarteaucitron",
         "orientation": "middle",
