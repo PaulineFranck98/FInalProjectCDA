@@ -3,33 +3,25 @@
     {% for itinerary in itinerariesData %}
         {% set creator = itinerary.createdBy %}
         {% set isOwner = app.user and creator and app.user.id == creator.id %}
-
         <div class="bg-white border border-gray-100 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between overflow-hidden">
             <div class="p-4 flex flex-col flex-grow">
                 <div class="flex items-center justify-between mb-3">
                     <h3 class="text-lg font-semibold text-violet-700 leading-tight truncate">
                         {{ itinerary.itineraryName }}
                     </h3>
-
                     {% if app.user and not isOwner %}
-                        <button 
-                            class="favorite-btn text-xl transition cursor-pointer"
-                            data-itinerary-id="{{ itinerary.id }}"
-                            title="{{ app.user.favoriteItineraries.contains(itinerary) ? 'Retirer des favoris' : 'Ajouter aux favoris' }}"
-                        >
+                        <button class="favorite-btn text-xl transition cursor-pointer" data-itinerary-id="{{ itinerary.id }}" title="{{ app.user.favoriteItineraries.contains(itinerary) ? 'Retirer des favoris' : 'Ajouter aux favoris' }}">
                             {% if app.user.favoriteItineraries.contains(itinerary) %}
-                                <i class="fa-solid fa-heart text-violet-600"></i>
+                                <i class="fa-solid fa-heart text-red-500"></i>
                             {% else %}
-                                <i class="fa-regular fa-heart text-gray-400 hover:text-violet-600"></i>
+                                <i class="fa-regular fa-heart text-red-500 hover:text-red-600"></i>
                             {% endif %}
                         </button>
                     {% endif %}
                 </div>
-
                 <p class="text-sm text-gray-500 mb-3 flex items-center">
                     <i class="fa-regular fa-user mr-2 text-violet-500"></i>
                     Créé par
-
                     {% if creator and creator.username is not empty %}
                         {% if isOwner %}
                             <a href="{{ path('show_dashboard') }}" class="ml-1 font-semibold hover:text-violet-700">
@@ -55,11 +47,8 @@
                     {% endif %}
                 </div>
             </div>
-
-            <div class="bg-gray-50 p-3 flex justify-between items-center border-t border-gray-100">
-                <p class="text-xs text-gray-400">
-                    Publié le {{ itinerary.creationDate|date('d/m/Y') }}
-                </p>
+            <div class="bg-gray-100 p-3 flex justify-between items-center border-t border-gray-100">
+                <p class="text-xs text-gray-700">Publié le {{ itinerary.creationDate|date('d/m/Y') }}</p>
                 {% if isOwner %}
                     <a href="{{ path('itinerary_detail', { itineraryId: itinerary.id }) }}" class="text-sm bg-violet-700 text-white px-3 py-1.5 rounded-md hover:bg-violet-800 transition" title="Voir le détail de votre itinéraire">
                         <i class="fa-solid fa-eye mr-1"></i> Voir
@@ -73,17 +62,13 @@
         </div>
     {% endfor %}
 </div>
-
 {% if pagination and pagination.totalPages > 1 %}
     <nav class="flex justify-center mt-6" aria-label="Pagination">
         <ul class="inline-flex items-center -space-x-px">
             {% set prevPage = pagination.page > 1 ? pagination.page - 1 : 1 %}
             <li>
-                <a href="?page={{ prevPage }}" data-page="{{ prevPage }}"
-                   class="px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700"
-                   aria-label="Page précédente">&laquo;</a>
+                <a href="?page={{ prevPage }}" data-page="{{ prevPage }}" class="px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700" aria-label="Page précédente">&laquo;</a>
             </li>
-
             {% for p in 1..pagination.totalPages %}
                 <li>
                     <a href="?page={{ p }}" data-page="{{ p }}"
@@ -100,9 +85,7 @@
 
             {% set nextPage = pagination.page < pagination.totalPages ? pagination.page + 1 : pagination.totalPages %}
             <li>
-                <a href="?page={{ nextPage }}" data-page="{{ nextPage }}"
-                   class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700"
-                   aria-label="Page suivante">&raquo;</a>
+                <a href="?page={{ nextPage }}" data-page="{{ nextPage }}" class="px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700" aria-label="Page suivante">&raquo;</a>
             </li>
         </ul>
     </nav>

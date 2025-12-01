@@ -2,7 +2,7 @@
 {% block title %}{{ itinerary.itineraryName }} - Itinéraire public{% endblock %}
 
 {% block body %}
-<div class="lg:flex lg:w-[80%] lg:h-[calc(100vh-100px)] mt-6 lg:mx-auto gap-6">
+<div class="lg:flex max-w-7xl mx-auto lg:h-[calc(100vh-100px)] mt-6 mb-6 gap-6">
 
     <div id="itinerary-locations" class="flex flex-col lg:w-1/2 min-w-[375px] lg:rounded-xl lg:p-4 lg:shadow max-h-[calc(100vh-2rem)]">
         <div class="flex-shrink-0 mb-4">
@@ -148,13 +148,7 @@
     </div>
 
     <div class="lg:w-1/2 lg:h-full h-screen relative">
-        <div id="itinerary-map"
-             class="w-full bg-gray-200 rounded-xl h-full"
-             data-locations='{{ locations|map(item => {
-                 "id": item.data.id,
-                 "order": item.order,
-                 "data": item.data
-             })|json_encode }}'>
+        <div id="itinerary-map" class="w-full bg-gray-200 rounded-xl h-full" data-locations='{{ locations|map(item => { "id": item.data.id, "order": item.order, "data": item.data })|json_encode }}'>
              <span class="text-gray-500">Carte</span>
         </div>
     </div>

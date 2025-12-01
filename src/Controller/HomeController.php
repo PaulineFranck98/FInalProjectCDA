@@ -27,8 +27,8 @@ class HomeController extends AbstractController
                 'data' => $locationData,
                 'count' => $item['usageCount']
             ];
-        }
-;
+        };
+
 
         return $this->render('home/index.html.twig', [
             'popular_locations' => $locationsData,

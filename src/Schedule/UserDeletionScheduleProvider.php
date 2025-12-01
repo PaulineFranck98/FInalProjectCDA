@@ -14,7 +14,6 @@ class UserDeletionScheduleProvider implements ScheduleProviderInterface
     public function getSchedule(): Schedule
     {
         return (new Schedule())
-            // 1 fois par jour
             ->add(
                 RecurringMessage::every('1 day', new UserDeletionMessage())
             );

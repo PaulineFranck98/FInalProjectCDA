@@ -376,7 +376,7 @@ class SecurityController extends AbstractController
     #[Route('/profile/cancel-deletion', name: 'cancel_deletion')]
     public function cancelDeletion(EntityManagerInterface $entityManager): Response
     {
-            /** @var User $user */
+        /** @var User $user */
         $user = $this->getUser();
 
         $user->setIsPendingDeletion(false);
@@ -384,7 +384,7 @@ class SecurityController extends AbstractController
 
         $entityManager->flush();
 
-        $this->addFlash('success', "Votre compte a été réactivé !");
+        $this->addFlash('success', "Votre compte a été réactivé");
         return $this->redirectToRoute('show_profile');
     }
 }

@@ -23,8 +23,8 @@
             </div>
         </div>
         <div class="flex-1 flex justify-center md:justify-end relative">
-            <img src="/img/mockups/laptop_mockup.webp" alt="Aperçu de l’application ShareMyWay affichée sur ordinateur" class="w-[430px] md:w-[520px] drop-shadow-xl select-none">
-            <img src="/img/mockups/phone-mockup.webp" alt="Aperçu de l’application ShareMyWay affichée sur téléphone" class="w-36 md:w-48 absolute top-10 left-0 md:left-14  drop-shadow-2xl select-none rotate-[5deg]">
+            <img src="/img/mockups/laptop_mockup.webp"  loading="lazy" alt="Aperçu de l’application ShareMyWay affichée sur ordinateur" class="w-[430px] md:w-[520px] drop-shadow-xl select-none">
+            <img src="/img/mockups/phone-mockup.webp" loading="lazy" alt="Aperçu de l’application ShareMyWay affichée sur téléphone" class="w-36 md:w-48 absolute top-10 left-0 md:left-14  drop-shadow-2xl select-none rotate-[5deg]">
         </div>
     </div>
 </section>
@@ -48,7 +48,7 @@
 <section id="why-sharemyway" class="py-20 bg-gradient-to-b from-white to-violet-50">
     <div class="max-w-7xl mx-auto px-6">
         <h2 class="text-2xl md:text-3xl font-semibold text-violet-800 mb-12 text-center">
-            Pourquoi utiliser ShareMyWay ?
+            Pourquoi rejoindre la communauté ?
         </h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
             <div class="text-center space-y-4">
@@ -115,7 +115,7 @@
                 {% for item in popular_itineraries %}
                     {% set itinerary = item.itinerary %}
                     {% set favorites = item.favoritesCount %}
-                    <a href="{{ path('itinerary_detail', { itineraryId: itinerary.id }) }}" class="relative block">
+                    <a href="{{ path('public_itinerary_detail', { itineraryId: itinerary.id }) }}" class="relative block">
                         <div class="absolute -top-3 -left-3 bg-violet-600   text-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg text-lg font-semibold z-10">
                             {{ loop.index }}
                         </div>
