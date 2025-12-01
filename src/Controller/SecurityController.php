@@ -77,7 +77,7 @@ class SecurityController extends AbstractController
     }
 
 
-    #[Route(path: '/account/dashboard', name: 'show_dashboard')]
+    #[Route(path: '/user/account/dashboard', name: 'show_dashboard')]
     public function showDashboard(ItineraryRepository $itineraryRepository, RatingRepository $ratingRepository, ApiHttpClient $apiHttpClient): Response
     {
         /** @var User $user */
@@ -127,7 +127,7 @@ class SecurityController extends AbstractController
     }
 
 
-    #[Route(path: '/account/ratings', name: 'show_ratings')]
+    #[Route(path: '/user/account/ratings', name: 'show_ratings')]
     public function showRatings(ApiHttpClient $apiHttpClient): Response
     {
         /** @var User $user */
@@ -158,7 +158,7 @@ class SecurityController extends AbstractController
     }
 
 
-   #[Route(path: '/account/itineraries', name: 'show_itineraries')]
+   #[Route(path: '/user/account/itineraries', name: 'show_itineraries')]
     public function showItineraries(ItineraryLocationRepository $itineraryLocationRepository, ApiHttpClient $apiHttpClient): Response
     {
         /** @var User $user */
@@ -204,13 +204,13 @@ class SecurityController extends AbstractController
         ]);
     }
 
-    #[Route(path:'/account/favorite/itineraries', name: 'favorite_itineraries')]
+    #[Route(path:'/user/account/favorite/itineraries', name: 'favorite_itineraries')]
     public function favoriteItineraries() : Response 
     {
         return $this->render('profile/favorite_itineraries.html.twig');
     }
 
-    #[Route('/account/visited-locations', name: 'show_visited_locations')]
+    #[Route('/user/account/visited-locations', name: 'show_visited_locations')]
     public function showVisitedLocations(UserVisitedLocationRepository $visitedRepository, ApiHttpClient $apiClient): Response 
     {
         /** @var \App\Entity\User $user */
@@ -250,7 +250,7 @@ class SecurityController extends AbstractController
     }
 
     // profile
-    #[Route(path: '/profile', name: 'show_profile')]
+    #[Route(path: '/user/profile', name: 'show_profile')]
     public function showProfile(Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager): Response
     {
         /** @var \App\Entity\User $user */
@@ -278,7 +278,7 @@ class SecurityController extends AbstractController
     }
 
 
-    #[Route('/profile/update-username', name: 'profile_update_username', methods: ['POST'])]
+    #[Route('/user/profile/update-username', name: 'profile_update_username', methods: ['POST'])]
     public function updateUsername(Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
         /** @var User $user */
@@ -297,7 +297,7 @@ class SecurityController extends AbstractController
         return new JsonResponse(['success' => true]);
     }
 
-    #[Route('/profile/update-email', name: 'profile_update_email', methods: ['POST'])]
+    #[Route('/user/profile/update-email', name: 'profile_update_email', methods: ['POST'])]
     public function updateEmail(Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
         /** @var User $user */
@@ -316,7 +316,7 @@ class SecurityController extends AbstractController
         return new JsonResponse(['success' => true]);
     }
 
-    #[Route('/profile/update-picture', name: 'profile_update_picture', methods: ['POST'])]
+    #[Route('/user/profile/update-picture', name: 'profile_update_picture', methods: ['POST'])]
     public function updatePicture(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): JsonResponse
     {
         /** @var User $user */
@@ -354,7 +354,7 @@ class SecurityController extends AbstractController
         ]);
     }
 
-    #[Route('/profile/delete', name: 'delete_account', methods: ['POST'])]
+    #[Route('/user/profile/delete', name: 'delete_account', methods: ['POST'])]
     public function deleteAccount(EntityManagerInterface $entityManager): Response 
     {
         /** @var User $user */
@@ -373,7 +373,7 @@ class SecurityController extends AbstractController
         return $this->redirectToRoute('app_logout');
     }
 
-    #[Route('/profile/cancel-deletion', name: 'cancel_deletion')]
+    #[Route('/user/profile/cancel-deletion', name: 'cancel_deletion')]
     public function cancelDeletion(EntityManagerInterface $entityManager): Response
     {
         /** @var User $user */

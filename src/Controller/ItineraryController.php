@@ -42,7 +42,7 @@ class ItineraryController extends AbstractController
     }
 
 
-    #[Route('/itinerary/new', name:'itinerary_new')]
+    #[Route('/user/itinerary/new', name:'itinerary_new')]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $itinerary = new Itinerary();
@@ -84,7 +84,7 @@ class ItineraryController extends AbstractController
     }
 
 
-    #[Route('/itinerary/{itineraryId}', name:'itinerary_detail')]
+    #[Route('/user/itinerary/{itineraryId}', name:'itinerary_detail')]
     public function itineraryDetail(int $itineraryId, ApiHttpClient $apiHttpClient, ItineraryRepository $itineraryRepository, ItineraryLocationRepository $itineraryLocationRepository, RatingRepository $ratingRepository) : Response 
     {
         $itinerary = $itineraryRepository->find($itineraryId);
@@ -123,7 +123,7 @@ class ItineraryController extends AbstractController
         ]);
     }
 
-    #[Route('/itinerary/{itineraryId}/edit', name: 'itinerary_edit')]
+    #[Route('/user/itinerary/{itineraryId}/edit', name: 'itinerary_edit')]
     public function edit(int $itineraryId, Request $request, EntityManagerInterface $entityManager, ItineraryRepository $itineraryRepository): Response {
         $itinerary = $itineraryRepository->find($itineraryId);
 
@@ -152,7 +152,7 @@ class ItineraryController extends AbstractController
         ]);
     }
 
-    #[Route('/itinerary/{itineraryId}/delete', name: 'itinerary_delete', methods: ['POST'])]
+    #[Route('/user/itinerary/{itineraryId}/delete', name: 'itinerary_delete', methods: ['POST'])]
     public function delete(int $itineraryId, Request $request, EntityManagerInterface $entityManager, ItineraryRepository $itineraryRepository): Response {
         $itinerary = $itineraryRepository->find($itineraryId);
 
@@ -178,7 +178,7 @@ class ItineraryController extends AbstractController
     }
 
 
-    #[Route('/itinerary/{itineraryId}/reorder', name: 'itinerary_reorder', methods:['POST'])]
+    #[Route('/user/itinerary/{itineraryId}/reorder', name: 'itinerary_reorder', methods:['POST'])]
     public function reorderItineraryLocations(int $itineraryId, Request $request, ItineraryRepository $itineraryRepository, ItineraryLocationRepository $itineraryLocationRepository, EntityManagerInterface $entityManager) : JsonResponse 
     {
         $itinerary = $itineraryRepository->find($itineraryId); 
@@ -214,7 +214,7 @@ class ItineraryController extends AbstractController
         return $this->json(['success' => true]);
     }
 
-    #[Route('/itinerary/{itineraryId}/add-location/{locationId}', name:'itinerary_add_location')]
+    #[Route('/user/itinerary/{itineraryId}/add-location/{locationId}', name:'itinerary_add_location')]
     public function addLocationToItinerary(int $itineraryId, string $locationId, EntityManagerInterface $entityManager, ItineraryRepository $itineraryRepository,ItineraryLocationRepository $itineraryLocationRepository) : Response 
     {
         $itinerary = $itineraryRepository->find($itineraryId);
@@ -255,7 +255,7 @@ class ItineraryController extends AbstractController
         ]);
     }  
 
-    #[Route('/itinerary/{itineraryId}/remove-location/{locationId}', name: 'itinerary_remove_location', methods: ['POST'])]
+    #[Route('/user/itinerary/{itineraryId}/remove-location/{locationId}', name: 'itinerary_remove_location', methods: ['POST'])]
     public function removeLocationFromItinerary(int $itineraryId, string $locationId, Request $request, ItineraryRepository $itineraryRepository, ItineraryLocationRepository $itineraryLocationRepository, EntityManagerInterface $entityManager): Response {
         $itinerary = $itineraryRepository->find($itineraryId);
 

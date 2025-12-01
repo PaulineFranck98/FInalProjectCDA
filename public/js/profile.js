@@ -74,4 +74,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    document.getElementById('delete-account-btn').addEventListener('click', () => {
+        document.getElementById('delete-modal').classList.remove('hidden');
+    });
+
+    document.getElementById('cancel-delete').addEventListener('click', () => {
+        document.getElementById('delete-modal').classList.add('hidden');
+    });
 });

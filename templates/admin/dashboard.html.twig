@@ -3,17 +3,17 @@
 {% block title %}Tableau de bord admin{% endblock %}
 
 {% block body %}
-<section id="admin-dashboard" class="flex min-h-0 lg:h-[calc(100vh-49px)]">
-    {% include 'partials/_profile_aside.html.twig' %}
+<section id="admin-dashboard" class=" mt-6 mb-6 max-w-7xl mx-auto flex min-h-0 lg:h-[calc(100vh-49px)]">
+    {% include 'profile/partials/_profile_aside.html.twig' %}
 
-    <section id="dashboard-container" class="border border-gray-200 w-full p-8 overflow-y-auto scrollbar-hide bg-gray-50">
+    <section id="dashboard-container" class="ml-5 rounded-xl border border-gray-200 w-full p-8 overflow-y-auto scrollbar-hide bg-gray-50">
 
         <h1 class="text-2xl font-semibold text-violet-800 mb-8">Tableau de bord</h1>
 
   
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
     
-            <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm flex flex-col justify-between hover:shadow-md transition">
+            <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm flex flex-col justify-between hover:shadow-md transition">
                 <div class="flex justify-between items-center">
                     <p class="text-sm text-gray-500">Total utilisateurs</p>
                     <i class="fa-regular fa-user text-violet-600 text-xl"></i>
@@ -22,7 +22,7 @@
             </div>
 
       
-            <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm flex flex-col justify-between hover:shadow-md transition">
+            <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm flex flex-col justify-between hover:shadow-md transition">
                 <div class="flex justify-between items-center">
                     <p class="text-sm text-gray-500">Inscriptions cette semaine</p>
                     <i class="fa-solid fa-user-plus text-violet-600 text-xl"></i>
@@ -40,7 +40,7 @@
                 </div>
             </div>
 
-            <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm flex flex-col justify-between hover:shadow-md transition">
+            <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm flex flex-col justify-between hover:shadow-md transition">
                 <div class="flex justify-between items-center">
                     <p class="text-sm text-gray-500">Total itinéraires</p>
                     <i class="fa-regular fa-map text-violet-600 text-xl"></i>
@@ -49,7 +49,7 @@
             </div>
 
           
-            <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm flex flex-col justify-between hover:shadow-md transition">
+            <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm flex flex-col justify-between hover:shadow-md transition">
                 <div class="flex justify-between items-center">
                     <p class="text-sm text-gray-500">Itinéraires cette semaine</p>
                     <i class="fa-solid fa-route text-violet-600 text-xl"></i>
@@ -69,9 +69,9 @@
         </div>
 
      
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
          
-            <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm flex flex-col justify-between hover:shadow-md transition">
+            <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm flex flex-col justify-between hover:shadow-md transition">
                 <div class="flex justify-between items-center">
                     <p class="text-sm text-gray-500">Total lieux</p>
                     <i class="fa-solid fa-location-dot text-violet-600 text-xl"></i>
@@ -80,7 +80,7 @@
             </div>
 
    
-            <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm flex flex-col justify-between hover:shadow-md transition">
+            <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm flex flex-col justify-between hover:shadow-md transition">
                 <div class="flex justify-between items-center">
                     <p class="text-sm text-gray-500">Lieux cette semaine</p>
                     <i class="fa-regular fa-map text-violet-600 text-xl"></i>
@@ -102,7 +102,7 @@
             <div class="bg-transparent lg:block hidden"></div>
         </div>
 
-        <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-6">
+        <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-5">
             <h2 class="text-xl font-semibold text-violet-800 mb-4">Derniers lieux ajoutés</h2>
 
             {% if latestLocations is empty %}
@@ -132,7 +132,6 @@
                 </div>
             {% endif %}
         </div>
-
     </section>
 </section>
 {% endblock %}

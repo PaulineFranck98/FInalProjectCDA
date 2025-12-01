@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class FavoriteController extends AbstractController
 {
-    #[Route('/favorite/itinerary/{id}', name: 'itinerary_favorite', methods: ['POST'])]
+    #[Route('/user/favorite/itinerary/{id}', name: 'itinerary_favorite', methods: ['POST'])]
     public function itineraryFavorite( Itinerary $itinerary, EntityManagerInterface $entityManager): JsonResponse 
     {
         /** @var User $user */

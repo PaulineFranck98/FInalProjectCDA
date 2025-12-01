@@ -104,7 +104,7 @@ class RegistrationFormType extends HoneyPotType
 
             ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,
-                'label' => 'J\'ai lu et j\'accepte les <a href="#" class="text-violet-800 hover:underline hover:text-violet-900">conditions</a>',
+                'label' => 'J\'ai lu et j\'accepte les <a href="/cgu" target="_blank" class="text-violet-800 hover:underline hover:text-violet-900">conditions</a>',
                 'attr' => ['class' => 'accent-violet-700'],
                 'row_attr' => ['class' => 'flex justify-between w-full'],
                 'label_html' => true,

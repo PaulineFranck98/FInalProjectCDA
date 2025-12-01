@@ -30,7 +30,7 @@ class LocationController extends AbstractController
     // }
 
 
-    #[Route('/location', name: 'location_search')]
+    #[Route('/user/location', name: 'location_search')]
     public function search(Request $request, LocationSearchServiceInterface $locationSearchService, ApiHttpClient $apiHttpClient, RatingRepository $ratingRepository, UserVisitedLocationRepository $visitedRepository): Response
     {
         /** @var User|null $user */
@@ -112,7 +112,7 @@ class LocationController extends AbstractController
     }
 
     
-    #[Route('/location/{id}', name: 'location_detail')]
+    #[Route('/user/location/{id}', name: 'location_detail')]
     public function getLocation(string $id, ApiHttpClient $apiHttpClient, RatingRepository $ratingRepository, LocationDistanceService $distanceService): Response
     {   
         $location = $apiHttpClient->getLocation($id);
@@ -148,7 +148,7 @@ class LocationController extends AbstractController
         ]);
     } 
 
-    #[Route('/visited/location/{id}', name: 'add_visited_location', methods: ['POST'])]
+    #[Route('/user/visited/location/{id}', name: 'add_visited_location', methods: ['POST'])]
     public function addVisitedLocation(string $id, Request $request, EntityManagerInterface $entityManager, UserVisitedLocationRepository $visitedRepository): JsonResponse 
     {
         /** @var \App\Entity\User $user */
@@ -191,7 +191,7 @@ class LocationController extends AbstractController
         ]);
     }
 
-    #[Route('/visited/location/{id}', name: 'remove_visited_location', methods: ['DELETE'])]
+    #[Route('/user/visited/location/{id}', name: 'remove_visited_location', methods: ['DELETE'])]
     public function removeVisitedLocation(string $id, EntityManagerInterface $entityManager, UserVisitedLocationRepository $visitedRepository ): JsonResponse 
     {
         /** @var \App\Entity\User $user */

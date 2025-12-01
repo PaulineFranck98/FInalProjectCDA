@@ -1,7 +1,7 @@
 
 <aside class="flex flex-col w-full lg:w-[400px] bg-white border border-gray-200 rounded-xl shadow-sm py-6">
     <div class="flex flex-col items-center mb-8">
-        <div class="relative w-24 h-24 rounded-full overflow-hidden border-4 border-violet-100 shadow-md mb-3 group">
+        <div class="relative w-24 h-24 rounded-full overflow-hidden border-2 border-gray-200 mb-3 group">
 
             {% if app.user.profilePicture %}
                 {% if app.user.googleId %}
@@ -10,7 +10,7 @@
                     <img id="profile-img" src="{{ asset('uploads/' ~ app.user.profilePicture) }}" alt="Photo de profil" class="w-full h-full object-cover">
                 {% endif %}
             {% else %}
-                <img id="profile-img" src="{{ asset('images/default-avatar.png') }}" alt="Avatar par défaut" class="w-full h-full object-cover opacity-80">
+                <img id="profile-img" src="{{ asset('img/default-avatar.webp') }}" alt="Avatar par défaut" class="w-full h-full object-cover opacity-80">
             {% endif %}
 
             {% if app.user.googleId is null and not is_granted('ROLE_ADMIN') %}
@@ -41,6 +41,12 @@
                 <a href="{{ path('admin_list_users') }}" 
                    class="anchors-aside {{ current_route == 'admin_list_users' ? 'active-anchor-aside' }}">
                     <i class="fa-regular fa-user mr-5"></i>Utilisateurs
+                </a>
+            </li>
+             <li class="px-4 py-2">
+                <a href="{{ path('show_profile') }}" 
+                   class="anchors-aside {{ current_route == 'show_profile' ? 'active-anchor-aside' }}">
+                   <i class="fa-regular fa-circle-user mr-5"></i>Profil
                 </a>
             </li>
         </ul> 

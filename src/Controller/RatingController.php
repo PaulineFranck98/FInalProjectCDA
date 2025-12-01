@@ -22,7 +22,7 @@ final class RatingController extends AbstractController
         ]);
     }
 
-    #[Route('/rating/new/{locationId}', name:'new_rating')]
+    #[Route('/user/rating/new/{locationId}', name:'new_rating')]
     public function new(Request $request, EntityManagerInterface $entityManager, ApiHttpClient $apiHttpClient, RatingRepository $ratingRepository, string $locationId): Response 
     { 
         if (!$this->getUser()) {
@@ -68,7 +68,7 @@ final class RatingController extends AbstractController
         ]);
     }
 
-    #[Route('/rating/{id}/edit', name: 'edit_rating')]
+    #[Route('/user/rating/{id}/edit', name: 'edit_rating')]
     public function edit(Rating $rating, Request $request, EntityManagerInterface $entityManager, ApiHttpClient $apiHttpClient): Response 
     {
         $location = $apiHttpClient->getLocation($rating->getLocationId());
@@ -102,7 +102,7 @@ final class RatingController extends AbstractController
         ]);
     }
 
-    #[Route('/rating/{id}/delete', name: 'delete_rating', methods: ['POST'])]
+    #[Route('/user/rating/{id}/delete', name: 'delete_rating', methods: ['POST'])]
     public function delete(Rating $rating, Request $request, EntityManagerInterface $entityManager): Response 
     {
      

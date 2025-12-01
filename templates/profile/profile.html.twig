@@ -10,7 +10,7 @@
   
         {% include 'profile/partials/_profile_aside.html.twig' %}
 
-        <section id="profile-container" class="border border-gray-200 w-full  p-8  overflow-y-auto  scrollbar-hide bg-gray-50">
+        <section id="profile-container" class="rounded-xl border border-gray-200 w-full p-8 overflow-y-auto scrollbar-hide bg-gray-50">
 
             <h2 class="text-2xl font-semibold text-violet-700 mb-8">Mon profil</h2>
 
@@ -28,7 +28,7 @@
                 <div class="border border-gray-200 rounded-lg p-4 shadow-sm bg-white">
                     <div class="flex justify-between items-center">
                         <p class="text-gray-700 font-medium">Nom d’utilisateur</p>
-                        <button class="text-violet-700 hover:text-violet-900 edit-btn" data-target="username">
+                        <button class="text-violet-700 hover:text-violet-900 edit-btn cursor-pointer" data-target="username">
                             <i class="fa-solid fa-pen"></i>
                         </button>
                     </div>
@@ -36,9 +36,9 @@
 
                     <form id="form-username" class="hidden mt-3" data-field="username">
                         <input type="text" name="username" value="{{ app.user.username }}" class="border rounded-md px-2 py-1 w-full border-gray-300">
-                        <div class="flex justify-end gap-2 mt-3">
-                            <button type="button" class="cancel-btn text-gray-500 text-sm">Annuler</button>
-                            <button type="submit" class="bg-violet-800 text-white text-sm px-4 py-1 rounded-md">Enregistrer</button>
+                        <div class="flex justify-end gap-4 mt-3">
+                            <button type="button" class="cancel-btn text-gray-500 text-sm cursor-pointer">Annuler</button>
+                            <button type="submit" class="bg-violet-800 text-white text-sm px-4 py-1 rounded-md cursor-pointer">Enregistrer</button>
                         </div>
                     </form>
                 </div>
@@ -48,7 +48,7 @@
                         <p class="text-gray-700 font-medium">Adresse e-mail</p>
 
                         {% if app.user.googleId is null %}
-                            <button class="text-violet-700 hover:text-violet-900 edit-btn" data-target="email">
+                            <button class="text-violet-700 hover:text-violet-900 edit-btn cursor-pointer" data-target="email">
                                 <i class="fa-solid fa-pen"></i>
                             </button>
                         {% endif %}
@@ -59,9 +59,9 @@
                     {% if app.user.googleId is null %}
                         <form id="form-email" class="hidden mt-3" data-field="email">
                             <input type="email" name="email" value="{{ app.user.email }}" class="border rounded-md px-2 py-1 w-full border-gray-300">
-                            <div class="flex justify-end gap-2 mt-3">
-                                <button type="button" class="cancel-btn text-gray-500 text-sm">Annuler</button>
-                                <button type="submit" class="bg-violet-800 text-white text-sm px-4 py-1 rounded-md">Enregistrer</button>
+                            <div class="flex justify-end gap-4 mt-3">
+                                <button type="button" class="cancel-btn text-gray-500 text-sm cursor-pointer">Annuler</button>
+                                <button type="submit" class="bg-violet-800 text-white text-sm px-4 py-1 rounded-md cursor-pointer">Enregistrer</button>
                             </div>
                         </form>
                     {% endif %}
@@ -80,32 +80,30 @@
                 {% endif %}
             </div>
 
-            <div class="mt-10 border border-red-200 bg-red-50 text-red-800 px-6 py-4 rounded-lg shadow-sm">
-                <h3 class="font-semibold text-red-700 text-lg mb-2">Supprimer mon compte</h3>
+            <div class="mt-25 border border-red-500 bg-red-50 text-red-600 px-6 py-4 rounded-lg shadow-sm">
+                <h3 class="font-semibold text-red-600 text-lg mb-4">Suppression du compte</h3>
                 <p class="text-sm mb-4">
                     La suppression rendra votre compte inaccessible immédiatement.  
                     Vous disposerez de <strong>30 jours</strong> pour le récupérer avant la suppression définitive.
                 </p>
 
-                <button 
-                    id="delete-account-btn"
-                    class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md font-medium transition">
+                <button id="delete-account-btn" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 mt-3 rounded-md font-medium transition cursor-pointer">
                     Supprimer mon compte
                 </button>
             </div>
 
             <div id="delete-modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
                 <div class="bg-white rounded-xl p-8 w-11/12 max-w-md shadow-lg">
-                    <h3 class="text-xl font-semibold text-red-700 mb-4">Confirmer la suppression</h3>
+                    <h3 class="text-xl font-semibold text-red-600 mb-4">Confirmer la suppression</h3>
                     <p class="text-gray-700 text-sm mb-6">
                         Êtes-vous sûr de vouloir supprimer votre compte ?<br>
                         Votre compte sera désactivé immédiatement, et définitivement supprimé dans <strong>30 jours</strong>.
                     </p>
 
                     <div class="flex justify-end gap-3">
-                        <button id="cancel-delete" class="px-4 py-2 text-gray-600 hover:text-gray-800">Annuler</button>
+                        <button id="cancel-delete" class="px-4 py-2 text-gray-600 hover:text-gray-800 cursor-pointer">Annuler</button>
                         <form method="post" action="{{ path('delete_account') }}">
-                            <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md">
+                            <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md cursor-pointer">
                                 Oui, supprimer
                             </button>
                         </form>
@@ -115,16 +113,6 @@
         </section>
     </div>
 </section>
-
-<script>
-    document.getElementById('delete-account-btn').addEventListener('click', () => {
-        document.getElementById('delete-modal').classList.remove('hidden');
-    });
-
-    document.getElementById('cancel-delete').addEventListener('click', () => {
-        document.getElementById('delete-modal').classList.add('hidden');
-    });
-</script>
 
 <script src="{{ asset('js/profile.js') }}"></script>
 
