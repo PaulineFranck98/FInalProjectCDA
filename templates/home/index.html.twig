@@ -9,6 +9,8 @@
 
 {% block body %}
 
+{# {{ dump(popular_locations)}} #}
+
 <section id="hero" class="w-full bg-gradient-to-b from-violet-50 to-white py-16">
     <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center gap-12">
         <div class="flex-1 space-y-6">
@@ -110,12 +112,12 @@
                         alt="Photo du lieu {{ location.locationName }} à {{ location.city }}"
                         class="w-full h-40 object-cover rounded-lg mb-4">
                     {% else %}
-                    <div class="w-full h-40 bg-gray-200 flex items-center justify-center text-gray-500 italic text-sm">
+                    <div class="w-full h-40 bg-gray-200 flex items-center justify-center text-gray-600 italic text-sm">
                         Aucune image</div>
                     {% endif %}
                     <h3 class="font-semibold text-violet-700">{{ location.locationName }} <span
-                            class="text-gray-500 font-light text-sm"> — {{ location.city }}</span></h3>
-                    <p class="text-gray-500 text-sm mt-1">Ajouté dans <span class="font-semibold text-violet-700">{{
+                            class="text-gray-600 font-light text-sm"> — {{ location.city }}</span></h3>
+                    <p class="text-gray-600 text-sm mt-1">Ajouté dans <span class="font-semibold text-violet-700">{{
                             item.count }} itinéraires</span></p>
                 </div>
             </a>
@@ -134,7 +136,7 @@
     <div class="max-w-7xl mx-auto px-6">
         <h2 class="text-2xl md:text-3xl font-semibold text-violet-800 mb-12 text-center">Itinéraires populaires</h2>
         {% if popular_itineraries is empty %}
-        <p class="text-center text-gray-500">Aucun itinéraire populaire pour le moment.</p>
+        <p class="text-center text-gray-600">Aucun itinéraire populaire pour le moment.</p>
         {% else %}
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {% for item in popular_itineraries %}

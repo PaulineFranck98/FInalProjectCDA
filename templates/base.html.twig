@@ -9,6 +9,7 @@
     <meta name="description"
         content="ShareMyWay : découvrez des lieux uniques, créez vos itinéraires en France et partagez vos découvertes avec la communauté.">
     {% endblock %}
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preload" as="style"
@@ -52,7 +53,7 @@
             <a href="{{ path('app_home') }}" class="flex items-center gap-1">
                 {# <span class="text-2xl text-violet-700">logo</span> #}
                 <figure class=" h-6">
-                    <img src="/img/logo-sharemyway-violet.webp" class="h-full"="Logo ShareMyWay" />
+                    <img src="/img/logo-sharemyway-violet.webp" class="h-full" alt="Logo ShareMyWay" />
                 </figure>
                 <span class="font-semibold text-violet-700">ShareMyWay</span>
             </a>
@@ -75,7 +76,7 @@
                 <a href="{{ path('show_dashboard') }}" class="flex items-center gap-2 hover:text-violet-900"><i
                         class="fa-solid fa-user"></i> Profil</a>
                 {% endif %}
-                <a href="{{ path('app_logout') }}" class=" text-gray-600 hover:text-gray-700"><i
+                <a href="{{ path('app_logout') }}" aria-label="logout" class=" text-gray-600 hover:text-gray-700"><i
                         class="fa-solid fa-right-from-bracket"></i></a>
             </nav>
             {% else %}
@@ -136,7 +137,7 @@
                 <a href="{{ path('mentions_legales') }}" class="hover:underline" target="_blank">Mentions légales</a>
                 <a href="{{ path('contact') }}" class="hover:underline" target="_blank">Contact</a>
             </nav>
-            <div class="text-gray-500 text-xs">
+            <div class="text-gray-600 text-xs">
                 © {{ "now"|date("Y") }} ShareMyWay — Tous droits réservés
             </div>
         </div>
