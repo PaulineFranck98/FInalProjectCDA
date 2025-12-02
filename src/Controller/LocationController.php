@@ -30,7 +30,7 @@ class LocationController extends AbstractController
     // }
 
 
-    #[Route('/user/location', name: 'location_search')]
+    #[Route('/location', name: 'location_search')]
     public function search(Request $request, LocationSearchServiceInterface $locationSearchService, ApiHttpClient $apiHttpClient, RatingRepository $ratingRepository, UserVisitedLocationRepository $visitedRepository): Response
     {
         /** @var User|null $user */
@@ -112,7 +112,7 @@ class LocationController extends AbstractController
     }
 
     
-    #[Route('/user/location/{id}', name: 'location_detail')]
+    #[Route('/location/{id}', name: 'location_detail')]
     public function getLocation(string $id, ApiHttpClient $apiHttpClient, RatingRepository $ratingRepository, LocationDistanceService $distanceService): Response
     {   
         $location = $apiHttpClient->getLocation($id);

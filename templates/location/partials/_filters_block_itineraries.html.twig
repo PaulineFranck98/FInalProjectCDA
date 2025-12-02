@@ -5,7 +5,7 @@
     </button>
 
     <div id="itineraryList" class="hidden flex flex-col mt-2 text-sm gap-1">
-        {% if app.user.itineraries is not empty %}
+        {% if app.user and app.user.itineraries is not empty%}
             {% for itinerary in app.user.itineraries %}
                 <a href="{{ path('itinerary_detail', {'itineraryId': itinerary.id}) }}" class="text-violet-700 hover:text-violet-900 hover:bg-violet-100  py-1 px-2 rounded transition">
                     {{ itinerary.itineraryName }}

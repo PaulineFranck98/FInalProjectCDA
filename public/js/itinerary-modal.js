@@ -19,7 +19,7 @@ function initItineraryModal() {
                 if (!Array.isArray(itineraries) || itineraries.length === 0) {
                     itineraryList.innerHTML = `
                         <p class="text-gray-600">Vous n’avez encore aucun itinéraire.</p>
-                        <a href="/itinerary/new?locationId=${locationId}" 
+                        <a href="user/itinerary/new?locationId=${locationId}" 
                            class="text-violet-700 underline">Créer un itinéraire</a>
                     `;
                 } else {
