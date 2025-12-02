@@ -1,146 +1,174 @@
 <!DOCTYPE html>
 <html lang="fr">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport"  content="width=device-width, initial-scale=1.0"/>
-        <title>{% block title %}ShareMyWay – Découvrez et créez vos itinéraires{% endblock %}</title>
-        {% block meta_description %}
-        <meta name="description" content="ShareMyWay : découvrez des lieux uniques, créez vos itinéraires en France et partagez vos découvertes avec la communauté.">
-        {% endblock %}
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap">
-        <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
-        
-        {% block stylesheets %}
-            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-            <link href='https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.css' rel='stylesheet' />
-            
-            {{ encore_entry_link_tags('app') }}
-        {% endblock %}
 
-        {% block javascripts %}
-            <script src="https://kit.fontawesome.com/d004286c36.js" crossorigin="anonymous"></script>
-            <script src="/tarteaucitron/tarteaucitron.js"></script>
-            <script src="/js/cookie-consent.js"></script>
-          
-            {{ encore_entry_script_tags('app') }}
-        {% endblock %}
-    </head>
-    <body class="w-full min-h-screen flex flex-col" data-turbo="false">
-        {% for label, messages in app.flashes %}
-            {% for message in messages %}
-                <div role="alert" class="flash-message text-center p-4 mb-4 text-sm rounded-lg fixed left-1/2 -translate-x-1/2  z-[10000] 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}ShareMyWay – Découvrez et créez vos itinéraires{% endblock %}</title>
+    {% block meta_description %}
+    <meta name="description"
+        content="ShareMyWay : découvrez des lieux uniques, créez vos itinéraires en France et partagez vos découvertes avec la communauté.">
+    {% endblock %}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" as="style"
+        href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
+
+    {% block stylesheets %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link href='https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.css' rel='stylesheet' />
+
+    {{ encore_entry_link_tags('app') }}
+    {% endblock %}
+
+    {% block javascripts %}
+    <script src="https://kit.fontawesome.com/d004286c36.js" crossorigin="anonymous"></script>
+    <script src="/tarteaucitron/tarteaucitron.js"></script>
+    <script src="/js/cookie-consent.js"></script>
+
+    {{ encore_entry_script_tags('app') }}
+    {% endblock %}
+</head>
+
+<body class="w-full min-h-screen flex flex-col" data-turbo="false">
+    {% for label, messages in app.flashes %}
+    {% for message in messages %}
+    <div role="alert" class="flash-message text-center p-4 mb-4 text-sm rounded-lg fixed left-1/2 -translate-x-1/2  z-[10000] 
                     {% if label == 'success' %}bg-green-50 text-green-600
                     {% elseif label == 'error' %}bg-red-50 text-red-600
                     {% elseif label == 'warning' %}bg-orange-50 text-orange-600
                     {% else %}bg-gray-100 text-gray-800{% endif %}">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        {% endfor %}
-        <header class="fixed top-0 left-0 w-full z-[200] bg-white/70 backdrop-blur-md border-b border-gray-200">
-            <div class="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between">
-                <a href="{{ path('app_home') }}" class="flex items-center gap-1">
-                    {# <span class="text-2xl text-violet-700">logo</span> #}
-                     <figure class=" h-6">
-                        <img src="/img/logo-sharemyway-violet.webp"  class="h-full" ="Logo ShareMyWay"/>
-                    </figure>
-                    <span class="font-semibold text-violet-700">ShareMyWay</span>
-                </a>
-                <button id="mobile-menu-btn" class="sm:hidden text-violet-700 text-3xl focus:outline-none transition" aria-controls="mobile-menu" aria-label="Ouvrir le menu de navigation">
-                    <i id="mobile-menu-icon" class="fa-solid fa-bars"></i>
-                </button>
-                {% if app.user %}
-                <nav class="hidden sm:flex items-center gap-8  text-violet-700" role="navigation">
-                    <a href="{{ path('app_home') }}" class="flex items-center gap-2 hover:text-violet-900"><i class="fa-solid fa-house"></i> Accueil</a>
-                    <a href="{{ path('location_search') }}" class="flex items-center gap-2 hover:text-violet-900"><i class="fa-solid fa-magnifying-glass"></i> Rechercher</a>
-                    <a href="{{ path('itinerary_discover') }}" class="flex items-center gap-2 hover:text-violet-900"><i class="fa-solid fa-route"></i> Itinéraires</a>
-                    {% if is_granted('ROLE_ADMIN') %}
-                        <a href="{{ path('admin_dashboard') }}" class="flex items-center gap-2 hover:text-violet-900"><i class="fa-solid fa-user"></i> Profil</a>
-                    {% else %}
-                        <a href="{{ path('show_dashboard') }}" class="flex items-center gap-2 hover:text-violet-900"><i class="fa-solid fa-user"></i> Profil</a>
-                    {% endif %}
-                    <a href="{{ path('app_logout') }}" class=" text-gray-600 hover:text-gray-700"><i class="fa-solid fa-right-from-bracket"></i></a>
-                </nav>
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% endfor %}
+    <header class="fixed top-0 left-0 w-full z-[200] bg-white/70 backdrop-blur-md border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between">
+            <a href="{{ path('app_home') }}" class="flex items-center gap-1">
+                {# <span class="text-2xl text-violet-700">logo</span> #}
+                <figure class=" h-6">
+                    <img src="/img/logo-sharemyway-violet.webp" class="h-full"="Logo ShareMyWay" />
+                </figure>
+                <span class="font-semibold text-violet-700">ShareMyWay</span>
+            </a>
+            <button id="mobile-menu-btn" class="sm:hidden text-violet-700 text-3xl focus:outline-none transition"
+                aria-controls="mobile-menu" aria-label="Ouvrir le menu de navigation">
+                <i id="mobile-menu-icon" class="fa-solid fa-bars"></i>
+            </button>
+            {% if app.user %}
+            <nav class="hidden sm:flex items-center gap-8  text-violet-700" role="navigation">
+                <a href="{{ path('app_home') }}" class="flex items-center gap-2 hover:text-violet-900"><i
+                        class="fa-solid fa-house"></i> Accueil</a>
+                <a href="{{ path('location_search') }}" class="flex items-center gap-2 hover:text-violet-900"><i
+                        class="fa-solid fa-magnifying-glass"></i> Rechercher</a>
+                <a href="{{ path('itinerary_discover') }}" class="flex items-center gap-2 hover:text-violet-900"><i
+                        class="fa-solid fa-route"></i> Itinéraires</a>
+                {% if is_granted('ROLE_ADMIN') %}
+                <a href="{{ path('admin_dashboard') }}" class="flex items-center gap-2 hover:text-violet-900"><i
+                        class="fa-solid fa-user"></i> Profil</a>
                 {% else %}
-                <nav class="hidden sm:flex items-center gap-8 font-medium text-violet-700" role="navigation">
-                    <a href="http://localhost:3000/sign-up" class="flex items-center gap-2 hover:text-violet-900" target="_blank"><i class="fa-solid fa-building"></i> Espace partenaire</a>
-                    <a href="{{ path('app_login') }}" class="flex items-center gap-2 hover:text-violet-900"><i class="fa-solid fa-user"></i> Espace particulier</a>
-                </nav>
+                <a href="{{ path('show_dashboard') }}" class="flex items-center gap-2 hover:text-violet-900"><i
+                        class="fa-solid fa-user"></i> Profil</a>
+                {% endif %}
+                <a href="{{ path('app_logout') }}" class=" text-gray-600 hover:text-gray-700"><i
+                        class="fa-solid fa-right-from-bracket"></i></a>
+            </nav>
+            {% else %}
+            <nav class="hidden sm:flex items-center gap-8 font-medium text-violet-700" role="navigation">
+                <a href="http://localhost:3000/sign-up" class="flex items-center gap-2 hover:text-violet-900"
+                    target="_blank"><i class="fa-solid fa-building"></i> Espace partenaire</a>
+                <a href="{{ path('app_login') }}" class="flex items-center gap-2 hover:text-violet-900"><i
+                        class="fa-solid fa-user"></i> Espace particulier</a>
+            </nav>
+            {% endif %}
+        </div>
+        <div id="mobile-menu"
+            class="fixed top-14 left-0 w-full h-[calc(100vh-56px)] bg-white/95 backdrop-blur-xl shadow-lg opacity-0 pointer-events-none transition-all duration-300 ease-out translate-y-4">
+            <div class="flex flex-col items-start gap-6 pt-8 pl-8">
+                {% if app.user %}
+                <a href="{{ path('app_home') }}" class="flex items-center gap-4 text-xl"><i
+                        class="fa-solid fa-house text-2xl w-6"></i> Accueil</a>
+                <a href="{{ path('location_search') }}" class="flex items-center gap-4 text-xl"><i
+                        class="fa-solid fa-magnifying-glass text-2xl w-6"></i> Rechercher</a>
+                <a href="{{ path('itinerary_discover') }}" class="flex items-center gap-4 text-xl"><i
+                        class="fa-solid fa-route text-2xl w-6"></i> Itinéraires</a>
+                {% if is_granted('ROLE_ADMIN') %}
+                <a href="{{ path('admin_dashboard') }}" class="flex items-center gap-4 text-xl"><i
+                        class="fa-solid fa-user text-2xl w-6"></i> Profil</a>
+                {% else %}
+                <a href="{{ path('show_dashboard') }}" class="flex items-center gap-4 text-xl"><i
+                        class="fa-solid fa-user text-2xl w-6"></i> Profil</a>
+                {% endif %}
+                <a href="{{ path('app_logout') }}" class="flex items-center gap-4 text-xl text-gray-600"><i
+                        class="fa-solid fa-right-from-bracket text-2xl w-6"></i> Déconnexion</a>
+                {% else %}
+                <a href="http://localhost:3000/sign-up" class="flex items-center gap-4 text-xl"><i
+                        class="fa-solid fa-building text-2xl w-6"></i> Espace partenaire</a>
+                <a href="{{ path('app_login') }}" class="flex items-center gap-4 text-xl"><i
+                        class="fa-solid fa-user text-2xl w-6"></i> Espace particulier</a>
                 {% endif %}
             </div>
-            <div id="mobile-menu" class="fixed top-14 left-0 w-full h-[calc(100vh-56px)] bg-white/95 backdrop-blur-xl shadow-lg opacity-0 pointer-events-none transition-all duration-300 ease-out translate-y-4">
-                <div class="flex flex-col items-start gap-6 pt-8 pl-8">
-                    {% if app.user %}
-                        <a href="{{ path('app_home') }}" class="flex items-center gap-4 text-xl"><i class="fa-solid fa-house text-2xl w-6"></i> Accueil</a>
-                        <a href="{{ path('location_search') }}" class="flex items-center gap-4 text-xl"><i class="fa-solid fa-magnifying-glass text-2xl w-6"></i> Rechercher</a>
-                        <a href="{{ path('itinerary_discover') }}" class="flex items-center gap-4 text-xl"><i class="fa-solid fa-route text-2xl w-6"></i> Itinéraires</a>
-                        {% if is_granted('ROLE_ADMIN') %}
-                            <a href="{{ path('admin_dashboard') }}" class="flex items-center gap-4 text-xl"><i class="fa-solid fa-user text-2xl w-6"></i> Profil</a>
-                        {% else %}
-                            <a href="{{ path('show_dashboard') }}" class="flex items-center gap-4 text-xl"><i class="fa-solid fa-user text-2xl w-6"></i> Profil</a>
-                        {% endif %}
-                        <a href="{{ path('app_logout') }}" class="flex items-center gap-4 text-xl text-gray-600"><i class="fa-solid fa-right-from-bracket text-2xl w-6"></i> Déconnexion</a>
-                    {% else %}
-                        <a href="http://localhost:3000/sign-up" class="flex items-center gap-4 text-xl"><i class="fa-solid fa-building text-2xl w-6"></i> Espace partenaire</a>
-                        <a href="{{ path('app_login') }}" class="flex items-center gap-4 text-xl"><i class="fa-solid fa-user text-2xl w-6"></i> Espace particulier</a>
-                    {% endif %}
-                </div>
+        </div>
+    </header>
+
+    <main class="flex-1 mt-[49px] h-[calc(100vh-49px)] overflow-hidden">
+        {% block body %}{% endblock %}
+    </main>
+    <footer class="border-t border-gray-200 bg-gray-100 text-violet-700 py-6">
+        <div class="max-w-6xl mx-auto px-6 flex flex-col items-center justify-between gap-4 text-sm">
+            <div class="flex items-center gap-2">
+                {# <span class="text-xl">logo</span> #}
+
+                <span class="font-semibold">ShareMyWay</span>
             </div>
-        </header>
-
-        <main class="flex-1 mt-[49px] h-[calc(100vh-49px)] overflow-hidden">
-            {% block body %}{% endblock %}
-        </main>
-        <footer class="border-t border-gray-200 bg-gray-100 text-violet-700 py-6">
-            <div class="max-w-6xl mx-auto px-6 flex flex-col items-center justify-between gap-4 text-sm">
-                <div class="flex items-center gap-2">
-                    {# <span class="text-xl">logo</span> #}
-                   
-                    <span class="font-semibold">ShareMyWay</span>
-                </div>
-                <nav class="flex flex-wrap items-center justify-center gap-4 text-violet-700" role="navigation">
-                    <a href="{{ path('cgu') }}" class="hover:underline" target="_blank">CGU</a>
-                    <a href="{{ path('politique_confidentialite') }}" class="hover:underline" target="_blank">Politique de confidentialité</a>
-                    <a href="{{ path('politique_cookies') }}" class="hover:underline" target="_blank">Politique de cookies</a>
-                    <a href="#tarteaucitron" class="hover:underline" target="_blank">Gérer mes cookies</a>
-                    <a href="{{ path('mentions_legales') }}" class="hover:underline" target="_blank">Mentions légales</a>
-                    <a href="{{ path('contact') }}" class="hover:underline" target="_blank">Contact</a>
-                </nav>
-                <div class="text-gray-500 text-xs">
-                    © {{ "now"|date("Y") }} ShareMyWay — Tous droits réservés
-                </div>
+            <nav class="flex flex-wrap items-center justify-center gap-4 text-violet-700" role="navigation">
+                <a href="{{ path('cgu') }}" class="hover:underline" target="_blank">CGU</a>
+                <a href="{{ path('politique_confidentialite') }}" class="hover:underline" target="_blank">Politique de
+                    confidentialité</a>
+                <a href="{{ path('politique_cookies') }}" class="hover:underline" target="_blank">Politique de
+                    cookies</a>
+                <a href="#tarteaucitron" class="hover:underline" target="_blank">Gérer mes cookies</a>
+                <a href="{{ path('mentions_legales') }}" class="hover:underline" target="_blank">Mentions légales</a>
+                <a href="{{ path('contact') }}" class="hover:underline" target="_blank">Contact</a>
+            </nav>
+            <div class="text-gray-500 text-xs">
+                © {{ "now"|date("Y") }} ShareMyWay — Tous droits réservés
             </div>
-        </footer>
-        <script>
-            document.addEventListener("DOMContentLoaded", () => {
-                const btn = document.getElementById("mobile-menu-btn");
-                const menu = document.getElementById("mobile-menu");
-                const icon = document.getElementById("mobile-menu-icon");
+        </div>
+    </footer>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const btn = document.getElementById("mobile-menu-btn");
+            const menu = document.getElementById("mobile-menu");
+            const icon = document.getElementById("mobile-menu-icon");
 
-                btn.addEventListener("click", () => {
-                    menu.classList.toggle("opacity-0");
-                    menu.classList.toggle("pointer-events-none");
-                    menu.classList.toggle("translate-y-4");
-                    if (icon.classList.contains("fa-bars")) {
-                        icon.classList.replace("fa-bars", "fa-xmark");
-                    } else {
-                        icon.classList.replace("fa-xmark", "fa-bars");
-                    }
-                });
-                const flashMessages = document.querySelectorAll(".flash-message");
-
-                flashMessages.forEach((message) => {
-                    setTimeout(() => {
-                        message.style.transition = "transform 0.35s ease-in";
-                        message.style.transform = "translateY(-50px)";
-                        setTimeout(() => message.remove(), 350);
-                    }, 5000); 
-                });
-             
+            btn.addEventListener("click", () => {
+                menu.classList.toggle("opacity-0");
+                menu.classList.toggle("pointer-events-none");
+                menu.classList.toggle("translate-y-4");
+                if (icon.classList.contains("fa-bars")) {
+                    icon.classList.replace("fa-bars", "fa-xmark");
+                } else {
+                    icon.classList.replace("fa-xmark", "fa-bars");
+                }
             });
-        </script>
-    </body>
+            const flashMessages = document.querySelectorAll(".flash-message");
+
+            flashMessages.forEach((message) => {
+                setTimeout(() => {
+                    message.style.transition = "transform 0.35s ease-in";
+                    message.style.transform = "translateY(-50px)";
+                    setTimeout(() => message.remove(), 350);
+                }, 5000);
+            });
+
+        });
+    </script>
+</body>
+
 </html>

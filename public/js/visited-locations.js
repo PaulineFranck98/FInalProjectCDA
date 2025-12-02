@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     await response.json();
                 }
             } catch (error) {
-                console.error(error);              
+                console.error(error);
             }
         });
     });

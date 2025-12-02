@@ -6,54 +6,55 @@
 
     {% include 'profile/partials/_profile_aside.html.twig' %}
 
-    <section id="profile-container" class="ml-5 rounded-xl  border border-gray-200 w-full p-8 overflow-y-auto scrollbar-hide bg-gray-50">
+    <section id="profile-container"
+        class="ml-5 rounded-xl  border border-gray-200 w-full p-8 overflow-y-auto scrollbar-hide bg-gray-50">
 
         <div class="bg-white border border-gray-200 rounded-xl shadow-sm p-6 mb-10">
             <div class="flex items-center justify-between mb-4">
                 <h2 class="text-xl font-semibold text-violet-800">Utilisateurs inscrits</h2>
 
                 <a href="{{ path('admin_list_users', { sort: sort == 'asc' ? 'desc' : 'asc' }) }}"
-                class="bg-violet-700 hover:bg-violet-800 text-white text-sm font-medium px-4 py-2 rounded-md transition">
+                    class="bg-violet-700 hover:bg-violet-800 text-white text-sm font-medium px-4 py-2 rounded-md transition">
                     {% if sort == 'asc' %}
-                        <i class="fa-solid fa-arrow-down-wide-short mr-2"></i> Plus récents
+                    <i class="fa-solid fa-arrow-down-wide-short mr-2"></i> Plus récents
                     {% else %}
-                        <i class="fa-solid fa-arrow-up-wide-short mr-2"></i> Plus anciens
+                    <i class="fa-solid fa-arrow-up-wide-short mr-2"></i> Plus anciens
                     {% endif %}
                 </a>
             </div>
 
             {% if users is empty %}
-                <p class="text-gray-500 italic">Aucun utilisateur trouvé.</p>
+            <p class="text-gray-500 italic">Aucun utilisateur trouvé.</p>
             {% else %}
-                <div class="overflow-x-auto">
-                    <table class="w-full border-collapse">
-                        <thead>
-                            <tr class="border-b border-gray-200 bg-gray-50">
-                                <th class="text-left text-sm font-semibold text-gray-600 px-4 py-3">Email</th>
-                                <th class="text-left text-sm font-semibold text-gray-600 px-4 py-3">Nom d'utilisateur</th>
-                                <th class="text-left text-sm font-semibold text-gray-600 px-4 py-3">Date d'inscription</th>
-                                <th class="text-left text-sm font-semibold text-gray-600 px-4 py-3">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for user in users %}
-                                <tr class="border-b border-gray-100 hover:bg-violet-50 transition">
-                                    <td class="px-4 py-3 text-violet-700 font-medium">{{ user.email }}</td>
-                                    <td class="px-4 py-3 text-gray-700">{{ user.username ?? 'Non défini' }}</td>
-                                    <td class="px-4 py-3 text-gray-600">
-                                        {{ user.registrationDate ? user.registrationDate|date('d/m/Y à H:i') : '—' }}
-                                    </td>
-                                    <td class="px-4 py-3">
-                                        <a href="{{ path('public_profile', { id: user.id }) }}"
-                                        class="text-violet-700 underline hover:text-violet-900 font-medium">
-                                            Voir le profil
-                                        </a>
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
+            <div class="overflow-x-auto">
+                <table class="w-full border-collapse">
+                    <thead>
+                        <tr class="border-b border-gray-200 bg-gray-50">
+                            <th class="text-left text-sm font-semibold text-gray-600 px-4 py-3">Email</th>
+                            <th class="text-left text-sm font-semibold text-gray-600 px-4 py-3">Nom d'utilisateur</th>
+                            <th class="text-left text-sm font-semibold text-gray-600 px-4 py-3">Date d'inscription</th>
+                            <th class="text-left text-sm font-semibold text-gray-600 px-4 py-3">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                        <tr class="border-b border-gray-100 hover:bg-violet-50 transition">
+                            <td class="px-4 py-3 text-violet-700 font-medium">{{ user.email }}</td>
+                            <td class="px-4 py-3 text-gray-700">{{ user.username ?? 'Non défini' }}</td>
+                            <td class="px-4 py-3 text-gray-600">
+                                {{ user.registrationDate ? user.registrationDate|date('d/m/Y à H:i') : '—' }}
+                            </td>
+                            <td class="px-4 py-3">
+                                <a href="{{ path('public_profile', { id: user.id }) }}"
+                                    class="text-violet-700 underline hover:text-violet-900 font-medium">
+                                    Voir le profil
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
             {% endif %}
         </div>
 

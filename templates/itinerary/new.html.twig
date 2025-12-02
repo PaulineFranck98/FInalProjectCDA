@@ -2,28 +2,31 @@
 {% block title %}Créer un itinéraire{% endblock %}
 
 {% block body %}
-    <section class="flex  justify-center w-full">
-        <div class="flex flex-col gap-4 items-center justify-center w-full max-w-9/12  md:max-w-lg mt-20 ">
+<section class="flex  justify-center w-full">
+    <div class="flex flex-col gap-4 items-center justify-center w-full max-w-9/12  md:max-w-lg mt-20 ">
         <h1 class="text-2xl font-semibold mb-4 text-violet-700">Créer un itinéraire</h1>
         {{ form_start(form) }}
-            {{ form_row(form.itineraryName, { row_attr: { class: 'flex flex-col ' }, attr: { class: 'input-base mb-7' } }) }}
-            {{ form_row(form.duration, {  row_attr: { class: 'flex flex-col ' }, attr: { class: 'input-base mb-7' } }) }}
-            {{ form_row(form.departureDate, {  row_attr: { class: 'flex flex-col ' }, attr: { class: 'input-base mb-7' } }) }}
-     
-            <div class="flex flex-col gap-2 mb-7 w-full">
-                {{ form_label(form.isPublic) }}
-                {{ form_widget(form.isPublic, { attr: { class: 'select-base' } }) }}
-                <p class="text-gray-600 text-sm mt-2 flex items-start gap-2 leading-snug">
-                    <i class="fa-solid fa-circle-info text-violet-600 mt-[2px]"></i>
-                    Si vous mettez votre itinéraire en public, il sera visible par les autres utilisateurs.
-                </p>
-            </div>
+        {{ form_row(form.itineraryName, { row_attr: { class: 'flex flex-col ' }, attr: { class: 'input-base mb-7' } })
+        }}
+        {{ form_row(form.duration, { row_attr: { class: 'flex flex-col ' }, attr: { class: 'input-base mb-7' } }) }}
+        {{ form_row(form.departureDate, { row_attr: { class: 'flex flex-col ' }, attr: { class: 'input-base mb-7' } })
+        }}
 
-            <div class="mt-4">
-                {{ form_row(form.save, { attr: { class: 'bg-violet-800 px-12 py-2 text-white font-medium text-center w-full rounded-xl btn-violet mt-8 mb-6' } }) }}
-            </div>
+        <div class="flex flex-col gap-2 mb-7 w-full">
+            {{ form_label(form.isPublic) }}
+            {{ form_widget(form.isPublic, { attr: { class: 'select-base' } }) }}
+            <p class="text-gray-600 text-sm mt-2 flex items-start gap-2 leading-snug">
+                <i class="fa-solid fa-circle-info text-violet-600 mt-[2px]"></i>
+                Si vous mettez votre itinéraire en public, il sera visible par les autres utilisateurs.
+            </p>
+        </div>
+
+        <div class="mt-4">
+            {{ form_row(form.save, { attr: { class: 'bg-violet-800 px-12 py-2 text-white font-medium text-center w-full
+            rounded-xl btn-violet mt-8 mb-6' } }) }}
+        </div>
 
         {{ form_end(form) }}
-        </div>  
-    </section>
+    </div>
+</section>
 {% endblock %}

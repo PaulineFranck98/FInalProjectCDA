@@ -1,4 +1,4 @@
-function toggleFilters()  {
+function toggleFilters() {
 
     const filtersPanel = document.getElementById("filtersPanel");
     const openBtn = document.getElementById("openFilters");
@@ -46,8 +46,8 @@ function initMap() {
             const popup = new maplibregl.Popup({
                 offset: 25,
                 closeButton: false,
-                className: 'custom-popup' 
-           }).setHTML(`
+                className: 'custom-popup'
+            }).setHTML(`
                 <div class="popup-content">
                     <div class="popup-header">
                         <span class="name">${location.locationName}</span>
@@ -59,7 +59,7 @@ function initMap() {
                     </div>
                 </div>
             `);
-            
+
             const marker = new maplibregl.Marker({ element })
                 .setLngLat([lon, lat])
                 .setPopup(popup)
@@ -91,7 +91,7 @@ function initMap() {
     });
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     initMap();
     toggleFilters();
 });

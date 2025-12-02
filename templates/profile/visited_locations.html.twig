@@ -8,50 +8,56 @@
 
         {% include 'profile/partials/_profile_aside.html.twig' %}
 
-        <section id="profile-container" class="rounded-xl border border-gray-200 w-full p-8 overflow-y-auto scrollbar-hide bg-gray-50">
+        <section id="profile-container"
+            class="rounded-xl border border-gray-200 w-full p-8 overflow-y-auto scrollbar-hide bg-gray-50">
             <h2 class="text-2xl font-semibold text-violet-700 mb-8">Mes lieux visités</h2>
 
             {% if visitedLocations is empty %}
-                <p class="text-gray-500 text-center py-10">Vous n’avez encore visité aucun lieu.</p>
+            <p class="text-gray-500 text-center py-10">Vous n’avez encore visité aucun lieu.</p>
             {% else %}
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                    {% for item in visitedLocations %}
-                        {% set location = item.location %}
-                        <div class="bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 flex flex-col overflow-hidden">
-                            {% if location.images and location.images[0] is defined %}
-                                <img src="{{ location.images[0].imageName ?? '' }}" alt="{{ location.locationName }}" class="w-full h-32 object-cover">
-                            {% else %}
-                                <div class="w-full h-28 bg-gray-200 flex items-center justify-center text-gray-500 italic text-sm">Aucune image</div>
-                            {% endif %}
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                {% for item in visitedLocations %}
+                {% set location = item.location %}
+                <div
+                    class="bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 flex flex-col overflow-hidden">
+                    {% if location.images and location.images[0] is defined %}
+                    <img src="{{ location.images[0].imageName ?? '' }}" alt="{{ location.locationName }}"
+                        class="w-full h-32 object-cover">
+                    {% else %}
+                    <div class="w-full h-28 bg-gray-200 flex items-center justify-center text-gray-500 italic text-sm">
+                        Aucune image</div>
+                    {% endif %}
 
-                            <div class="p-3.5 flex flex-col flex-grow">
-                                <h3 class="text-lg font-semibold text-violet-700 leading-tight truncate mb-1.5">
-                                    {{ location.locationName }}
-                                </h3>
+                    <div class="p-3.5 flex flex-col flex-grow">
+                        <h3 class="text-lg font-semibold text-violet-700 leading-tight truncate mb-1.5">
+                            {{ location.locationName }}
+                        </h3>
 
-                                <p class="text-sm text-gray-600 mb-0.5">
-                                    <i class="fa-solid fa-location-dot text-violet-600 mr-1"></i>
-                                    {{ location.city ?? 'Ville inconnue' }}
-                                </p>
+                        <p class="text-sm text-gray-600 mb-0.5">
+                            <i class="fa-solid fa-location-dot text-violet-600 mr-1"></i>
+                            {{ location.city ?? 'Ville inconnue' }}
+                        </p>
 
-                                <p class="text-sm text-gray-500 mb-3">
-                                    <i class="fa-regular fa-calendar text-violet-600 mr-1"></i>
-                                    Visité le {{ item.visitedAt|date('d/m/Y') }}
-                                </p>
+                        <p class="text-sm text-gray-500 mb-3">
+                            <i class="fa-regular fa-calendar text-violet-600 mr-1"></i>
+                            Visité le {{ item.visitedAt|date('d/m/Y') }}
+                        </p>
 
-                                <div class="mt-auto flex justify-between items-center pt-2 border-t border-gray-100">
-                                    <a href="/location/{{ location.id }}" 
-                                    class="text-sm bg-violet-700 text-white px-3 py-1.5 rounded-md hover:bg-violet-800 transition">
-                                    <i class="fa-solid fa-eye mr-1"></i> Voir
-                                    </a>
-                                    <button class="remove-visited-btn text-sm text-red-600 hover:text-red-800 transition cursor-pointer" data-location-id="{{ location.id }}">
-                                        <i class="fa-solid fa-trash-can mr-1"></i> Supprimer
-                                    </button>
-                                </div>
-                            </div>
+                        <div class="mt-auto flex justify-between items-center pt-2 border-t border-gray-100">
+                            <a href="/location/{{ location.id }}"
+                                class="text-sm bg-violet-700 text-white px-3 py-1.5 rounded-md hover:bg-violet-800 transition">
+                                <i class="fa-solid fa-eye mr-1"></i> Voir
+                            </a>
+                            <button
+                                class="remove-visited-btn text-sm text-red-600 hover:text-red-800 transition cursor-pointer"
+                                data-location-id="{{ location.id }}">
+                                <i class="fa-solid fa-trash-can mr-1"></i> Supprimer
+                            </button>
                         </div>
-                    {% endfor %}
+                    </div>
                 </div>
+                {% endfor %}
+            </div>
             {% endif %}
         </section>
     </div>

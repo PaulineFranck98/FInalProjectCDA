@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const pageInput = document.getElementById("pageInput");
 
 
-    const url = window.location.pathname; 
+    const url = window.location.pathname;
 
 
     if (!form || !container) return;
@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 container.innerHTML = newContainer.innerHTML;
 
                 initPagination();
-                
+
                 if (typeof initItineraryModal === "function") {
                     initItineraryModal();
                 }
@@ -61,7 +61,7 @@ document.addEventListener("DOMContentLoaded", function () {
             `;
         }
     }
-    
+
     function initPagination() {
         const paginationLinks = container.querySelectorAll("nav a");
         paginationLinks.forEach(link => {

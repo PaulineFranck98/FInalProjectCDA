@@ -6,40 +6,26 @@
     </p>
     <div class="flex flex-col gap-2">
         <div class="flex items-center">
-            <input 
-                type="range" 
-                id="priceMin" 
-                name="priceMin"
-                class="w-2/3 accent-violet-700 cursor-pointer"
-                min="{{ priceRange.minPrice }}" 
-                max="{{ priceRange.maxPrice }}" 
-                value="{{ filters.priceMin ?? priceRange.minPrice }}" 
-                step="1"
-                oninput="
+            <input type="range" id="priceMin" name="priceMin" class="w-2/3 accent-violet-700 cursor-pointer"
+                min="{{ priceRange.minPrice }}" max="{{ priceRange.maxPrice }}"
+                value="{{ filters.priceMin ?? priceRange.minPrice }}" step="1" oninput="
                     const maxInput = document.getElementById('priceMax');
                     if (parseInt(this.value) >= parseInt(maxInput.value)) this.value = maxInput.value - 1;
                     document.getElementById('minPriceDisplay').textContent = this.value;
-                "
-            >
-            <span class="text-sm ms-2">Min : <span id="minPriceDisplay">{{ filters.priceMin ?? priceRange.minPrice }}</span>€</span>
+                ">
+            <span class="text-sm ms-2">Min : <span id="minPriceDisplay">{{ filters.priceMin ?? priceRange.minPrice
+                    }}</span>€</span>
         </div>
         <div class="flex items-center">
-            <input 
-                type="range" 
-                id="priceMax" 
-                name="priceMax"
-                class="w-2/3 accent-violet-700 cursor-pointer"
-                min="{{ priceRange.minPrice }}" 
-                max="{{ priceRange.maxPrice }}" 
-                value="{{ filters.priceMax ?? priceRange.maxPrice }}" 
-                step="1"
-                oninput="
+            <input type="range" id="priceMax" name="priceMax" class="w-2/3 accent-violet-700 cursor-pointer"
+                min="{{ priceRange.minPrice }}" max="{{ priceRange.maxPrice }}"
+                value="{{ filters.priceMax ?? priceRange.maxPrice }}" step="1" oninput="
                     const minInput = document.getElementById('priceMin');
                     if (parseInt(this.value) <= parseInt(minInput.value)) this.value = parseInt(minInput.value) + 1;
                     document.getElementById('maxPriceDisplay').textContent = this.value;
-                "
-            >
-            <span class="text-sm ms-2">Max : <span id="maxPriceDisplay">{{ filters.priceMax ?? priceRange.maxPrice }}</span>€</span>
+                ">
+            <span class="text-sm ms-2">Max : <span id="maxPriceDisplay">{{ filters.priceMax ?? priceRange.maxPrice
+                    }}</span>€</span>
         </div>
     </div>
 </div>
@@ -51,9 +37,8 @@
         Réductions
     </label>
     <label class="relative inline-flex items-center cursor-pointer">
-        <input type="checkbox" id="hasDiscount" name="hasDiscount" value="true"
-            class="sr-only peer"
-            {% if filters.hasDiscount is defined and filters.hasDiscount %}checked{% endif %}>
+        <input type="checkbox" id="hasDiscount" name="hasDiscount" value="true" class="sr-only peer" {% if
+            filters.hasDiscount is defined and filters.hasDiscount %}checked{% endif %}>
         <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-2 peer-focus:ring-violet-300 
                     peer-checked:after:translate-x-full peer-checked:after:border-white 
                     after:content-[''] after:absolute after:top-[2px] after:left-[2px] 
@@ -71,23 +56,18 @@
     </p>
     <div class="flex flex-col gap-2 text-sm text-gray-700">
         {% for stars in [5, 4, 3] %}
-            <label class="flex items-center justify-between cursor-pointer">
-                <div class="flex items-center gap-2">
-                    <input 
-                        class="accent-violet-700 cursor-pointer" 
-                        type="checkbox" 
-                        name="minRating[]" 
-                        value="{{ stars }}" 
-                        {% if filters.minRating is defined and filters.minRating == stars %}checked{% endif %}
-                    >
-                    <div class="text-yellow-500 text-[0.85rem]">
-                        {% for i in 1..stars %}
-                            <i class="fa-solid fa-star"></i>
-                        {% endfor %}
-                    </div>
+        <label class="flex items-center justify-between cursor-pointer">
+            <div class="flex items-center gap-2">
+                <input class="accent-violet-700 cursor-pointer" type="checkbox" name="minRating[]" value="{{ stars }}"
+                    {% if filters.minRating is defined and filters.minRating==stars %}checked{% endif %}>
+                <div class="text-yellow-500 text-[0.85rem]">
+                    {% for i in 1..stars %}
+                    <i class="fa-solid fa-star"></i>
+                    {% endfor %}
                 </div>
-                <span class="text-gray-600 font-medium">{{ stars }}+</span>
-            </label>
+            </div>
+            <span class="text-gray-600 font-medium">{{ stars }}+</span>
+        </label>
         {% endfor %}
     </div>
 </div>
@@ -100,11 +80,11 @@
     </p>
     <div class="flex flex-col">
         {% for type in types %}
-            <div class="flex gap-2 text-[0.9rem] text-gray-700">
-                <input class="accent-violet-700 cursor-pointer" type="checkbox" name="typeIds[]" value="{{ type.id }}" 
-                       {% if filters.typeIds is defined and type.id in filters.typeIds %}checked{% endif %}>
-                <label>{{ type.typeName }}</label>
-            </div>
+        <div class="flex gap-2 text-[0.9rem] text-gray-700">
+            <input class="accent-violet-700 cursor-pointer" type="checkbox" name="typeIds[]" value="{{ type.id }}" {% if
+                filters.typeIds is defined and type.id in filters.typeIds %}checked{% endif %}>
+            <label>{{ type.typeName }}</label>
+        </div>
         {% endfor %}
     </div>
 </div>
@@ -117,11 +97,12 @@
     </p>
     <div class="flex flex-col">
         {% for companion in companions %}
-            <div class="flex gap-2 text-[0.9rem] text-gray-700">
-                <input class="accent-violet-700 cursor-pointer" type="checkbox" name="companionIds[]" value="{{ companion.id }}" 
-                       {% if filters.companionIds is defined and companion.id in filters.companionIds %}checked{% endif %}>
-                <label>{{ companion.companionName }}</label>
-            </div>
+        <div class="flex gap-2 text-[0.9rem] text-gray-700">
+            <input class="accent-violet-700 cursor-pointer" type="checkbox" name="companionIds[]"
+                value="{{ companion.id }}" {% if filters.companionIds is defined and companion.id in
+                filters.companionIds %}checked{% endif %}>
+            <label>{{ companion.companionName }}</label>
+        </div>
         {% endfor %}
     </div>
 </div>
@@ -134,11 +115,11 @@
     </p>
     <div class="flex flex-col">
         {% for theme in themes %}
-            <div class="flex gap-2 text-[0.9rem] text-gray-700">
-                <input class="accent-violet-700 cursor-pointer" type="checkbox" name="themeIds[]" value="{{ theme.id }}" 
-                       {% if filters.themeIds is defined and theme.id in filters.themeIds %}checked{% endif %}>
-                <label>{{ theme.themeName }}</label>
-            </div>
+        <div class="flex gap-2 text-[0.9rem] text-gray-700">
+            <input class="accent-violet-700 cursor-pointer" type="checkbox" name="themeIds[]" value="{{ theme.id }}" {%
+                if filters.themeIds is defined and theme.id in filters.themeIds %}checked{% endif %}>
+            <label>{{ theme.themeName }}</label>
+        </div>
         {% endfor %}
     </div>
 </div>
@@ -151,11 +132,11 @@
     </p>
     <div class="flex flex-col">
         {% for confort in conforts %}
-            <div class="flex gap-2 text-[0.9rem] text-gray-700">
-                <input class="accent-violet-700 cursor-pointer" type="checkbox" name="confortIds[]" value="{{ confort.id }}" 
-                       {% if filters.confortIds is defined and confort.id in filters.confortIds %}checked{% endif %}>
-                <label>{{ confort.confortLevel }}</label>
-            </div>
+        <div class="flex gap-2 text-[0.9rem] text-gray-700">
+            <input class="accent-violet-700 cursor-pointer" type="checkbox" name="confortIds[]" value="{{ confort.id }}"
+                {% if filters.confortIds is defined and confort.id in filters.confortIds %}checked{% endif %}>
+            <label>{{ confort.confortLevel }}</label>
+        </div>
         {% endfor %}
     </div>
 </div>
@@ -168,11 +149,12 @@
     </p>
     <div class="flex flex-col">
         {% for duration in durations %}
-            <div class="flex gap-2 text-[0.9rem] text-gray-700">
-                <input class="accent-violet-700 cursor-pointer" type="checkbox" name="durationIds[]" value="{{ duration.id }}" 
-                       {% if filters.durationIds is defined and duration.id in filters.durationIds %}checked{% endif %}>
-                <label>{{ duration.onSiteTime|duration_label('long') }}</label>
-            </div>
+        <div class="flex gap-2 text-[0.9rem] text-gray-700">
+            <input class="accent-violet-700 cursor-pointer" type="checkbox" name="durationIds[]"
+                value="{{ duration.id }}" {% if filters.durationIds is defined and duration.id in filters.durationIds
+                %}checked{% endif %}>
+            <label>{{ duration.onSiteTime|duration_label('long') }}</label>
+        </div>
         {% endfor %}
     </div>
 </div>
@@ -185,11 +167,12 @@
     </p>
     <div class="flex flex-col">
         {% for intensity in intensities %}
-            <div class="flex gap-2 text-[0.9rem] text-gray-700">
-                <input class="accent-violet-700 cursor-pointer" type="checkbox" name="intensityIds[]" value="{{ intensity.id }}" 
-                       {% if filters.intensityIds is defined and intensity.id in filters.intensityIds %}checked{% endif %}>
-                <label>{{ intensity.intensityLevel }}</label>
-            </div>
+        <div class="flex gap-2 text-[0.9rem] text-gray-700">
+            <input class="accent-violet-700 cursor-pointer" type="checkbox" name="intensityIds[]"
+                value="{{ intensity.id }}" {% if filters.intensityIds is defined and intensity.id in
+                filters.intensityIds %}checked{% endif %}>
+            <label>{{ intensity.intensityLevel }}</label>
+        </div>
         {% endfor %}
     </div>
 </div>

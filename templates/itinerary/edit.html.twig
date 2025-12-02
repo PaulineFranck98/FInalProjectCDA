@@ -8,15 +8,17 @@
         <h1 class="text-2xl font-semibold mb-4">Modifier l'itinéraire</h1>
 
         {{ form_start(form) }}
-            {{ form_row(form.itineraryName, { attr: { class: 'input-base mb-5' } }) }}
-            {{ form_row(form.duration, { attr: { class: 'input-base mb-5' } }) }}
-            {{ form_row(form.departureDate, { attr: { class: 'input-base mb-5' } }) }}
-            {{ form_row(form.isPublic, { row_attr: { class: 'flex gap-6 items-center justify-center accent-violet-700' } }) }}
+        {{ form_row(form.itineraryName, { attr: { class: 'input-base mb-5' } }) }}
+        {{ form_row(form.duration, { attr: { class: 'input-base mb-5' } }) }}
+        {{ form_row(form.departureDate, { attr: { class: 'input-base mb-5' } }) }}
+        {{ form_row(form.isPublic, { row_attr: { class: 'flex gap-6 items-center justify-center accent-violet-700' } })
+        }}
 
-            <div class="mt-4">
-                {{ form_row(form.save, { label: 'Enregistrer les modifications', attr: { class: 'bg-violet-800 px-12 py-2 text-white font-medium text-center w-full rounded-xl btn-violet mt-8 mb-6' } }) }}
-            </div>
+        <div class="mt-4">
+            {{ form_row(form.save, { label: 'Enregistrer les modifications', attr: { class: 'bg-violet-800 px-12 py-2
+            text-white font-medium text-center w-full rounded-xl btn-violet mt-8 mb-6' } }) }}
+        </div>
         {{ form_end(form) }}
-    </div>  
+    </div>
 </section>
 {% endblock %}

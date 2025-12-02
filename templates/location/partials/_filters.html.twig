@@ -1,5 +1,5 @@
 <form id="filtersForm" method="get"
-      class="flex flex-col gap-4 bg-white rounded-xl p-4 shadow lg:w-1/2  md:min-w-[320px] overflow-y-auto scrollbar-hide">
+    class="flex flex-col gap-4 bg-white rounded-xl p-4 shadow lg:w-1/2  md:min-w-[320px] overflow-y-auto scrollbar-hide">
 
     <input type="hidden" name="page" id="pageInput" value="{{ filters.page ?? 1 }}">
 
@@ -15,24 +15,21 @@
             Masquer les lieux visités
         </label>
         <label class="relative inline-flex items-center cursor-pointer">
-            <input 
-                type="checkbox" 
-                id="excludeVisited" 
-                name="excludeVisited" 
-                value="1"
-                class="sr-only peer"
-                {% if filters.excludeVisited is defined and filters.excludeVisited == '1' %}checked{% endif %}
-            >
-            <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-2 peer-focus:ring-violet-300  peer-checked:after:translate-x-full peer-checked:after:border-white  after:content-[''] after:absolute after:top-[2px] after:left-[2px]  after:bg-white after:border-gray-300 after:border after:rounded-full  after:h-5 after:w-5 after:transition-all peer-checked:bg-violet-700">
+            <input type="checkbox" id="excludeVisited" name="excludeVisited" value="1" class="sr-only peer" {% if
+                filters.excludeVisited is defined and filters.excludeVisited=='1' %}checked{% endif %}>
+            <div
+                class="w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-2 peer-focus:ring-violet-300  peer-checked:after:translate-x-full peer-checked:after:border-white  after:content-[''] after:absolute after:top-[2px] after:left-[2px]  after:bg-white after:border-gray-300 after:border after:rounded-full  after:h-5 after:w-5 after:transition-all peer-checked:bg-violet-700">
             </div>
         </label>
     </div>
     {% endif %}
-    <input type="text" name="city" placeholder="Ville" class="border border-gray-300 rounded px-4 py-2 w-full" value="{{ filters.city ?? '' }}" />
-    
+    <input type="text" name="city" placeholder="Ville" class="border border-gray-300 rounded px-4 py-2 w-full"
+        value="{{ filters.city ?? '' }}" />
+
     {% include 'location/partials/_filters_blocks.html.twig' %}
 
-    <div class="w-full flex justify-center items-center gap-4 text-red-600 border border-red-300 bg-red-50 rounded-md py-2">
+    <div
+        class="w-full flex justify-center items-center gap-4 text-red-600 border border-red-300 bg-red-50 rounded-md py-2">
         <i class="fa-regular fa-trash-can"></i>
         <a href="{{ path('location_search') }}">Réinitialiser</a>
     </div>

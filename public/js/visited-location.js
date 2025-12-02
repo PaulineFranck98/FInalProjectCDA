@@ -11,11 +11,11 @@ function initVisitedModal() {
             currentLocationId = checkbox.dataset.locationId;
 
             if (checkbox.checked) {
-              
+
                 modal.classList.remove('hidden');
-                dateInput.value = ''; 
+                dateInput.value = '';
             } else {
-             
+
                 await fetch(`/visited/location/${currentLocationId}`, { method: 'DELETE' });
             }
         });

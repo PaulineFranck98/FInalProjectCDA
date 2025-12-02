@@ -1,23 +1,25 @@
-
 <aside class="flex flex-col w-full lg:w-[400px] bg-white border border-gray-200 rounded-xl shadow-sm py-6">
     <div class="flex flex-col items-center mb-8">
         <div class="relative w-24 h-24 rounded-full overflow-hidden border-2 border-gray-200 mb-3 group">
 
             {% if app.user.profilePicture %}
-                {% if app.user.googleId %}
-                    <img src="{{ app.user.profilePicture }}" alt="Photo de profil" class="w-full h-full object-cover">
-                {% else %}
-                    <img id="profile-img" src="{{ asset('uploads/' ~ app.user.profilePicture) }}" alt="Photo de profil" class="w-full h-full object-cover">
-                {% endif %}
+            {% if app.user.googleId %}
+            <img src="{{ app.user.profilePicture }}" alt="Photo de profil" class="w-full h-full object-cover">
             {% else %}
-                <img id="profile-img" src="{{ asset('img/default-avatar.webp') }}" alt="Avatar par défaut" class="w-full h-full object-cover opacity-80">
+            <img id="profile-img" src="{{ asset('uploads/' ~ app.user.profilePicture) }}" alt="Photo de profil"
+                class="w-full h-full object-cover">
+            {% endif %}
+            {% else %}
+            <img id="profile-img" src="{{ asset('img/default-avatar.webp') }}" alt="Avatar par défaut"
+                class="w-full h-full object-cover opacity-80">
             {% endif %}
 
             {% if app.user.googleId is null and not is_granted('ROLE_ADMIN') %}
-                <label for="profile-upload" class="absolute inset-0 flex items-center justify-center bg-black opacity-0 group-hover:opacity-80 cursor-pointer transition">
-                    <i class="fa-solid fa-pen text-white text-lg"></i>
-                </label>
-                <input id="profile-upload" type="file" accept="image/*" class="hidden">
+            <label for="profile-upload"
+                class="absolute inset-0 flex items-center justify-center bg-black opacity-0 group-hover:opacity-80 cursor-pointer transition">
+                <i class="fa-solid fa-pen text-white text-lg"></i>
+            </label>
+            <input id="profile-upload" type="file" accept="image/*" class="hidden">
             {% endif %}
         </div>
 
@@ -29,71 +31,72 @@
     {% set current_route = app.request.attributes.get('_route') %}
 
     {% if is_granted('ROLE_ADMIN') %}
-        <ul class="w-full lg:pt-2">
-            <li class="px-4 py-2">
-                <a href="{{ path('admin_dashboard') }}" 
-                   class="anchors-aside {{ current_route == 'admin_dashboard' ? 'active-anchor-aside' }}">
-                    <i class="fa-regular fa-clone mr-5"></i>Tableau de bord
-                </a>
-            </li>
+    <ul class="w-full lg:pt-2">
+        <li class="px-4 py-2">
+            <a href="{{ path('admin_dashboard') }}"
+                class="anchors-aside {{ current_route == 'admin_dashboard' ? 'active-anchor-aside' }}">
+                <i class="fa-regular fa-clone mr-5"></i>Tableau de bord
+            </a>
+        </li>
 
-            <li class="px-4 py-2">
-                <a href="{{ path('admin_list_users') }}" 
-                   class="anchors-aside {{ current_route == 'admin_list_users' ? 'active-anchor-aside' }}">
-                    <i class="fa-regular fa-user mr-5"></i>Utilisateurs
-                </a>
-            </li>
-             <li class="px-4 py-2">
-                <a href="{{ path('show_profile') }}" 
-                   class="anchors-aside {{ current_route == 'show_profile' ? 'active-anchor-aside' }}">
-                   <i class="fa-regular fa-circle-user mr-5"></i>Profil
-                </a>
-            </li>
-        </ul> 
+        <li class="px-4 py-2">
+            <a href="{{ path('admin_list_users') }}"
+                class="anchors-aside {{ current_route == 'admin_list_users' ? 'active-anchor-aside' }}">
+                <i class="fa-regular fa-user mr-5"></i>Utilisateurs
+            </a>
+        </li>
+        <li class="px-4 py-2">
+            <a href="{{ path('show_profile') }}"
+                class="anchors-aside {{ current_route == 'show_profile' ? 'active-anchor-aside' }}">
+                <i class="fa-regular fa-circle-user mr-5"></i>Profil
+            </a>
+        </li>
+    </ul>
 
     {% else %}
-        <ul class="w-full lg:pt-2">
-            <li class="px-4 py-2">
-                <a href="{{ path('show_dashboard') }}" 
-                   class="anchors-aside {{ current_route == 'show_dashboard' ? 'active-anchor-aside' }}">
-                   <i class="fa-regular fa-clone mr-5"></i>Tableau de bord
-                </a>
-            </li>
+    <ul class="w-full lg:pt-2">
+        <li class="px-4 py-2">
+            <a href="{{ path('show_dashboard') }}"
+                class="anchors-aside {{ current_route == 'show_dashboard' ? 'active-anchor-aside' }}">
+                <i class="fa-regular fa-clone mr-5"></i>Tableau de bord
+            </a>
+        </li>
 
-            <li class="px-4 py-2">
-                <a href="{{ path('show_profile') }}" 
-                   class="anchors-aside {{ current_route == 'show_profile' ? 'active-anchor-aside' }}">
-                   <i class="fa-regular fa-circle-user mr-5"></i>Profil
-                </a>
-            </li>
-            <li class="px-4 py-2">
-                <a href="{{ path('show_itineraries') }}" 
-                   class="anchors-aside {{ current_route == 'show_itineraries' ? 'active-anchor-aside' }}">
-                   <i class="fa-regular fa-map mr-5"></i>Itinéraires
-                </a>
-            </li>            
-            <li class="px-4 py-2">
-                <a href="{{ path('show_visited_locations') }}" 
+        <li class="px-4 py-2">
+            <a href="{{ path('show_profile') }}"
+                class="anchors-aside {{ current_route == 'show_profile' ? 'active-anchor-aside' }}">
+                <i class="fa-regular fa-circle-user mr-5"></i>Profil
+            </a>
+        </li>
+        <li class="px-4 py-2">
+            <a href="{{ path('show_itineraries') }}"
+                class="anchors-aside {{ current_route == 'show_itineraries' ? 'active-anchor-aside' }}">
+                <i class="fa-regular fa-map mr-5"></i>Itinéraires
+            </a>
+        </li>
+        <li class="px-4 py-2">
+            <a href="{{ path('show_visited_locations') }}"
                 class="anchors-aside {{ current_route == 'show_visited_locations' ? 'active-anchor-aside' }}">
-                    <i class="fa-solid fa-location-dot mr-5"></i>Lieux visités
-                </a>
-            </li>
-            <li class="px-4 py-2">
-                <a href="{{ path('show_ratings') }}" 
-                   class="anchors-aside {{ current_route == 'show_ratings' ? 'active-anchor-aside' }}">
-                   <i class="fa-regular fa-star mr-5"></i>Avis
-                </a>
-            </li>
-            <li class="px-4 py-2">
-                <a href="{{ path('favorite_itineraries') }}" class="anchors-aside {{ current_route == 'favorite_itineraries' ? 'active-anchor-aside' }}">
-                    <i class="fa-regular fa-heart mr-5"></i>Itinéraires favoris
-                </a>
-            </li>
-            <li class="px-4 py-2">
-                <a href="#" class="anchors-aside {{ current_route == 'show_lorem' ? 'active-anchor-aside' }}">
-                    <i class="fa-regular fa-pen-to-square mr-5"></i>Lorem
-                </a>
-            </li>
-        </ul>
+                <i class="fa-solid fa-location-dot mr-5"></i>Lieux visités
+            </a>
+        </li>
+        <li class="px-4 py-2">
+            <a href="{{ path('show_ratings') }}"
+                class="anchors-aside {{ current_route == 'show_ratings' ? 'active-anchor-aside' }}">
+                <i class="fa-regular fa-star mr-5"></i>Avis
+            </a>
+        </li>
+        <li class="px-4 py-2">
+            <a href="{{ path('favorite_itineraries') }}"
+                class="anchors-aside {{ current_route == 'favorite_itineraries' ? 'active-anchor-aside' }}">
+                <i class="fa-regular fa-heart mr-5"></i>Itinéraires favoris
+            </a>
+        </li>
+        <li class="px-4 py-2">
+            <a href="#" class="anchors-aside {{ current_route == 'show_lorem' ? 'active-anchor-aside' }}">
+                <i class="fa-regular fa-pen-to-square mr-5"></i>Lorem
+            </a>
+        </li>
+    </ul>
     {% endif %}
 </aside>

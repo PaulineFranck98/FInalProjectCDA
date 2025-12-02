@@ -6,12 +6,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     new Sortable(list, {
         animation: 150,
-        handle: '.location-item', 
+        handle: '.location-item',
         ghostClass: 'bg-violet-100',
         onEnd: async function () {
-           
+
             const orderedIds = Array.from(list.querySelectorAll('.location-item')).map(element => element.dataset.locationId);
-    
+
             list.querySelectorAll('.location-item').forEach((element, index) => {
                 const indexSpan = element.querySelector('.location-index');
                 if (indexSpan) {

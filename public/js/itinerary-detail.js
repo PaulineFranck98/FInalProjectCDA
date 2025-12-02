@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function createMarkers() {
         locations.forEach(item => {
-            const loc = item.data; 
+            const loc = item.data;
             const hasGeo = loc.geo && Array.isArray(loc.geo.coordinates);
             if (!hasGeo) return;
 
@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 return [lon, lat];
             });
 
-     
+
         if (coords.length < 2) {
             if (map.getSource('itinerary-route')) {
                 const emptyGeoJSON = {
@@ -114,7 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (map.getSource('itinerary-route')) {
             map.getSource('itinerary-route').setData(routeGeoJSON);
         } else {
-      
+
             map.addSource('itinerary-route', {
                 type: 'geojson',
                 data: routeGeoJSON
@@ -160,12 +160,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    window.updateItineraryOrderOnMap = function(newOrderIdsInDomOrder) {
+    window.updateItineraryOrderOnMap = function (newOrderIdsInDomOrder) {
 
         newOrderIdsInDomOrder.forEach((locId, index) => {
             const match = locations.find(entry => entry.data.id === locId || entry.id === locId);
             if (match) {
-                match.order = index; 
+                match.order = index;
             }
         });
 

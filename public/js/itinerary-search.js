@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const form = document.getElementById("filtersForm");
     const container = document.getElementById("itinerariesContainer");
     const pageInput = document.getElementById("pageInput");
-    const url = window.location.pathname; 
+    const url = window.location.pathname;
     if (!form || !container) return;
 
     function getFormParams() {
@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 headers: { "X-Requested-With": "XMLHttpRequest" },
             });
             const html = await response.text();
-       
+
             container.innerHTML = html;
 
             initPagination();
