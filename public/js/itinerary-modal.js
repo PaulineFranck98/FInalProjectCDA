@@ -19,14 +19,14 @@ function initItineraryModal() {
                 if (!Array.isArray(itineraries) || itineraries.length === 0) {
                     itineraryList.innerHTML = `
                         <p class="text-gray-600">Vous n’avez encore aucun itinéraire.</p>
-                        <a href="user/itinerary/new?locationId=${locationId}" 
+                        <a href="/user/itinerary/new?locationId=${locationId}" 
                            class="text-violet-700 underline">Créer un itinéraire</a>
                     `;
                 } else {
                     itineraryList.innerHTML = itineraries.map(itinerary => `
                         <div class="flex justify-between items-center border-b py-2">
                             <span>${itinerary.itineraryName}</span>
-                            <a href="/itinerary/${itinerary.id}/add-location/${locationId}" 
+                            <a href="/user/itinerary/${itinerary.id}/add-location/${locationId}" 
                                class="text-violet-700 underline hover:text-violet-900">
                                Ajouter
                             </a>
