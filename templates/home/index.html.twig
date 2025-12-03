@@ -95,7 +95,8 @@
         </div>
     </div>
 </section>
-{% if popular_locations %}<section id="popular-locations" class="py-20 bg-white">
+
+<section id="popular-locations" class="py-20 bg-white">
     <div class="max-w-7xl mx-auto px-6">
         <h2 class="text-2xl md:text-3xl font-semibold text-violet-800 mb-12 text-center">Lieux populaires</h2>
         {% if popular_locations is empty %}
@@ -130,6 +131,7 @@
             <a href="{{ path('location_search') }}" class="text-violet-700 font-medium hover:underline">Voir tous les
                 lieux →</a>
         </div>
+        {% endif %}
     </div>
 </section>
 
