@@ -3,9 +3,9 @@
 namespace App\EventSubscriber;
 
 use Psr\Log\LoggerInterface;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Http\Event\LoginFailureEvent;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class LoginFailureSubscriber implements EventSubscriberInterface
 {
@@ -21,7 +21,7 @@ class LoginFailureSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            LoginFailureEvent::class => 'onLoginFailure'
+            LoginFailureEvent::class => 'onLoginFailure',
         ];
     }
 

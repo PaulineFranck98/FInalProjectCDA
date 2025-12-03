@@ -9,7 +9,7 @@ use League\OAuth2\Client\Provider\ResourceOwnerInterface;
 final readonly class OAuthRegistrationService
 {
     public function __construct(
-        private UserRepository $repository
+        private UserRepository $repository,
     )
     {
         
@@ -18,16 +18,13 @@ final readonly class OAuthRegistrationService
     /**
      * @param GoogleUser $resourceOwner
      */
-
     public function persist(ResourceOwnerInterface $resourceOwner): User 
     {
         $user = (new User())
         ->setEmail($resourceOwner->getEmail())
         ->setGoogleId($resourceOwner->getId())
         ->setUsername($data['name'] ?? null)
-        ->setProfilePicture($data['picture'] ?? null);
-
-    
+        ->setProfilePicture($data['picture'] ?? null);  
 
         $this->repository->add($user, true);
         return $user;

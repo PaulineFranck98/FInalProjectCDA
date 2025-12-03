@@ -3,9 +3,7 @@
 namespace App\Security;
 
 use App\Entity\User;
-use RuntimeException;
 use App\Repository\UserRepository;
-use App\Security\AbstractOAuthAuthenticator;
 use League\OAuth2\Client\Provider\GoogleUser;
 use League\OAuth2\Client\Provider\ResourceOwnerInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
@@ -16,29 +14,27 @@ class GoogleAuthenticator extends AbstractOAuthAuthenticator
 
     protected function getUserFromResourceOwner(ResourceOwnerInterface $resourceOwner, UserRepository $repository): ?User
     {
-        if(!($resourceOwner instanceOf GoogleUser))
-        {
-            throw new RuntimeException("expecting google user");
+        if (!($resourceOwner instanceOf GoogleUser)) {
+            throw new RuntimeException('expecting google user');
         }
 
-        if(true !== ($resourceOwner->toArray()['email_verified'] ?? null))
-        {
-            throw new AuthenticationException("email not verified");
+        if (true !== ($resourceOwner->toArray()['email_verified'] ?? null)) {
+            throw new AuthenticationException('email not verified');
         }
 
-        $user =  $repository->findOneBy([
+        $user = $repository->findOneBy([
             'google_id' => $resourceOwner->getId(),
-            'email' => $resourceOwner->getEmail()
+            'email' => $resourceOwner->getEmail(),
         ]);
 
         // update si infos manquantes lors de la connexion
-        if($user) {
+        if ($user) {
             $data = $resourceOwner->toArray();
 
-            if ($user->getUsername() === null) {
+            if (null === $user->getUsername()) {
                 $user->setUsername($data['name'] ?? null);
             }
-            if ($user->getProfilePicture() === null) {
+            if (null === $user->getProfilePicture()) {
                 $user->setProfilePicture($data['picture'] ?? null);
             }
 
