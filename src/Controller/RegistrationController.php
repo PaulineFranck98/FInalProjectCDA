@@ -32,7 +32,7 @@ class RegistrationController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-             // Je précise que $profilePictureFile sera une instance de UploadedFile
+            // Je précise que $profilePictureFile sera une instance de UploadedFile
              /** @var UploadedFile $profilePictureFile */
             // Je récupère les données du champ 'profilePicture' de mon formulaire
             $profilePictureFile = $form->get('profilePicture')->getData();

@@ -18,7 +18,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 class ItineraryController extends AbstractController
 {
-    // affichage dans la modale
     #[Route('/api/itineraries', name:'api_user_itineraries')]
     public function userItineraries(): JsonResponse 
     {

@@ -18,15 +18,6 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class LocationController extends AbstractController
 {
-    // #[Route('/location', name: 'locations_list')]
-    // public function getLocations(ApiHttpClient $apiHttpClient): Response
-    // {
-    //     $locations = $apiHttpClient->getLocations();
-    //     return $this->render('location/index.html.twig', [
-    //         'locations' => $locations
-    //     ]);
-    // }
-
     #[Route('/location', name: 'location_search')]
     public function search(Request $request, LocationSearchServiceInterface $locationSearchService, ApiHttpClient $apiHttpClient, RatingRepository $ratingRepository, UserVisitedLocationRepository $visitedRepository): Response
     {
@@ -125,9 +116,7 @@ class LocationController extends AbstractController
 
         $nearby = $distanceService->findNearest($nearLocations, (float) $location['latitude'], (float) $location['longitude'], 5);
 
-        //  j'exclus le lieu actuel si jamais il est présent
         $nearby = array_filter($nearby, fn ($location) => $location['id'] !== $location['id']);
-
 
         $averageRating = $ratingRepository->getAverageRating($id);
 

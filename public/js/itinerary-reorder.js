@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 window.updateItineraryOrderOnMap(orderedIds);
             }
             try {
-                const response = await fetch(`/itinerary/${itineraryId}/reorder`, {
+                const response = await fetch(`/user/itinerary/${itineraryId}/reorder`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

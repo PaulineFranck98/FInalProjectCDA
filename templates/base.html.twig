@@ -51,9 +51,8 @@
     <header class="fixed top-0 left-0 w-full z-[200] bg-white/70 backdrop-blur-md border-b border-gray-200">
         <div class="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between">
             <a href="{{ path('app_home') }}" class="flex items-center gap-1">
-                {# <span class="text-2xl text-violet-700">logo</span> #}
                 <figure class=" h-6">
-                    <img src="{{ asset('img/logo-sharemyway-violet.webp') }}" class="h-full" alt="Logo ShareMyWay" />
+                    <img src="{{ asset('img/logo-sharemyway.svg') }}" class="h-full" alt="Logo ShareMyWay" />
                 </figure>
                 <span class="font-semibold text-violet-700">ShareMyWay</span>
             </a>
@@ -123,9 +122,8 @@
     <footer class="border-t border-gray-200 bg-gray-100 text-violet-700 py-6">
         <div class="max-w-6xl mx-auto px-6 flex flex-col items-center justify-between gap-4 text-sm">
             <div class="flex items-center gap-2">
-                {# <span class="text-xl">logo</span> #}
                 <figure class=" h-4">
-                    <img src="{{ asset('img/logo-sharemyway-violet.webp') }}" class="h-full" alt="Logo ShareMyWay" />
+                    <img src="{{ asset('img/logo-sharemyway.svg') }}" class="h-full" alt="Logo ShareMyWay" />
                 </figure>
 
                 <span class="font-semibold">ShareMyWay</span>
@@ -142,9 +140,6 @@
             </nav>
             <div class="text-gray-600 text-xs">
                 © {{ "now"|date("Y") }} ShareMyWay — Tous droits réservés
-            </div>
-            <div class="text-xs text-gray-400">
-                Environnement : {{ app.environment }}
             </div>
         </div>
     </footer>

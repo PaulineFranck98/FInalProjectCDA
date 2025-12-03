@@ -9,8 +9,6 @@
 
 {% block body %}
 
-{# {{ dump(popular_locations)}} #}
-
 <section id="hero" class="w-full bg-gradient-to-b from-violet-50 to-white py-16">
     <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center gap-12">
         <div class="flex-1 space-y-6">
@@ -55,7 +53,7 @@
 
             {% for region in regions %}
             <a href="{{ path('location_search', { region: region }) }}"
-                class="bg-violet-50 border border-violet-200 rounded-xl py-6 text-center font-medium text-violet-700 hover:bg-violet-100 transition shadow-sm">
+                class="bg-violet-50 border border-violet-200 rounded-xl py-6 px-3 text-center font-medium text-violet-700 hover:bg-violet-100 transition shadow-sm">
                 {{ region }}
             </a>
             {% endfor %}
@@ -116,7 +114,7 @@
                         alt="Photo du lieu {{ location.locationName }} à {{ location.city }}"
                         class="w-full h-40 object-cover rounded-lg mb-4">
                     {% else %}
-                    <div class="w-full h-40 bg-gray-200 flex items-center justify-center text-gray-600 italic text-sm">
+                    <div class="w-full h-40 bg-gray-200 flex items-center justify-center text-gray-600 italic text-sm rounded-lg mb-4">
                         Aucune image</div>
                     {% endif %}
                     <h3 class="font-semibold text-violet-700">{{ location.locationName }} <span

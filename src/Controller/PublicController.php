@@ -62,7 +62,6 @@ class PublicController extends AbstractController
         foreach ($itineraries as $itinerary) {
             $itinerariesData[] = [
                 'itinerary' => $itinerary,
-                // départ/arrivée ici plus tard ?
             ];
         }
 
