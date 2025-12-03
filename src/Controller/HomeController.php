@@ -31,8 +31,8 @@ class HomeController extends AbstractController
 
 
         return $this->render('home/index.html.twig', [
-            'popular_locations' => $locationsData,
-            'popular_itineraries' => $popularItineraries
+            'popular_locations' => $locationsData ?? [],
+            'popular_itineraries' => $popularItineraries ?? []
         ]);
     }
 }
