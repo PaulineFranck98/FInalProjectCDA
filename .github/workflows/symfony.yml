@@ -18,8 +18,8 @@ jobs:
           php-version: '8.2'
           extensions: mbstring, xml, ctype, iconv, intl, pdo, pdo_mysql, dom, filter, gd, json
      
-      - name: Copy .env.example to .env
-        run: cp .env.example .env
+      # - name: Copy .env.example to .env
+      #   run: cp .env.example .env
       
       - name: Install Composer dependencies
         run: composer install --no-interaction --prefer-dist

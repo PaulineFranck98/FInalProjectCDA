@@ -1,6 +1,6 @@
 
 ###> symfony/framework-bundle ###
-/.env
+
 /.env.prod
 /.env.test
 /.env.local
@@ -28,7 +28,7 @@ yarn-error.log
 /phpunit.xml
 .phpunit.result.cache
 ###< phpunit/phpunit ###
-.env
+
 
 ###> friendsofphp/php-cs-fixer ###
 /.php-cs-fixer.php
