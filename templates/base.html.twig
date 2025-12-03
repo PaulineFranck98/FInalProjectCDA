@@ -53,7 +53,7 @@
             <a href="{{ path('app_home') }}" class="flex items-center gap-1">
                 {# <span class="text-2xl text-violet-700">logo</span> #}
                 <figure class=" h-6">
-                    <img src="/img/logo-sharemyway-violet.webp" class="h-full" alt="Logo ShareMyWay" />
+                    <img src="{{ asset('img/logo-sharemyway-violet.webp') }}" class="h-full" alt="Logo ShareMyWay" />
                 </figure>
                 <span class="font-semibold text-violet-700">ShareMyWay</span>
             </a>
@@ -124,6 +124,9 @@
         <div class="max-w-6xl mx-auto px-6 flex flex-col items-center justify-between gap-4 text-sm">
             <div class="flex items-center gap-2">
                 {# <span class="text-xl">logo</span> #}
+                <figure class=" h-4">
+                    <img src="{{ asset('img/logo-sharemyway-violet.webp') }}" class="h-full" alt="Logo ShareMyWay" />
+                </figure>
 
                 <span class="font-semibold">ShareMyWay</span>
             </div>

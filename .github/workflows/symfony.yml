@@ -24,6 +24,12 @@ jobs:
       - name: Install Composer dependencies
         run: composer install --no-interaction --prefer-dist
 
+      - name: Run PHPStan 
+        run: vendor/bin/phpstan analyse src
+
+      - name: Run PHP CS Fixer
+        run: vendor/bin/php-cs-fixer fix src --dry-run --diff
+
       - name: Run unit tests
         run: vendor/bin/phpunit
       
