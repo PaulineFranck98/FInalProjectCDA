@@ -7171,3 +7171,21 @@ tarteaucitron.services.klaviyo = {
         tarteaucitron.addScript('//static.klaviyo.com/onsite/js/klaviyo.js?company_id=' + tarteaucitron.user.klaviyoCompanyId);
     }
 };
+
+tarteaucitron.services.cloudinary = {
+    "key": "cloudinary",
+    "type": "cdn", // ou "other"
+    "name": "Cloudinary",
+    "uri": "https://cloudinary.com/privacy",
+    "needConsent": false, 
+    "cookies": [
+        "_ga",
+        "_ga_",         
+        "_hp2_id"      
+    ],
+    "js": function () {
+        //  Cloudinary se charge via les URLs images
+    },
+    "fallback": function () {}
+};
+
