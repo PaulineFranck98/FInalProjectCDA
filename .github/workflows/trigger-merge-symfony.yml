@@ -17,19 +17,9 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-      - name: Show git logs before merge
-        run: |
-          git fetch origin
-          git log --oneline origin/test | head -n 10
-          git log --oneline origin/develop | head -n 10
-
       - name: Merge develop into test
         run: |
           git fetch origin
           git checkout test
           git merge origin/develop -m "Auto-merge from develop to test after Symfony CI passed"
           git push origin test
-
-      - name: Show git logs after merge
-        run: |
-          git log --oneline | head -n 10
