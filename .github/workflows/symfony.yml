@@ -38,5 +38,5 @@ jobs:
         run: |
           curl -X POST https://api.github.com/repos/PaulineFranck98/finalProjectCDA/dispatches \
             -H "Accept: application/vnd.github.v3+json" \
-            -H "Authorization: token ${{ token $GH_PAT }}" \
+            -H "Authorization: token ${{ secrets.GH_PAT }}" \
             -d '{"event_type":"trigger-merge-symfony"}'
