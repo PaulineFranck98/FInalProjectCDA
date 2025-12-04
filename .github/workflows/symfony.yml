@@ -36,7 +36,7 @@ jobs:
       - name: Notify GitHub (trigger merge develop to test)
         if: ${{ success() }}
         run: |
-          curl -X POST https://api.github.com/repos/PaulineFranck98/votre-repo-symfony/dispatches \
+          curl -X POST https://api.github.com/repos/PaulineFranck98/FInalProjectCDA/dispatches \
             -H "Accept: application/vnd.github.v3+json" \
             -H "Authorization: token ${{ secrets.GH_PAT }}" \
             -d '{"event_type":"trigger-merge-symfony"}'
