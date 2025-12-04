@@ -21,7 +21,10 @@ jobs:
       - name: Install Composer dependencies
         run: composer install --no-interaction --prefer-dist
 
-      - name: Run PHPStan 
+      - name: Clear Symfony cache
+        run: php bin/console cache:clear --env=test
+
+      - name: Run PHPStan
         run: vendor/bin/phpstan analyse src
 
       # - name: Run PHP CS Fixer
@@ -29,3 +32,11 @@ jobs:
 
       - name: Run unit tests
         run: vendor/bin/phpunit
+
+      - name: Notify GitHub (trigger merge develop to test)
+        if: ${{ success() }}
+        run: |
+          curl -X POST https://api.github.com/repos/PaulineFranck98/votre-repo-symfony/dispatches \
+            -H "Accept: application/vnd.github.v3+json" \
+            -H "Authorization: token ${{ secrets.GH_PAT }}" \
+            -d '{"event_type":"trigger-merge-symfony"}'

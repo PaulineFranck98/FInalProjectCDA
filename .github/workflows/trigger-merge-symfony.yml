@@ -1,0 +1,25 @@
+name: Merge develop to test
+
+on:
+  repository_dispatch:
+    types: [trigger-merge-symfony]
+
+jobs:
+  merge:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Merge develop into test
+        run: |
+          git fetch origin
+          git checkout test
+          git merge origin/develop -m "Auto-merge from develop to test after Symfony CI passed"
+          git push origin test

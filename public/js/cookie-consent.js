@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
         "cookieslist": false,
         "closePopup": true,
         "showIcon": true,
-        "iconPosition": "BottomRight",
+        "iconPosition": "BottomLeft",
         "DenyAllCta": true,
         "AcceptAllCta": true,
         "highPrivacy": true,
