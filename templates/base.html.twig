@@ -35,7 +35,6 @@
     {{ encore_entry_script_tags('app') }}
     {% endblock %}
 </head>
-
 <body class="w-full min-h-screen flex flex-col" data-turbo="false">
     {% for label, messages in app.flashes %}
     {% for message in messages %}
@@ -115,7 +114,6 @@
             </div>
         </div>
     </header>
-
     <main class="flex-1 mt-[49px] h-[calc(100vh-49px)] overflow-hidden">
         {% block body %}{% endblock %}
     </main>
