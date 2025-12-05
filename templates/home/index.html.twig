@@ -18,14 +18,11 @@
 					Partagez vos découvertes.
 				</h1>
 				<p class="text-gray-600 text-lg">
-					ShareMyWay vous permet de découvrir des lieux uniques, créer vos propres itinéraires, et partager vos
-										                avis avec la communauté.
+					ShareMyWay vous permet de découvrir des lieux uniques, créer vos propres itinéraires, et partager vos avis avec la communauté.
 				</p>
 				<div class="flex gap-4 mt-4">
-					<a href="{{ path('location_search') }}" class="bg-violet-700 text-white px-6 py-3 rounded-lg hover:bg-violet-800 transition">Explorer les
-												                    lieux</a>
-					<a href="#regions" class="border border-violet-700 text-violet-700 px-6 py-3 rounded-lg hover:bg-violet-50 transition">Voir
-												                    les régions</a>
+					<a href="{{ path('location_search') }}" class="bg-violet-700 text-white px-6 py-3 rounded-lg hover:bg-violet-800 transition">Explorer les lieux</a>
+					<a href="#regions" class="border border-violet-700 text-violet-700 px-6 py-3 rounded-lg hover:bg-violet-50 transition">Voir les régions</a>
 				</div>
 			</div>
 			<div class="flex-1 flex justify-center md:justify-end relative">
@@ -64,8 +61,7 @@
 						<i class="fa-solid fa-map-location-dot"></i>
 					</div>
 					<h3 class="font-semibold text-xl text-violet-800">Explorez des lieux uniques</h3>
-					<p class="text-gray-600">Découvrez des lieux culturels, naturels et touristiques partagés par les
-												                    utilisateurs.</p>
+					<p class="text-gray-600">Découvrez des lieux culturels, naturels et touristiques partagés par les utilisateurs.</p>
 				</div>
 				<div class="text-center space-y-4">
 					<div class="text-violet-700 text-5xl">
@@ -80,8 +76,7 @@
 						<i class="fa-solid fa-star"></i>
 					</div>
 					<h3 class="font-semibold text-xl text-violet-800">Laissez votre avis</h3>
-					<p class="text-gray-600">Partagez vos impressions et aidez les autres voyageurs à découvrir les
-												                    meilleurs lieux.</p>
+					<p class="text-gray-600">Partagez vos impressions et aidez les autres voyageurs à découvrir les meilleurs lieux.</p>
 				</div>
 			</div>
 		</div>
@@ -98,10 +93,8 @@
 				<p class="text-gray-600 text-lg">
 					Retrouvez chaque jour des
 					<strong>idées d’itinéraires</strong>, des
-					<strong>lieux
-												                inspirants</strong>
-					et les plus belles découvertes de la communauté.
-										                Restez informé(e) des nouveautés, conseils et actualités voyage !
+					<strong>lieux inspirants</strong> et les plus belles découvertes de la communauté.
+					Restez informé(e) des nouveautés, conseils et actualités voyage !
 				</p>
 
 				<div class="flex gap-5 pt-2">
@@ -133,7 +126,6 @@
 
 	<div class="md:w-80 w-2/3 h-1 bg-violet-300 mx-auto rounded-full mb-8"></div>
 
-
 	<section id="popular-locations" class="py-20 bg-white">
 		<div class="max-w-7xl mx-auto px-6">
 			<h2 class="text-2xl md:text-3xl font-semibold text-violet-800 mb-12 text-center">Lieux populaires</h2>
@@ -159,18 +151,15 @@
 										—
 										{{ location.city }}</span>
 								</h3>
-								<p class="text-gray-600 text-sm mt-1">Ajouté dans
-									<span class="font-semibold text-violet-700">{{
-                            item.count }}
-										itinéraires</span>
+								<p class="text-gray-600 text-sm mt-1">
+                                    Ajouté dans <span class="font-semibold text-violet-700">{{ item.count }} itinéraires</span>
 								</p>
 							</div>
 						</a>
 					{% endfor %}
 				</div>
 				<div class="text-center mt-10">
-					<a href="{{ path('location_search') }}" class="text-violet-700 font-medium hover:underline">Voir tous les
-												                lieux →</a>
+					<a href="{{ path('location_search') }}" class="text-violet-700 font-medium hover:underline">Voir tous les lieux →</a>
 				</div>
 			{% endif %}
 		</div>
@@ -204,21 +193,18 @@
 								{% if itinerary.duration is defined and itinerary.duration %}
 									<p class="text-sm text-gray-900 mb-2 flex items-center">
 										<i class="fa-solid fa-route text-violet-600 mr-2"></i>
-										{{ itinerary.duration }}
-										jour{{ itinerary.duration > 1 ? 's' : '' }}
+										{{ itinerary.duration }} jour{{ itinerary.duration > 1 ? 's' : '' }}
 									</p>
 								{% endif %}
 								<div class="text-right mt-4">
-									<span class="inline-block bg-violet-700 text-white px-4 py-2 rounded-lg text-sm hover:bg-violet-800 transition">Voir
-																				                            l’itinéraire</span>
+									<span class="inline-block bg-violet-700 text-white px-4 py-2 rounded-lg text-sm hover:bg-violet-800 transition">Voir l’itinéraire</span>
 								</div>
 							</div>
 						</a>
 					{% endfor %}
 				</div>
 				<div class="text-center mt-10">
-					<a href="{{ path('itinerary_discover') }}" class="text-violet-700 font-medium hover:underline">Voir tous les
-												                itinéraires →</a>
+					<a href="{{ path('itinerary_discover') }}" class="text-violet-700 font-medium hover:underline">Voir tous les itinéraires →</a>
 				</div>
 			{% endif %}
 		</div>
