@@ -19,7 +19,7 @@ class ApiHttpClient
     
     public function getLocation(string $id): ?array
     { 
-        $response = $this->client->request('GET', $this->baseUrl . '/location/' . $id);
+        $response = $this->client->request('GET', $this->baseUrl . '/public/location/' . $id);
 
         $data = $response->toArray(false);
 
