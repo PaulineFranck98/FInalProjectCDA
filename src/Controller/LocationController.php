@@ -116,7 +116,10 @@ class LocationController extends AbstractController
 
         $nearby = $distanceService->findNearest($nearLocations, (float) $location['latitude'], (float) $location['longitude'], 5);
 
-        $nearby = array_filter($nearby, fn ($location) => $location['id'] !== $location['id']);
+        $currentId = $location['id'] ?? $id;
+        $nearby = array_filter($nearby, fn ($loc) => $loc['id'] !== $currentId);
+
+        // $nearby = array_filter($nearby, fn ($location) => $location['id'] !== $location['id']);
 
         $averageRating = $ratingRepository->getAverageRating($id);
 

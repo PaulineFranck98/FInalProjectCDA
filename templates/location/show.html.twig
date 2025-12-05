@@ -1,13 +1,11 @@
 {% extends 'base.html.twig' %}
 {% block title %}{{ location.locationName }} - Détail du lieu{% endblock %}
 {% block meta_description %}
-Découvrez {{ location.locationName }} à {{ location.city }} : {{ location.description|striptags|slice(0, 160) }}...
+<meta name="description" content="Découvrez {{ location.locationName }} à {{ location.city }} : {{ location.description|striptags|slice(0, 160) }}..." />
 {% endblock %}
 
 {% block body %}
 <div>
-    {# {{ dump(nearby) }} #}
-
     {% if location.images|length > 0 %}
     <figure class="h-64 w-full block lg:hidden">
         <img src="{{ location.images[0].imageName }}" alt="{{ location.locationName}}" loading="lazy"
@@ -297,7 +295,7 @@ Découvrez {{ location.locationName }} à {{ location.city }} : {{ location.de
 
     {# ----------------- A PROXIMITE ----------------- #}
     <section class="mt-7  h-72  bg-[#393939] p-5 lg:px-44">
-        <h2 class="text-white font-semibold text-xl mb-3">À proximité</h2>
+        <h2 class="text-white font-semibold text-xl mb-3 pl-3">À proximité</h2>
         <div class="swiper mySwiperNearby">
             <div class="swiper-wrapper">
                 {% for nearbyLocation in nearby %}

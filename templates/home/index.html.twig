@@ -26,8 +26,20 @@
 				</div>
 			</div>
 			<div class="flex-1 flex justify-center md:justify-end relative">
-				<img src="{{ asset('img/mockups/laptop_mockup.webp' )}}" loading="lazy" alt="Aperçu de l’application ShareMyWay affichée sur ordinateur" class="w-[430px] md:w-[520px] drop-shadow-xl select-none">
-				<img src="{{ asset('img/mockups/phone-mockup.webp') }}" loading="lazy" alt="Aperçu de l’application ShareMyWay affichée sur téléphone" class="w-36 md:w-48 absolute top-10 left-0 md:left-14  drop-shadow-2xl select-none rotate-[5deg]">
+				<figure class="w-[90%] md:w-[520px]">
+					<picture>
+						<source media="(max-width: 769px)" srcset="{{ asset('img/mockups/laptop_mockup-small.webp') }}">
+						<source media="(min-width: 770px)" srcset="{{ asset('img/mockups/laptop_mockup.webp') }}">
+						<img src="{{ asset('img/mockups/laptop_mockup.webp' )}}" loading="lazy" alt="Aperçu de l’application ShareMyWay affichée sur ordinateur" class="w-full drop-shadow-xl select-none">
+					</picture>
+				</figure>
+				<figure class="w-34 md:w-48 absolute top-10 left-0 md:left-14  drop-shadow-2xl select-none rotate-[5deg]">
+					<picture>
+						<source media="(max-width: 769px)" srcset="{{ asset('img/mockups/phone-mockup-small.webp') }}">
+						<source media="(min-width: 770px)" srcset="{{ asset('img/mockups/phone-mockup.webp') }}">
+						<img src="{{ asset('img/mockups/phone-mockup.webp') }}" loading="lazy" alt="Aperçu de l’application ShareMyWay affichée sur téléphone" class="w-full">
+					</picture>
+				</figure>
 			</div>
 		</div>
 	</section>
@@ -118,8 +130,20 @@
 			</div>
 
 			<div class="flex-1 w-full flex justify-center md:justify-end relative">
-				<img src="{{ asset('img/mockups/sharemyway-x.webp') }}" alt="Publication Instagram illustrant ShareMyWay et ses inspirations de voyage" loading="lazy" class="w-44 md:w-60 drop-shadow-xl rounded-lg select-none md:pr-5 mr-44 md:mr-0">
-				<img src="{{ asset('img/mockups/sharemyway-insta.webp') }}" alt="Publication X présentant les itinéraires et découvertes ShareMyWay" loading="lazy" class="w-60 md:w-75 rounded-lg select-none absolute -top-6 right-0 md:-top-8 md:left-20">
+				<figure class="w-44 md:w-60 drop-shadow-xl rounded-lg select-none md:pr-5 mr-44 md:mr-0">
+				<picture>
+					<source media="(max-width: 769px)" srcset="{{ asset('img/mockups/sharemyway-x-small.webp') }}">
+					<source media="(min-width: 770px)" srcset="{{ asset('img/mockups/sharemyway-x.webp') }}">
+					<img src="{{ asset('img/mockups/sharemyway-x.webp') }}" alt="Publication Instagram illustrant ShareMyWay et ses inspirations de voyage" loading="lazy" class="w-full">
+				</picture>
+				</figure>
+				<figure class="w-60 md:w-75 rounded-lg select-none absolute -top-6 right-[-30px] md:-top-8 md:left-20">
+					<picture>
+						<source media="(max-width: 769px)" srcset="{{ asset('img/mockups/sharemyway-insta-small.webp') }}">
+						<source media="(min-width: 770px)" srcset="{{ asset('img/mockups/sharemyway-insta.webp') }}">
+						<img src="{{ asset('img/mockups/sharemyway-insta.webp') }}" alt="Publication X présentant les itinéraires et découvertes ShareMyWay" loading="lazy" class="w-full">
+					</picture>
+				</figure>
 			</div>
 		</div>
 	</section>
