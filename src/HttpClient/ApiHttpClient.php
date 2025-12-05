@@ -17,10 +17,17 @@ class ApiHttpClient
 
  
     
-    public function getLocation(string $id): array
-    {
+    public function getLocation(string $id): ?array
+    { 
         $response = $this->client->request('GET', $this->baseUrl . '/location/' . $id);
-        return $response->toArray();
+
+        $data = $response->toArray(false);
+
+        if ($response->getStatusCode() !== 200 || empty($data)) {
+            return null;
+        }
+
+        return $data;
     }
 
     public function getLocationsByZipcode(string $zipcode): array
