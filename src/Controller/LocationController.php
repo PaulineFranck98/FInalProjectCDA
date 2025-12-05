@@ -105,6 +105,10 @@ class LocationController extends AbstractController
     {   
         $location = $apiHttpClient->getLocation($id);
 
+        if (!$location) {
+            throw $this->createNotFoundException("Lieu introuvable");
+        }
+
         if (!isset($location['latitude'], $location['longitude'], $location['zipcode'])) {
             throw $this->createNotFoundException('Coordonnées manquantes');
         }
