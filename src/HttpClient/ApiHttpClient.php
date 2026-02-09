@@ -19,8 +19,7 @@ class ApiHttpClient
     
     public function getLocation(string $id): ?array
     { 
-        $response = $this->client->request('GET', $this->baseUrl . '/location/' . $id);
-
+        $response = $this->client->request('GET', $this->baseUrl . '/public/location/' . $id);
         $data = $response->toArray(false);
 
         if ($response->getStatusCode() !== 200 || empty($data)) {
@@ -41,9 +40,9 @@ class ApiHttpClient
     {
         $url = $this->baseUrl . '/public/location';
 
-        foreach ($filters as $key => $value) {
+        foreach ($filters as $filter => $value) {
             if (is_array($value)) {
-                $filters[$key] = implode(',', $value);
+                $filters[$filter] = implode(',', $value);
             }
         }
 
@@ -53,8 +52,6 @@ class ApiHttpClient
 
         $response = $this->client->request('GET', $url);
         $status = $response->getStatusCode();
-
-        // false pour ne pas jeter d'erreur automatiquement si erreur !== 200
         $data = $response->toArray(false);
 
         if($status !== 200) {
@@ -70,7 +67,6 @@ class ApiHttpClient
             ];
         }
 
-        // check si la réponse contient bien les données attendues
         return [
             'locations' => $data['data'] ?? [],
             'pagination' => [

@@ -29,7 +29,6 @@ class GoogleAuthenticator extends AbstractOAuthAuthenticator
             'email' => $resourceOwner->getEmail(),
         ]);
 
-        // update si infos manquantes lors de la connexion
         if ($user) {
             $data = $resourceOwner->toArray();
 

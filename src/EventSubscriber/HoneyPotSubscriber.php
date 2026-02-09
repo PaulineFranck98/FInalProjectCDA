@@ -47,9 +47,10 @@ class HoneyPotSubscriber implements EventSubscriberInterface
 
         if (!empty($phone) || !empty($faxNumber))
         {
-            $this->honeyPotLogger->info("Potentielle tentative de robot spammer ayant l'adresse IP suivante : '{$request->getClientIp()}' a eu lieu. Le champ phone contenait '{$phone}' et le champ faxNumber contenait '{$faxNumber}'. Le lien est : '{$request->getURI()}'");   
-            // throw new AccessDeniedException("Accès refusé");
-            throw new HttpException(403, 'Go away dirty bot ! ');
+            $this->honeyPotLogger->info("Potentielle tentative de robot spammer ayant l'adresse IP suivante :
+             '{$request->getClientIp()}' a eu lieu. Le champ phone contenait '{$phone}'
+              et le champ faxNumber contenait '{$faxNumber}'. Le lien est : '{$request->getURI()}'");   
+            throw new HttpException(403, 'Accès refusé');
         }       
     }
 }

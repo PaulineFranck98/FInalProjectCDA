@@ -1,4 +1,3 @@
-// public/js/itinerary-search.js
 document.addEventListener("DOMContentLoaded", function () {
     const form = document.getElementById("filtersForm");
     const container = document.getElementById("itinerariesContainer");
