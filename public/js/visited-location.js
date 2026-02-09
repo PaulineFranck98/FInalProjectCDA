@@ -16,7 +16,7 @@ function initVisitedModal() {
                 dateInput.value = '';
             } else {
 
-                await fetch(`/visited/location/${currentLocationId}`, { method: 'DELETE' });
+                await fetch(`/user/visited/location/${currentLocationId}`, { method: 'DELETE' });
             }
         });
     });
@@ -28,7 +28,7 @@ function initVisitedModal() {
             return;
         }
 
-        await fetch(`/visited/location/${currentLocationId}`, {
+        await fetch(`/user/visited/location/${currentLocationId}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ visitedAt: date })

@@ -22,7 +22,8 @@
 				</p>
 				<div class="flex gap-4 mt-4">
 					<a href="{{ path('location_search') }}" class="bg-violet-700 text-white px-6 py-3 rounded-lg hover:bg-violet-800 transition">Explorer les lieux</a>
-					<a href="#regions" class="border border-violet-700 text-violet-700 px-6 py-3 rounded-lg hover:bg-violet-50 transition">Voir les régions</a>
+					{# <a href="#regions" class="border border-violet-700 text-violet-700 px-6 py-3 rounded-lg hover:bg-violet-50 transition">Voir les régions</a> #}
+					<a href="{{ path('itinerary_discover') }}" class="border border-violet-700 text-violet-700 px-6 py-3 rounded-lg hover:bg-violet-50 transition">Voir les itinéraires</a>
 				</div>
 			</div>
 			<div class="flex-1 flex justify-center md:justify-end relative">
@@ -37,18 +38,21 @@
 					<picture>
 						<source media="(max-width: 769px)" srcset="{{ asset('img/mockups/phone-mockup-small.webp') }}">
 						<source media="(min-width: 770px)" srcset="{{ asset('img/mockups/phone-mockup.webp') }}">
-						<img src="{{ asset('img/mockups/phone-mockup.webp') }}" loading="lazy" alt="Aperçu de l’application ShareMyWay affichée sur téléphone" class="w-full">
+						<img src="{{ asset('img/mockups/phone-mockup.webp') }}" 
+							 loading="lazy" 
+							 alt="Aperçu de l’application ShareMyWay affichée sur téléphone" 
+							 class="w-full">
 					</picture>
 				</figure>
 			</div>
 		</div>
 	</section>
-	<section id="regions" class="py-20 bg-white">
+	{# <section id="regions" class="py-20 bg-white">
 		<div class="max-w-7xl mx-auto px-6">
 			<h2 class="text-2xl md:text-3xl font-semibold text-violet-800 mb-8 text-center">Où souhaitez-vous voyager ?</h2>
 			<p class="text-center text-gray-600 mb-12">Choisissez une super-région pour commencer votre exploration.</p>
 
-			{# TODO remplacer les régions + ajouter formes #}
+			{# TODO remplacer les régions + ajouter formes 
 			<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6">
 				{% set regions = ['Hauts-de-France', 'Normandie', 'Île-de-France', 'Grand-Est', 'Bretagne',
             'Pays-de-la-Loire', 'Centre-Val-de-Loire', 'Bourgogne-Franche-Comté', 'Nouvelle-Aquitaine',
@@ -61,7 +65,7 @@
 				{% endfor %}
 			</div>
 		</div>
-	</section>
+	</section> #}
 	<section id="why-sharemyway" class="py-20 bg-gradient-to-b from-white to-violet-50">
 		<div class="max-w-7xl mx-auto px-6">
 			<h2 class="text-2xl md:text-3xl font-semibold text-violet-800 mb-15 text-center">

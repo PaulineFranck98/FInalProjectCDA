@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!confirm('Voulez-vous retirer ce lieu de vos lieux déjà visités ?')) return;
 
             try {
-                const response = await fetch(`/visited/location/${id}`, {
+                const response = await fetch(`/user/visited/location/${id}`, {
                     method: 'DELETE',
                 });
 

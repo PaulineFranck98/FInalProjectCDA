@@ -69,8 +69,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 e.preventDefault();
                 const urlObj = new URL(link.href);
                 const newPage = urlObj.searchParams.get("page") || 1;
-
-                // je mets à jour la valeur du champ caché
                 if (pageInput) pageInput.value = newPage;
 
                 fetchResults();

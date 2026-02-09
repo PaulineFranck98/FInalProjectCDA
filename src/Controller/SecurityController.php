@@ -341,7 +341,8 @@ class SecurityController extends AbstractController
             return new JsonResponse(['error' => 'Erreur lors du téléchargement du fichier.'], 500);
         }
 
-        if ($user->getProfilePicture() && file_exists($this->getParameter('uploads_directory').'/'.$user->getProfilePicture())) {
+        if ($user->getProfilePicture() && file_exists($this->getParameter('uploads_directory').
+        '/'.$user->getProfilePicture())) {
             unlink($this->getParameter('uploads_directory').'/'.$user->getProfilePicture());
         }
 

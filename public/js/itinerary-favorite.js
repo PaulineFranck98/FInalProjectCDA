@@ -6,7 +6,7 @@ document.addEventListener('click', async (e) => {
     const icon = button.querySelector('i');
 
     try {
-        const response = await fetch(`/favorite/itinerary/${itineraryId}`, {
+        const response = await fetch(`/user/favorite/itinerary/${itineraryId}`, {
             method: 'POST',
             headers: { 'X-Requested-With': 'XMLHttpRequest' },
         });

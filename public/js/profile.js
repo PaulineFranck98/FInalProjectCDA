@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const field = form.dataset.field;
             const value = form.querySelector('input').value;
 
-            const response = await fetch(`/profile/update-${field}`, {
+            const response = await fetch(`/user/profile/update-${field}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
                 body: JSON.stringify({ [field]: value })
@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
             formData.append('profilePicture', file);
 
             try {
-                const response = await fetch('/profile/update-picture', {
+                const response = await fetch('/user/profile/update-picture', {
                     method: 'POST',
                     body: formData
                 });
