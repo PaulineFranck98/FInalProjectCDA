@@ -15,12 +15,12 @@
     </button>
 
     <div id="filtersPanel"
-        class="fixed inset-0 bg-white z-1000 transform translate-x-full transition-transform duration-300 lg:relative lg:translate-x-0  flex flex-col lg:flex-row gap-6 min-h-0 md:pt-10">
+        class="fixed inset-0 bg-white z-1000 lg:z-10 transform translate-x-full transition-transform duration-300 lg:relative lg:translate-x-0  flex flex-col lg:flex-row gap-6 min-h-0 md:pt-10">
         {% include 'location/partials/_filters.html.twig' %}
         {% include 'location/partials/_list.html.twig' %}
     </div>
 
-    <div class="w-full lg:h-full h-screen relative">
+    <div class="w-full lg:h-full h-screen relative lg:pt-10">
         <div id="search-map" class="w-full  bg-gray-200 rounded-xl h-full" data-locations='{{ locations|json_encode }}'>
             <span class="text-gray-500">Carte</span>
         </div>
