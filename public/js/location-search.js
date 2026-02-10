@@ -50,7 +50,7 @@ function initMap() {
             }).setHTML(`
                 <div class="popup-content">
                     <div class="popup-header">
-                        <span class="name">${location.locationName}</span>
+                        <a class="name"  href="/location/${location.id}">${location.locationName}</a>
                         ${location.city ? `<span class="city"> — ${location.city}</span>` : ''}
                     </div>
                     <div class="popup-header">

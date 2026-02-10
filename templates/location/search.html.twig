@@ -10,17 +10,17 @@
 
 <div class=" max-w-7xl mx-auto flex flex-col lg:flex-row lg:gap-6 m-auto lg:h-[calc(100vh-49px)] pb-10">
     <button id="openFilters" aria-label="Ouvrir les filtres"
-        class="fixed top-2 right-4 bg-violet-700 text-white px-4 py-2 rounded-full shadow-lg z-50 lg:hidden">
+        class="fixed bottom-4 right-4 bg-violet-700 text-white px-4 py-2 rounded-full shadow-lg z-1000 lg:hidden">
         <i class="fa-solid fa-sliders"></i> Filtres
     </button>
 
     <div id="filtersPanel"
-        class="fixed inset-0 bg-white z-50 transform translate-x-full transition-transform duration-300 lg:relative lg:translate-x-0  flex flex-col lg:flex-row gap-6 min-h-0 md:pt-10">
+        class="fixed inset-0 bg-white z-1000 transform translate-x-full transition-transform duration-300 lg:relative lg:translate-x-0  flex flex-col lg:flex-row gap-6 min-h-0 md:pt-10">
         {% include 'location/partials/_filters.html.twig' %}
         {% include 'location/partials/_list.html.twig' %}
     </div>
 
-    <div class="w-full pt-10 lg:h-full h-screen relative">
+    <div class="w-full lg:h-full h-screen relative">
         <div id="search-map" class="w-full  bg-gray-200 rounded-xl h-full" data-locations='{{ locations|json_encode }}'>
             <span class="text-gray-500">Carte</span>
         </div>
