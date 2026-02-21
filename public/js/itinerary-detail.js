@@ -171,4 +171,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
         updateRouteLine();
     };
+
+    (function setupItineraryMobileToggle() {
+        const openBtn = document.getElementById('openItineraryList');
+        const closeBtn = document.getElementById('closeItineraryList');
+        const listPanel = document.getElementById('itinerary-locations');
+        if (!listPanel || (!openBtn && !closeBtn)) return;
+
+        const originalClasses = listPanel.className;
+
+        openBtn?.addEventListener('click', () => {
+            listPanel.className = 'fixed inset-0 z-1000 bg-white overflow-auto p-4';
+
+            const mobileActions = document.getElementById('mobileItineraryActionButtons');
+            if (mobileActions) mobileActions.classList.add('hidden');
+
+            document.body.style.overflow = 'hidden';
+        });
+
+        closeBtn?.addEventListener('click', () => {
+            listPanel.className = originalClasses;
+
+            const mobileActions = document.getElementById('mobileItineraryActionButtons');
+            if (mobileActions) mobileActions.classList.remove('hidden');
+
+            document.body.style.overflow = '';
+        });
+    })();
 });

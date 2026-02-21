@@ -321,7 +321,9 @@
                             <span class="text-white">{{ nearbyLocation.locationName }}</span>
                             <span class="text-[#cdd1d7] text-sm"> - {{ nearbyLocation.city }}</span>
                         </p>
+                        {% if nearbyLocation.type %}
                         <p class="text-[#cdd1d7] text-sm">{{ nearbyLocation.type.typeName }}</p>
+                        {% endif %}
                     </a>
                 </div>
                 {% else %}

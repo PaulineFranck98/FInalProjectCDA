@@ -1,65 +1,71 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Connexion{% endblock %}
+{% block title %}Connexion
+{% endblock %}
 
 {% block body %}
-<div
-    class="w-screen md:max-w-lg md:mx-auto h-screen flex flex-col justify-center items-center md:justify-start  md:mt-36">
-    <div class="bg-white/70 pt-3 pb-4 rounded-lg w-full max-w-9/12 md:max-w-lg md:mx-auto">
-        <form method="post" class="w-full">
-            {% if error %}
-            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-            {% endif %}
+	<div class="w-screen md:max-w-lg md:mx-auto h-screen flex flex-col justify-center items-center md:justify-start  md:mt-36">
+		<div class="bg-white/70 pt-3 pb-4 rounded-lg w-full max-w-9/12 md:max-w-lg md:mx-auto">
+			<form method="post" class="w-full">
 
-            <h1 class="text-violet-800 text-xl md:text-2xl font-semibold text-center mb-10">Ravi de vous revoir !</h1>
-            <div class="flex flex-col mb-6">
-                <label class=" md:text-lg mb-2 font-semibold" for="username">Email</label>
-                <input class="input-base" type="email" value="{{ last_username }}" name="_username" id="username"
-                    autocomplete="email" required autofocus>
-            </div>
-            <div class="flex flex-col mb-1">
-                <label class=" md:text-lg mb-2 font-semibold" for="password">Mot de passe</label>
-                <input class="input-base" type="password" name="_password" id="password"
-                    autocomplete="current-password">
-            </div>
-            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
-            {#
-            Uncomment this section and add a remember_me option below your firewall to activate remember me
-            functionality.
-            See https://symfony.com/doc/current/security/remember_me.html
+				<h1 class="text-violet-800 text-xl md:text-2xl font-semibold text-center mb-10">Ravi de vous revoir !</h1>
+				<div class="flex flex-col mb-6">
+					<label class=" md:text-lg mb-2 font-semibold" for="username">Email</label>
+					<input
+					class="input-base" type="email" value="{{ last_username }}" name="_username" id="username" autocomplete="email" required autofocus>
+					{% if errorMessage %}
+						<p class="text-red-600 text-sm mt-1">{{ errorMessage }}</p>
+					{% elseif error %}
+						<p class="text-red-600 text-sm mt-1">{{ error.messageKey|trans(error.messageData, 'security') }}</p>
+					{% endif %}
+				</div>
+				<div class="flex flex-col mb-1">
+					<label class=" md:text-lg mb-2 font-semibold" for="password">Mot de passe</label>
+					<input class="input-base" type="password" name="_password" id="password" autocomplete="current-password">
+				</div>
+				<input
+				type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
-            <div class="checkbox mb-3">
-                <input type="checkbox" name="_remember_me" id="_remember_me">
-                <label for="_remember_me">Remember me</label>
-            </div>
-            #}
+				{#
+												            Uncomment this section and add a remember_me option below your firewall to activate remember me
+												            functionality.
+												            See https://symfony.com/doc/current/security/remember_me.html
+												
+												            <div class="checkbox mb-3">
+												                <input type="checkbox" name="_remember_me" id="_remember_me">
+												                <label for="_remember_me">Remember me</label>
+												            </div>
+												            #}
 
-            <p class="text-xs md:text-sm"><a href="{{ path('app_forgot_password_request')}}">Vous avez oublié votre mot
-                    de passe? <span class="font-semibold underline underline-offset-2">Cliquez ici</span></a></p>
-            <p class="flex justify-center">
-                <button
-                    class=" bg-violet-800 px-12 py-2 text-white font-medium text-center w-full rounded-xl btn-violet mt-8 mb-8 md:text-lg"
-                    type="submit">
-                    C'est parti
-                </button>
-            </p>
-        </form>
-        <div class="flex items-center gap-4 mb-5">
-            <div class="flex-1 border-t border-gray-500"></div>
-            <span class="text-gray-700">ou</span>
-            <div class="flex-1 border-t border-gray-500"></div>
-        </div>
-        <div class="flex align-center justify-center gap-3  bg-white px-2 py-3 border border-gray-300 rounded-xl mb-7">
-            <figure>
-                <img src="/img/logo_google.webp" alt="logo Google" />
-            </figure>
-            <p class=" md:text-lg">
-                <a href="{{ path('connect_google', {service: 'google'}) }}">Continuer avec Google</a>
-            </p>
-        </div>
-        <p class="w-full">Pas encore inscrit ?<a href="{{ path('app_register') }}"
-                class="text-violet-800  hover:underline hover:text-violet-900"> S'inscrire</a> </p>
-    </div>
-</div>
+				<p class="text-xs md:text-sm">
+					<a href="{{ path('app_forgot_password_request')}}">Vous avez oublié votre mot
+																		                    de passe?
+						<span class="font-semibold underline underline-offset-2">Cliquez ici</span>
+					</a>
+				</p>
+				<p class="flex justify-center">
+					<button class=" bg-violet-800 px-12 py-2 text-white font-medium text-center w-full rounded-xl btn-violet mt-8 mb-8 md:text-lg" type="submit">
+						C'est parti
+					</button>
+				</p>
+			</form>
+			<div class="flex items-center gap-4 mb-5">
+				<div class="flex-1 border-t border-gray-500"></div>
+				<span class="text-gray-700">ou</span>
+				<div class="flex-1 border-t border-gray-500"></div>
+			</div>
+			<div class="flex align-center justify-center gap-3  bg-white px-2 py-3 border border-gray-300 rounded-xl mb-7">
+				<figure>
+					<img src="/img/logo_google.webp" alt="logo Google"/>
+				</figure>
+				<p class=" md:text-lg">
+					<a href="{{ path('connect_google', {service: 'google'}) }}">Continuer avec Google</a>
+				</p>
+			</div>
+			<p class="w-full">Pas encore inscrit ?<a href="{{ path('app_register') }}" class="text-violet-800  hover:underline hover:text-violet-900">
+					S'inscrire</a>
+			</p>
+		</div>
+	</div>
 {% endblock %}

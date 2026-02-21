@@ -1,11 +1,35 @@
-function toggleFilters() {
+function setupPanels() {
 
     const filtersPanel = document.getElementById("filtersPanel");
-    const openBtn = document.getElementById("openFilters");
-    const closeBtn = document.getElementById("closeFilters");
+    const openFiltersBtn = document.getElementById("openFilters");
+    const closeFiltersBtn = document.getElementById("closeFilters");
 
-    openBtn?.addEventListener("click", () => filtersPanel.classList.remove("translate-x-full"));
-    closeBtn?.addEventListener("click", () => filtersPanel.classList.add("translate-x-full"));
+    openFiltersBtn?.addEventListener("click", () => filtersPanel.classList.remove("translate-x-full"));
+    closeFiltersBtn?.addEventListener("click", () => filtersPanel.classList.add("translate-x-full"));
+
+    const listPanel = document.getElementById("listPanel");
+    const openListBtn = document.getElementById("openList");
+    const closeListBtn = document.getElementById("closeList");
+
+    openListBtn?.addEventListener("click", () => {
+        listPanel.classList.remove("translate-x-full");
+
+        const locationsContainer = listPanel?.querySelector('#locationsContainer') || document.getElementById('locationsContainer');
+        if (locationsContainer) {
+            locationsContainer.classList.remove('hidden');
+            locationsContainer.classList.add('flex');
+        }
+    });
+
+    closeListBtn?.addEventListener("click", () => {
+        listPanel.classList.add("translate-x-full");
+
+        const locationsContainer = listPanel?.querySelector('#locationsContainer') || document.getElementById('locationsContainer');
+        if (locationsContainer) {
+            locationsContainer.classList.add('hidden');
+            locationsContainer.classList.remove('flex');
+        }
+    });
 }
 
 function initMap() {
@@ -93,5 +117,5 @@ function initMap() {
 
 document.addEventListener('DOMContentLoaded', function () {
     initMap();
-    toggleFilters();
+    setupPanels();
 });

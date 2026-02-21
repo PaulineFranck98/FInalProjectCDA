@@ -1,37 +1,50 @@
 {% extends 'base.html.twig' %}
-{% block title %}Recherche de lieux{% endblock %}
+{% block title %}Recherche de lieux
+{% endblock %}
 
 {% block meta_description %}
-<meta name="description"
-    content="Recherchez des lieux touristiques, culturels ou naturels partout en France. Filtrez par région, catégorie ou distance et explorez les endroits les plus appréciés de ShareMyWay.">
+	<meta name="description" content="Recherchez des lieux touristiques, culturels ou naturels partout en France. Filtrez par région, catégorie ou distance et explorez les endroits les plus appréciés de ShareMyWay.">
 {% endblock %}
 
 {% block body %}
 
-<div class=" max-w-7xl mx-auto flex flex-col lg:flex-row lg:gap-6 m-auto lg:h-[calc(100vh-49px)] pb-10">
-    <button id="openFilters" aria-label="Ouvrir les filtres"
-        class="fixed bottom-4 right-4 bg-violet-700 text-white px-4 py-2 rounded-full shadow-lg z-1000 lg:hidden">
-        <i class="fa-solid fa-sliders"></i> Filtres
-    </button>
+	<div class=" max-w-7xl mx-auto flex flex-col lg:flex-row lg:gap-6 m-auto lg:h-[calc(100vh-49px)] pb-10">
+		<div id="mobileActionButtons" class="fixed bottom-4 right-4 lg:hidden z-1000 flex items-center space-x-3 gap-2">
+			<button id="openList" aria-label="Ouvrir la liste" class="bg-violet-700 text-white px-4 py-2 rounded-full shadow-lg">
+				<i class="fa-solid fa-list"></i>
+				Liste
+			</button>
 
-    <div id="filtersPanel"
-        class="fixed inset-0 bg-white z-1000 lg:z-10 transform translate-x-full transition-transform duration-300 lg:relative lg:translate-x-0  flex flex-col lg:flex-row gap-6 min-h-0 md:pt-10">
-        {% include 'location/partials/_filters.html.twig' %}
-        {% include 'location/partials/_list.html.twig' %}
-    </div>
+			<button id="openFilters" aria-label="Ouvrir les filtres" class="bg-violet-700 text-white px-4 py-2 rounded-full shadow-lg">
+				<i class="fa-solid fa-sliders"></i>
+				Filtres
+			</button>
+		</div>
 
-    <div class="w-full lg:h-full h-screen relative lg:pt-10">
-        <div id="search-map" class="w-full  bg-gray-200 rounded-xl h-full" data-locations='{{ locations|json_encode }}'>
-            <span class="text-gray-500">Carte</span>
-        </div>
-    </div>
-</div>
+		<div id="filtersPanel" class="fixed inset-0 bg-white z-1000 lg:z-10 transform translate-x-full transition-transform duration-300 lg:relative lg:translate-x-0  flex flex-col lg:flex-row gap-6 min-h-0 md:pt-10">
+			{% include 'location/partials/_filters.html.twig' %}
+			{% include 'location/partials/_list.html.twig' %}
+		</div>
 
-<script src='https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.js'></script>
-<script src="{{ asset('js/location-search.js') }}"></script>
-<script src="{{ asset('js/itinerary-modal.js') }}"></script>
-<script src="{{ asset('js/location-filters.js') }}"></script>
+		<div id="listPanel" class="fixed inset-0 bg-white z-1000 transform translate-x-full transition-transform duration-300 flex flex-col gap-6 min-h-0 md:pt-10 lg:hidden">
+			<button id="closeList" type="button" class="self-end text-violet-700 mb-2 lg:hidden">
+				<i class="fa-solid fa-xmark text-2xl"></i>
+			</button>
+			{% include 'location/partials/_list.html.twig' %}
+		</div>
 
-{# ---------------- MODALE ITINÉRAIRE ---------------- #}
-{% include 'location/partials/_itinerary_modal.html.twig' %}
+		<div class="w-full lg:h-full h-screen relative lg:pt-10">
+			<div id="search-map" class="w-full  bg-gray-200 rounded-xl h-full" data-locations='{{ locations|json_encode }}'>
+				<span class="text-gray-500">Carte</span>
+			</div>
+		</div>
+	</div>
+
+	<script src='https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.js'></script>
+	<script src="{{ asset('js/location-search.js') }}"></script>
+	<script src="{{ asset('js/itinerary-modal.js') }}"></script>
+	<script src="{{ asset('js/location-filters.js') }}"></script>
+
+	{# ---------------- MODALE ITINÉRAIRE ---------------- #}
+	{% include 'location/partials/_itinerary_modal.html.twig' %}
 {% endblock %}
