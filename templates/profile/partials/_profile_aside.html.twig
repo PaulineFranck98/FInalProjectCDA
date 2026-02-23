@@ -84,11 +84,11 @@
 					<i class="fa-regular fa-heart mr-5"></i>Itinéraires favoris
 				</a>
 			</li>
-			<li class="px-4 py-2">
+			{# <li class="px-4 py-2">
 				<a href="#" class="anchors-aside {{ current_route == 'show_lorem' ? 'active-anchor-aside' }}">
 					<i class="fa-regular fa-pen-to-square mr-5"></i>Lorem
 				</a>
-			</li>
+			</li> #}
 		</ul>
 	{% endif %}
 </aside>
@@ -98,6 +98,7 @@
     const panel = document.getElementById('profileAsidePanel');
     if (! panel) 
     return;
+    
     const openBtn = document.createElement('button');
     openBtn.id = 'openProfileAside';
     openBtn.setAttribute('aria-label', 'Ouvrir le menu');
