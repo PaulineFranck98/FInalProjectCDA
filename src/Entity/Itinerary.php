@@ -34,7 +34,7 @@ class Itinerary
     /**
      * @var Collection<int, ItineraryLocation>
      */
-    #[ORM\OneToMany(targetEntity: ItineraryLocation::class, mappedBy: 'itinerary')]
+    #[ORM\OneToMany(targetEntity: ItineraryLocation::class, mappedBy: 'itinerary', cascade: ['persist','remove'], orphanRemoval: true)]
     private Collection $itineraryLocations;
 
     /**
